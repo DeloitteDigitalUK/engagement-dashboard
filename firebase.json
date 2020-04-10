@@ -5,6 +5,7 @@
   },
   "functions": {
     "predeploy": [
+      "npm run build",
       "npm --prefix \"$RESOURCE_DIR\" run lint"
     ]
   },
