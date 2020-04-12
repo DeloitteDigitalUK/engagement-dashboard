@@ -12,41 +12,41 @@ import { TextField } from 'formik-material-ui';
 import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout';
 import { useFirebase } from '../firebase';
 
-export default function SignUpPage() {
+export default function LogInPage() {
 
   const classes = useAnonymousStyles();
   const firebase = useFirebase();
 
   const [ errorMessage, setErrorMessage ] = useState(null);
 
-  const signUp = async ({ name, email, password }) => {
+  const logIn = async ({ email, password }) => {
     try {
-      const user = await firebase.signUp(name, email, password);
+      const user = await firebase.logIn(email, password);
       // TODO: Redirect to home page
       alert("Logged in as " + user.displayName);
     } catch(error) {
       console.error(error);
-      setErrorMessage(error.message);
+      setErrorMessage(
+        error.code === 'auth/user-disabled'? "This user has been disabled." :
+        error.code === 'auth/user-not-found' || error.code == 'auth/wrong-password'? "Incorrect email address or password." :
+        error.message
+      );
     }
   }
 
   return (
-    <AnonymousLayout icon={<LockOutlinedIcon />} title="Sign up">
+    <AnonymousLayout icon={<LockOutlinedIcon />} title="Log in">
       <Formik
         initialValues={{
-          'name': "",
           'email': "",
           'password': "",
-          'confirmPassword': ""
         }}
         validationSchema={Yup.object({
-          name: Yup.string("Enter your name").required("Name is required"),
           email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
-          password: Yup.string("Enter your password").min(8, "Password must contain at least 8 characters").required("Password is required"),
-          confirmPassword: Yup.string("Confirm your password").required("Please confirm your password").oneOf([Yup.ref("password")], "Passwords do not match")
+          password: Yup.string("Enter your password").required("Password is required"),
         })}
         onSubmit={async (values, { setSubmitting }) => {
-          await signUp(values);
+          await logIn(values);
           setSubmitting(false);
         }}
       >
@@ -59,24 +59,12 @@ export default function SignUpPage() {
               <Grid item xs={12}>
                 <Field
                   component={TextField}
-                  id="name"
-                  name="name"
-                  label="Name"
-                  autoComplete="name"
-                  variant="outlined"
-                  fullWidth
-                  autoFocus
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  component={TextField}
                   id="email"
                   name="email"
                   label="Email Address"
                   autoComplete="email"
                   variant="outlined"
+                  autoFocus
                   fullWidth
                   required
                 />
@@ -94,19 +82,6 @@ export default function SignUpPage() {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Field
-                    component={TextField}
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    label="Confirm password"
-                    autoComplete="confirm-password"
-                    variant="outlined"
-                    fullWidth
-                    required
-                  />
-              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -117,12 +92,17 @@ export default function SignUpPage() {
               disabled={isSubmitting}
               onClick={submitForm}
             >
-              Sign up
+              Log in
             </Button>
-            <Grid container justify="flex-end">
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
               <Grid item>
                 <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                  {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
@@ -131,5 +111,6 @@ export default function SignUpPage() {
       </Formik>
     </AnonymousLayout>
   );
+
 
 }

@@ -1,8 +1,14 @@
 import * as firebase from 'firebase/app';
+
+// These imports have side-effects!
 import 'firebase/auth';
 import 'firebase/firestore';
 
+import * as rfhAuth from 'react-firebase-hooks/auth';
+
 import { createContext, useContext } from 'react';
+
+// To configure these, set then in a `.env` or `.env.local` file.
 
 var firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -14,11 +20,21 @@ var firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
+// Initialise Firebase global singleton
+
 firebase.initializeApp(firebaseConfig);
 
-export const FirebaseContext = createContext(null);
-export const useFirebase = () => useContext(FirebaseContext);
+// Expose variants of  `react-firebase-hooks` hooks configured to use this firebase instance
+export const useAuthState = () => rfhAuth.useAuthState(firebase.auth());
 
+/**
+ * Basic API for the app. Usually accessed via a hook:
+ * 
+ *  const firebase = useFirebase()
+ * 
+ * Does not attempt to fully abstract Firebase, but rather to provide better
+ * isolated functions to avoid scattering too much logic in the UI code.
+ */
 export default class API {
 
   constructor() {
@@ -36,7 +52,8 @@ export default class API {
    *   - "auth/wrong-password"
    */
   async logIn(email, password) {
-    return await this.firebase.auth().signInWithEmailAndPassword(email, password);
+    const credentials = await this.firebase.auth().signInWithEmailAndPassword(email, password);
+    return credentials.user;
   }
 
   /**
@@ -47,10 +64,9 @@ export default class API {
   }
   
   /**
-   * Create and return user.
+   * Create and return user. User will be sent a generic email verification link.
    * May legitimately throw with `error.code` set to one of
    *   - "auth/email-already-in-use"
-   *   - "auth/invalid-email"
    *   - "auth/weak-password"
    */
   async signUp(name, email, password) {
@@ -65,20 +81,21 @@ export default class API {
     return credentials.user;
   }
 
-  // async sendPasswordResetEmail() {
-
-  // }
-
-  // async confirmPasswordReset(email, code) {
-
-  // }
+  /**
+   * Send email to reset password, using a generic form.
+   * May legitimately throw with `error.code` set to one of:
+   *   - "auth/user-not-found"
+   */
+  async sendPasswordResetEmail(email) {
+    return this.firebase.auth().sendPasswordResetEmail(email, {})
+  }
 
   /**
    * Update user profile data.
    */
   async updateProfile({name}) {
     const user = this.firebase.auth().currentUser;
-    await user.updateProfile({
+    return user.updateProfile({
       displayName: name
     })
   }
@@ -95,8 +112,14 @@ export default class API {
     const user = this.firebase.auth().currentUser;
     const credential = firebase.auth.EmailAuthProvider.credential(user.email, oldPassword);
     await user.reauthenticateWithCredential(credential);
-    await user.updatePassword(newPassword);
+    return user.updatePassword(newPassword);
   }
 
   
 }
+
+/**
+ * Provide an instance of `API` as React context. Use `useFirebase()` as a convience hook.
+ */
+export const FirebaseContext = createContext(new API());
+export const useFirebase = () => useContext(FirebaseContext);

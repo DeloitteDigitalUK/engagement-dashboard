@@ -1,16 +1,49 @@
 import React from 'react';
 
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Box from '@material-ui/core/Box';
+import { Avatar, Typography, Paper, CssBaseline, Box, Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-function AnonymousLayout({ children }) {
+export const useAnonymousStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    padding: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  alert: {
+    width: '100%',
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
+function AnonymousLayout({ icon, title, children }) {
+
+  const classes = useAnonymousStyles();
 
   return (
     <Container maxWidth="sm">
       <CssBaseline />
       <Box my={4}>
-        {children}
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            {icon}
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            {title}
+          </Typography>
+          {children}
+        </Paper>
       </Box>
     </Container>
   );

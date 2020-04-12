@@ -1,18 +1,13 @@
 import React from 'react';
 import './App.css';
 
-import API, { FirebaseContext } from './firebase';
-
 import SignUpPage from './pages/SignUpPage';
 
 function App() {
 
-  const api = new API();
-
+  // TODO: implement router
   return (
-    <FirebaseContext.Provider value={api}>
-      <SignUpPage />
-    </FirebaseContext.Provider>
+    <SignUpPage />
   );
 }
 
