@@ -24,6 +24,7 @@ yarn-error.log*
 
 # firebase
 
+.firebase
 .firebaserc
 *.log
 *.cache
