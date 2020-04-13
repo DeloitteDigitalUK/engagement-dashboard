@@ -15,29 +15,21 @@ export const useStyles = makeStyles((theme) => ({
 }));
 
 export default function UserMenu({ user }) {
-  
-  const [anchorEl, setAnchorEl] = useState(null);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [anchorElement, setAnchorElement] = useState(null);
+
   const classes = useStyles();
   const history = useHistory();
   const firebase = useFirebase();
 
-  const open = Boolean(anchorEl);
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleProfile = () => {
-    handleClose();
+    setMenuOpen(false);
     history.push('/profile');
   };
 
   const handleLogOut = () => {
-    handleClose();
+    setMenuOpen(false);
     firebase.logOut();
     // App will automatically redirect to login now
   }
@@ -48,7 +40,7 @@ export default function UserMenu({ user }) {
         aria-label="Current user account"
         aria-controls="menu-user-profile"
         aria-haspopup="true"
-        onClick={handleMenu}
+        onClick={(e) => { setAnchorElement(e.target); setMenuOpen(true); }}
         color="inherit"
       >
         <AccountCircle />
@@ -56,7 +48,7 @@ export default function UserMenu({ user }) {
       </IconButton>
       <Menu
         id="menu-user-profile"
-        anchorEl={anchorEl}
+        anchorEl={anchorElement}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
@@ -66,8 +58,8 @@ export default function UserMenu({ user }) {
           vertical: 'top',
           horizontal: 'right',
         }}
-        open={open}
-        onClose={handleClose}
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
       >
         <MenuItem onClick={handleProfile}>Profile</MenuItem>
         <MenuItem onClick={handleLogOut}>Log out</MenuItem>
