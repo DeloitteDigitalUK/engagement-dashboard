@@ -92,7 +92,7 @@ export default class API {
   /**
    * Update user profile data.
    */
-  async updateProfile({name}) {
+  async updateProfile({ name }) {
     const user = this.firebase.auth().currentUser;
     return user.updateProfile({
       displayName: name
@@ -102,8 +102,6 @@ export default class API {
   /**
    * Change password from old (which will be re-authenticated) to new.
    * May legitimate throw with `error.code` set to:
-   *   - "auth/user-mismatch"
-   *   - "auth/user-not-found"
    *   - "auth/wrong-password"
    *   - "auth/weak-password"
    */
