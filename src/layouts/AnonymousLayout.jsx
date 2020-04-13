@@ -1,7 +1,14 @@
 import React from 'react';
 
-import { Avatar, Typography, Paper, CssBaseline, Box, Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Avatar,
+  Typography,
+  Paper,
+  CssBaseline,
+  Box,
+  Container,
+  makeStyles
+} from '@material-ui/core';
 
 export const useAnonymousStyles = makeStyles((theme) => ({
   paper: {
