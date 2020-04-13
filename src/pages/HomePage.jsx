@@ -4,7 +4,7 @@ import AuthenticatedLayout from '../layouts/AuthenticatedLayout';
 
 export default function HomePage({ user }) {
   return (
-    <AuthenticatedLayout user={user} title="Engagement Dashboard">
+    <AuthenticatedLayout user={user}>
       {user.displayName}
     </AuthenticatedLayout>
   );
