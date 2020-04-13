@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 
 import { useHistory } from "react-router-dom";
 
-import { makeStyles } from '@material-ui/core/styles';
-import { IconButton, MenuItem, Menu, Typography } from '@material-ui/core';
+import { IconButton, MenuItem, Menu, Typography, makeStyles } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { useFirebase } from '../firebase';
 
 export const useStyles = makeStyles((theme) => ({
   userName: {
-    'margin-left': theme.spacing(1)
+    marginLeft: theme.spacing(1)
   }
 }));
 
