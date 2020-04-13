@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link as RouterLink } from "react-router-dom";
 
-import { Link, Grid, makeStyles } from '@material-ui/core';
+import { Link, Grid, Typography, makeStyles } from '@material-ui/core';
 import ErrorOutlinedIcon from '@material-ui/icons/ErrorOutlined';
 
 import AnonymousLayout from '../layouts/AnonymousLayout';
 
 const useStyles = makeStyles((theme) => ({
   infoText: {
-    'text-align': 'center'
+    textAlign: 'center'
   }
 }));
 
@@ -20,12 +20,12 @@ export default function NotFoundPage() {
     <AnonymousLayout icon={<ErrorOutlinedIcon />} title="Not found">
       <Grid container spacing={2}>
         <Grid item xs={12} className={styles.infoText}>
-          <p>
+          <Typography component="p">
             The page you tried to access cannot be found.
-          </p>
-          <p>
+          </Typography>
+          <Typography component="p">
             <Link to="/" component={RouterLink}>Return to home page</Link>
-          </p>
+          </Typography>
         </Grid>
       </Grid>
    </AnonymousLayout>
