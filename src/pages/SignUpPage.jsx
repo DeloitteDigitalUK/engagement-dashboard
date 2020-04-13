@@ -21,7 +21,7 @@ const formSchema = Yup.object({
 
 const knownErrors = {
   "auth/email-already-in-use": "You already have an account.",
-  "auth/weak-password": "You password is too simple. Please pick a longer/more complex password."
+  "auth/weak-password": "Your password is too simple. Please pick a longer/more complex password."
 };
 
 export default function SignUpPage() {
