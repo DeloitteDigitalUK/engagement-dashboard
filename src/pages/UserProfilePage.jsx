@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Button, Grid, Typography, Divider } from '@material-ui/core';
+import { Button, Grid, Typography, Divider, Box } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
 
 import * as Yup from "yup";
@@ -67,11 +67,11 @@ export default function UserProfilePage({ user }) {
       >
         {({ submitForm, isSubmitting }) => (
           <Form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography component="h2" variant="h5" gutterBottom>Your details</Typography>
-                <Typography>These details are visible to other users in your projects.</Typography>
-              </Grid>
+            <Box className={classes.formDescription}>
+              <Typography component="h2" variant="h5" gutterBottom>Your details</Typography>
+              <Typography>These details are visible to other users in your projects.</Typography>
+            </Box>
+            <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
                   component={TextField}
@@ -123,13 +123,11 @@ export default function UserProfilePage({ user }) {
       >
         {({ submitForm, isSubmitting }) => (
           <Form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography component="h2" variant="h5" gutterBottom>Change password</Typography>
-                <Typography>Enter your current password for validation, then your new password, and finally confirm.</Typography>
-              </Grid>
-            </Grid>
-            <Grid container spacing={2}>
+            <Box className={classes.formDescription}>
+              <Typography component="h2" variant="h5" gutterBottom>Change password</Typography>
+              <Typography>Enter your current password for validation, then your new password, and finally confirm.</Typography>
+            </Box>
+            <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
                   component={TextField}
@@ -143,8 +141,6 @@ export default function UserProfilePage({ user }) {
                   required
                 />
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
                 <Field
                   component={TextField}
@@ -158,8 +154,6 @@ export default function UserProfilePage({ user }) {
                   required
                 />
               </Grid>
-            </Grid>
-            <Grid container spacing={2}>
               <Grid item xs={12} md={4}>
                 <Field
                     component={TextField}

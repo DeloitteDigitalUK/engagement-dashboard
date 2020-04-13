@@ -49,6 +49,9 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   form: {
     marginTop: theme.spacing(3),
   },
+  formDescription: {
+    margin: theme.spacing(3, 0, 2),
+  },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
