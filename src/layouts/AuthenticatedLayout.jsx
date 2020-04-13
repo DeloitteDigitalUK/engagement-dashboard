@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom';
+
 import {
   CssBaseline,
   AppBar,
   Toolbar,
-  Typography,
   Container,
+  Link,
+  makeStyles
 } from '@material-ui/core';
 
 import UserMenu from '../components/UserMenu';
@@ -27,6 +29,9 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    '&:hover': {
+      textDecoration: 'none'
+    },
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -38,9 +43,18 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
+  alert: {
+    width: '100%',
+  },
+  form: {
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
-export default function AuthenticatedLayout({ user, title, children }) {
+export default function AuthenticatedLayout({ user, title, titleLink, children }) {
   
   const classes = useAuthenticatedStyles();
 
@@ -49,9 +63,9 @@ export default function AuthenticatedLayout({ user, title, children }) {
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {title}
-          </Typography>
+          <Link component={RouterLink} variant="h6" color="inherit" noWrap className={classes.title} to={titleLink? titleLink : "/"}>
+            {title? title : "Engagement Dashboard"}
+          </Link>
           <UserMenu user={user} />
         </Toolbar>
       </AppBar>
