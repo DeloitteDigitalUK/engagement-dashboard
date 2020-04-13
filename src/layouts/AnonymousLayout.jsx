@@ -27,7 +27,7 @@ export const useAnonymousStyles = makeStyles((theme) => ({
   },
 }));
 
-function AnonymousLayout({ icon, title, children }) {
+export default function AnonymousLayout({ icon, title, children }) {
 
   const classes = useAnonymousStyles();
 
@@ -48,5 +48,3 @@ function AnonymousLayout({ icon, title, children }) {
     </Container>
   );
 }
-
-export default AnonymousLayout;
