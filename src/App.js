@@ -8,15 +8,19 @@ import { useAuthState } from './firebase';
 
 import Loading from './components/Loading';
 
+import NotFoundPage from './pages/NotFoundPage';
+
 import SignUpPage from './pages/SignUpPage';
 import LogInPage from './pages/LogInPage';
 import PasswordResetPage from './pages/PasswordResetPage';
 
-const PrivateRoute = ({ isLoggedIn, children, ...rest }) => (
+import HomePage from './pages/HomePage';
+
+const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
   <Route
     {...rest}
     render={({ location }) =>
-      isLoggedIn ? (
+      isAuthenticated ? (
         children
       ) : (
         <Redirect
@@ -36,7 +40,7 @@ const PrivateRoute = ({ isLoggedIn, children, ...rest }) => (
 export default function App() {
 
   const [user, userInitalizing, userError] = useAuthState();
-  const isLoggedIn = (user !== null && user !== undefined);
+  const isAuthenticated = (user !== null && user !== undefined);
 
   if(userInitalizing) {
     return <Loading />;
@@ -51,12 +55,13 @@ export default function App() {
     <BrowserRouter>
       <Switch>
         
-        <Route path="/signup"><SignUpPage /></Route>
-        <Route path="/login"><LogInPage /></Route>
-        <Route path="/password-reset"><PasswordResetPage /></Route>
+        <Route exact path="/signup"><SignUpPage /></Route>
+        <Route exact path="/login"><LogInPage /></Route>
+        <Route exact path="/password-reset"><PasswordResetPage /></Route>
 
-        <PrivateRoute isLoggedIn={isLoggedIn} path="/">TODO: Home page for {user && user.displayName}</PrivateRoute>
+        <PrivateRoute isAuthenticated={isAuthenticated} exact path="/"><HomePage user={user} /></PrivateRoute>
 
+        <Route path="*"><NotFoundPage /></Route>
       </Switch>
     </BrowserRouter>
   );
