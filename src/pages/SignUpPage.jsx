@@ -123,7 +123,7 @@ export default function SignUpPage() {
             <Grid container justify="flex-end">
               <Grid item>
                 <Link variant="body2" to="/login" component={RouterLink}>
-                  Already have an account? Log in
+                  Log in instead
                 </Link>
               </Grid>
             </Grid>

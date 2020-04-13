@@ -94,15 +94,15 @@ export default function LogInPage() {
             >
               Log in
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container justify="space-between">
+              <Grid item>
                 <Link variant="body2" to="/password-reset" component={RouterLink}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-              <Link variant="body2" to="/signup" component={RouterLink}>
-                  Don't have an account? Sign up
+                <Link variant="body2" to="/signup" component={RouterLink}>
+                  Create new account
                 </Link>
               </Grid>
             </Grid>

@@ -81,10 +81,10 @@ export default function PasswordResetPage() {
             >
               Send instructions
             </Button>
-            <Grid container>
-              <Grid item xs>
-              <Link variant="body2" to="/login" component={RouterLink}>
-                  Remember your password? Log in
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link variant="body2" to="/login" component={RouterLink}>
+                  Log in instead
                 </Link>
               </Grid>
             </Grid>
