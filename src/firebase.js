@@ -44,7 +44,7 @@ export default class API {
   // Authentication API
 
   /**
-   * Log in and return user.
+   * Log in and return credentials
    * May legitimately throw with `error.code` set to one of:
    *   - "auth/invalid-email"
    *   - "auth/user-disabled"
@@ -52,8 +52,7 @@ export default class API {
    *   - "auth/wrong-password"
    */
   async logIn(email, password) {
-    const credentials = await this.firebase.auth().signInWithEmailAndPassword(email, password);
-    return credentials.user;
+    return this.firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
   /**
