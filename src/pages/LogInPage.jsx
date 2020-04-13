@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import { Button, Link, Grid } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
-
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import * as Yup from "yup";
@@ -12,46 +12,47 @@ import { TextField } from 'formik-material-ui';
 import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout';
 import { useFirebase } from '../firebase';
 
+const formSchema = Yup.object({
+  email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
+  password: Yup.string("Enter your password").required("Password is required"),
+});
+
+const knownErrors = {
+  'auth/user-disabled': "This user has been disabled.",
+  'auth/user-not-found': "Incorrect email address or password.",
+  'auth/wrong-password': "Incorrect email address or password."
+};
+
 export default function LogInPage() {
 
   const classes = useAnonymousStyles();
   const firebase = useFirebase();
+  const history = useHistory();
 
   const [ errorMessage, setErrorMessage ] = useState(null);
-
-  const logIn = async ({ email, password }) => {
-    try {
-      const user = await firebase.logIn(email, password);
-      // TODO: Redirect to home page
-      alert("Logged in as " + user.displayName);
-    } catch(error) {
-      console.error(error);
-      setErrorMessage(
-        error.code === 'auth/user-disabled'? "This user has been disabled." :
-        error.code === 'auth/user-not-found' || error.code == 'auth/wrong-password'? "Incorrect email address or password." :
-        error.message
-      );
-    }
-  }
 
   return (
     <AnonymousLayout icon={<LockOutlinedIcon />} title="Log in">
       <Formik
-        initialValues={{
-          'email': "",
-          'password': "",
-        }}
-        validationSchema={Yup.object({
-          email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
-          password: Yup.string("Enter your password").required("Password is required"),
-        })}
-        onSubmit={async (values, { setSubmitting }) => {
-          await logIn(values);
-          setSubmitting(false);
+        validationSchema={formSchema}
+        initialValues={formSchema.default()}
+        onSubmit={async ({ email, password }, { setSubmitting }) => {
+          try {
+            await firebase.logIn(email, password);      
+            history.push('/');
+          } catch(error) {
+            if(error.code in knownErrors) {
+              setErrorMessage(knownErrors[error.code]);
+            } else {
+              console.log(error);
+              setErrorMessage(error.message);
+            }
+            setSubmitting(false);
+          }
         }}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form}>
+          <Form className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
@@ -64,7 +65,6 @@ export default function LogInPage() {
                   label="Email Address"
                   autoComplete="email"
                   variant="outlined"
-                  autoFocus
                   fullWidth
                   required
                 />
@@ -96,13 +96,13 @@ export default function LogInPage() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link variant="body2" to="/password-reset" component={RouterLink}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+              <Link variant="body2" to="/signup" component={RouterLink}>
+                  Don't have an account? Sign up
                 </Link>
               </Grid>
             </Grid>

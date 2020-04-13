@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from "react-router-dom";
 
 import { Button, Link, Grid } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
@@ -12,6 +13,14 @@ import { TextField } from 'formik-material-ui';
 import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout';
 import { useFirebase } from '../firebase';
 
+const formSchema = Yup.object({
+  email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
+});
+
+const knownErrors = {
+  'auth/user-not-found': "Please check your email for further instructions."
+}
+
 export default function PasswordResetPage() {
 
   const classes = useAnonymousStyles();
@@ -20,37 +29,29 @@ export default function PasswordResetPage() {
   const [ errorMessage, setErrorMessage ] = useState(null);
   const [ statusMessage, setStatusMessage ] = useState(null);
 
-  const logIn = async ({ email }) => {
-    try {
-      await firebase.sendPasswordResetEmail(email);
-      setStatusMessage("Please check your email for further instructions.");
-    } catch(error) {
-      if(error.code === 'auth/user-not-found') {
-        setStatusMessage("Please check your email for further instructions.");
-      } else {
-        console.error(error);
-        setErrorMessage(error.message);
-      }
-    }
-  }
-
   return (
     <AnonymousLayout icon={<LockOutlinedIcon />} title="Reset password">
       <Formik
-        initialValues={{
-          'email': "",
-        }}
-        validationSchema={Yup.object({
-          email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
-        })}
-        onSubmit={async (values, { setSubmitting }) => {
+        validationSchema={formSchema}
+        initialValues={formSchema.default()}
+        onSubmit={async ({ email }, { setSubmitting }) => {
           setStatusMessage(null);
-          await logIn(values);
+          try {
+            await firebase.sendPasswordResetEmail(email);
+            setStatusMessage("Please check your email for further instructions.");
+          } catch(error) {
+            if(error.code in knownErrors) {
+              setErrorMessage(knownErrors[error.code]);
+            } else {
+              console.log(error);
+              setErrorMessage(error.message);
+            }
+          }
           setSubmitting(false);
         }}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form}>
+          <Form className={classes.form} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
@@ -64,7 +65,6 @@ export default function PasswordResetPage() {
                   label="Email Address"
                   autoComplete="email"
                   variant="outlined"
-                  autoFocus
                   fullWidth
                   required
                 />
@@ -83,13 +83,8 @@ export default function PasswordResetPage() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+              <Link variant="body2" to="/login" component={RouterLink}>
+                  Remember your password? Log in
                 </Link>
               </Grid>
             </Grid>
