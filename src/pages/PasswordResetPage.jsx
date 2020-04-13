@@ -14,7 +14,7 @@ import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout'
 import { useFirebase } from '../firebase';
 
 const formSchema = Yup.object({
-  email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required"),
+  email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required").default(""),
 });
 
 const knownErrors = {
