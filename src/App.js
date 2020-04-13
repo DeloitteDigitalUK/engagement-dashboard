@@ -16,6 +16,8 @@ import PasswordResetPage from './pages/PasswordResetPage';
 
 import HomePage from './pages/HomePage';
 
+import UserProfilePage from './pages/UserProfilePage';
+
 const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
   <Route
     {...rest}
@@ -60,6 +62,8 @@ export default function App() {
         <Route exact path="/password-reset"><PasswordResetPage /></Route>
 
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/"><HomePage user={user} /></PrivateRoute>
+
+        <PrivateRoute isAuthenticated={isAuthenticated} exact path="/profile"><UserProfilePage user={user} /></PrivateRoute>
 
         <Route path="*"><NotFoundPage /></Route>
       </Switch>
