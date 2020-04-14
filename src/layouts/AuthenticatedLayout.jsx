@@ -46,9 +46,6 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   alert: {
     width: '100%',
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
 }));
 
 export default function AuthenticatedLayout({ user, title, titleLink, children }) {

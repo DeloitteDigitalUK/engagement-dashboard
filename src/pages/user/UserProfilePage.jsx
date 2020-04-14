@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 
-import { Button, Grid, Typography, Divider, Box } from '@material-ui/core';
-import { Alert } from "@material-ui/lab";
+import { Button, Grid, Divider, makeStyles } from '@material-ui/core';
 
 import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import AuthenticatedLayout, { useAuthenticatedStyles } from '../../layouts/AuthenticatedLayout';
 import { useFirebase } from '../../firebase';
+
+import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
+
+import StatusMessages from '../../components/StatusMessages';
+import FormDescription from '../../components/FormDescription';
+
+import { submitHandler } from '../../utils/formHelpers';
 
 const profileSchema = Yup.object({
   name: Yup.string("Enter your name").required("Name is required").default(""),
@@ -25,10 +30,16 @@ const knownErrors = {
   'auth/weak-password': "Your new password is too simple. Please pick a longer/more complex password."
 }
 
+const useStyles = makeStyles((theme) => ({
+  divider: {
+    margin: theme.spacing(3, 0)
+  }
+}));
+
 export default function UserProfilePage({ user }) {
 
+  const classes = useStyles();
   const firebase = useFirebase();
-  const classes = useAuthenticatedStyles();
 
   const [ errorMessage, setErrorMessage ] = useState(null);
   const [ statusMessage, setStatusMessage ] = useState(null);
@@ -36,41 +47,25 @@ export default function UserProfilePage({ user }) {
   return (
     <AuthenticatedLayout user={user}>
 
-      <Box my={2}>
-        {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
-        {statusMessage && <Alert className={classes.alert} severity="success">{statusMessage}</Alert>}
-      </Box>
+      <StatusMessages error={errorMessage} status={statusMessage} />
+
+      <FormDescription title="Your details">
+        These details are visible to other users in your projects.
+      </FormDescription>
 
       <Formik
         validationSchema={profileSchema}
-        initialValues={{
-          name: user.displayName
-        }}
-        onSubmit={async ({ name }, { setSubmitting }) => {
-          setStatusMessage(null);
-          setErrorMessage(null);
-          try {
-            await firebase.updateProfile({ name })
-            setStatusMessage("Changes saved.");
-          } catch(error) {
-            if(error.code in knownErrors) {
-              setErrorMessage(knownErrors[error.code]);
-            } else {
-              console.log(error);
-              setErrorMessage(error.message);
-            }
-          }
-          setSubmitting(false);
-        }}
+        initialValues={{ ...profileSchema.default(), name: user.displayName }}
+        onSubmit={submitHandler({
+          action: ({ name }) => firebase.updateProfile({ name }),
+          success: "Changes saved",
+          knownErrors,
+          setStatusMessage,
+          setErrorMessage,
+        })}
       >
         {({ submitForm, isSubmitting }) => (
           <Form noValidate>
-            
-            <Box my={2}>
-              <Typography component="h2" variant="h5" gutterBottom>Your details</Typography>
-              <Typography>These details are visible to other users in your projects.</Typography>
-            </Box>
-
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
@@ -84,50 +79,41 @@ export default function UserProfilePage({ user }) {
                   required
                 />
               </Grid>
+              <Grid item xs={12} md={4}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  Save changes
+                </Button>
+              </Grid>
             </Grid>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              disabled={isSubmitting}
-              onClick={submitForm}
-            >
-              Save changes
-            </Button>
           </Form>
         )}
       </Formik>
 
-      <Divider />
+      <Divider className={classes.divider} />
+
+      <FormDescription title="Change password">
+        Enter your current password for validation, then your new password, and finally confirm.
+      </FormDescription>
 
       <Formik
         validationSchema={passwordSchema}
         initialValues={passwordSchema.default()}
-        onSubmit={async ({ currentPassword, newPassword }, { setSubmitting }) => {
-          setStatusMessage(null);
-          setErrorMessage(null);
-          try {
-            await firebase.changePassword(currentPassword, newPassword)
-            setStatusMessage("Your password has been changed.");
-          } catch(error) {
-            if(error.code in knownErrors) {
-              setErrorMessage(knownErrors[error.code]);
-            } else {
-              console.log(error);
-              setErrorMessage(error.message);
-            }
-          }
-          setSubmitting(false);
-        }}
+        onSubmit={submitHandler({
+          action: ({ currentPassword, newPassword }) => firebase.changePassword(currentPassword, newPassword),
+          success: "Your password has been changed",
+          knownErrors,
+          setStatusMessage,
+          setErrorMessage,
+        })}
       >
         {({ submitForm, isSubmitting }) => (
           <Form noValidate>
-            
-            <Box my={2}>
-              <Typography component="h2" variant="h5" gutterBottom>Change password</Typography>
-              <Typography>Enter your current password for validation, then your new password, and finally confirm.</Typography>
-            </Box>
 
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
@@ -169,19 +155,18 @@ export default function UserProfilePage({ user }) {
                     required
                   />
               </Grid>
+              <Grid item xs={12} md={4}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  Change password
+                </Button>
+              </Grid>
             </Grid>
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              className={classes.submit}
-              disabled={isSubmitting}
-              onClick={submitForm}
-            >
-              Change password
-            </Button>
-            
           </Form>
         )}
       </Formik>
