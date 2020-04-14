@@ -7,8 +7,8 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import AuthenticatedLayout, { useAuthenticatedStyles } from '../layouts/AuthenticatedLayout';
-import { useFirebase } from '../firebase';
+import AuthenticatedLayout, { useAuthenticatedStyles } from '../../layouts/AuthenticatedLayout';
+import { useFirebase } from '../../firebase';
 
 const profileSchema = Yup.object({
   name: Yup.string("Enter your name").required("Name is required").default(""),
@@ -36,12 +36,10 @@ export default function UserProfilePage({ user }) {
   return (
     <AuthenticatedLayout user={user}>
 
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
-          {statusMessage && <Alert className={classes.alert} severity="success">{statusMessage}</Alert>}
-        </Grid>
-      </Grid>
+      <Box my={2}>
+        {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
+        {statusMessage && <Alert className={classes.alert} severity="success">{statusMessage}</Alert>}
+      </Box>
 
       <Formik
         validationSchema={profileSchema}
@@ -66,11 +64,13 @@ export default function UserProfilePage({ user }) {
         }}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form} noValidate>
-            <Box className={classes.formDescription}>
+          <Form noValidate>
+            
+            <Box my={2}>
               <Typography component="h2" variant="h5" gutterBottom>Your details</Typography>
               <Typography>These details are visible to other users in your projects.</Typography>
             </Box>
+
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
@@ -122,11 +122,13 @@ export default function UserProfilePage({ user }) {
         }}
       >
         {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form} noValidate>
-            <Box className={classes.formDescription}>
+          <Form noValidate>
+            
+            <Box my={2}>
               <Typography component="h2" variant="h5" gutterBottom>Change password</Typography>
               <Typography>Enter your current password for validation, then your new password, and finally confirm.</Typography>
             </Box>
+
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
@@ -168,6 +170,7 @@ export default function UserProfilePage({ user }) {
                   />
               </Grid>
             </Grid>
+
             <Button
               type="submit"
               variant="contained"
@@ -178,6 +181,7 @@ export default function UserProfilePage({ user }) {
             >
               Change password
             </Button>
+            
           </Form>
         )}
       </Formik>

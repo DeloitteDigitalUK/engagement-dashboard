@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import { Button, Link, Grid } from '@material-ui/core';
+import { Button, Link, Grid, Box } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
@@ -9,22 +9,21 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout';
-import { useFirebase } from '../firebase';
+import AnonymousLayout, { useAnonymousStyles } from '../../layouts/AnonymousLayout';
+import { useFirebase } from '../../firebase';
 
 const formSchema = Yup.object({
-  name: Yup.string("Enter your name").required("Name is required").default(""),
   email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required").default(""),
-  password: Yup.string("Enter your password").min(8, "Password must contain at least 8 characters").required("Password is required").default(""),
-  confirmPassword: Yup.string("Confirm your password").required("Please confirm your password").oneOf([Yup.ref("password")], "Passwords do not match").default("")
+  password: Yup.string("Enter your password").required("Password is required").default(""),
 });
 
 const knownErrors = {
-  "auth/email-already-in-use": "You already have an account.",
-  "auth/weak-password": "Your password is too simple. Please pick a longer/more complex password."
+  'auth/user-disabled': "This user has been disabled.",
+  'auth/user-not-found': "Incorrect email address or password.",
+  'auth/wrong-password': "Incorrect email address or password."
 };
 
-export default function SignUpPage() {
+export default function LogInPage() {
 
   const classes = useAnonymousStyles();
   const firebase = useFirebase();
@@ -33,13 +32,13 @@ export default function SignUpPage() {
   const [ errorMessage, setErrorMessage ] = useState(null);
 
   return (
-    <AnonymousLayout icon={<LockOutlinedIcon />} title="Sign up">
+    <AnonymousLayout icon={<LockOutlinedIcon />} title="Log in">
       <Formik
         validationSchema={formSchema}
         initialValues={formSchema.default()}
-        onSubmit={async ({ name, email, password }, { setSubmitting }) => {
+        onSubmit={async ({ email, password }, { setSubmitting }) => {
           try {
-            await firebase.signUp(name, email, password);
+            await firebase.logIn(email, password);      
             history.push('/');
           } catch(error) {
             if(error.code in knownErrors) {
@@ -54,22 +53,12 @@ export default function SignUpPage() {
       >
         {({ submitForm, isSubmitting }) => (
           <Form className={classes.form} noValidate>
+
+            <Box my={2}>
+              {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
+            </Box>
+
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  component={TextField}
-                  id="name"
-                  name="name"
-                  label="Name"
-                  autoComplete="name"
-                  variant="outlined"
-                  fullWidth
-                  required
-                />
-              </Grid>
               <Grid item xs={12}>
                 <Field
                   component={TextField}
@@ -95,20 +84,8 @@ export default function SignUpPage() {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Field
-                    component={TextField}
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    label="Confirm password"
-                    autoComplete="confirm-password"
-                    variant="outlined"
-                    fullWidth
-                    required
-                  />
-              </Grid>
             </Grid>
+
             <Button
               type="submit"
               fullWidth
@@ -118,12 +95,18 @@ export default function SignUpPage() {
               disabled={isSubmitting}
               onClick={submitForm}
             >
-              Sign up
+              Log in
             </Button>
-            <Grid container justify="flex-end">
+            
+            <Grid container justify="space-between">
               <Grid item>
-                <Link variant="body2" to="/login" component={RouterLink}>
-                  Log in instead
+                <Link variant="body2" to="/password-reset" component={RouterLink}>
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link variant="body2" to="/signup" component={RouterLink}>
+                  Create new account
                 </Link>
               </Grid>
             </Grid>
@@ -132,5 +115,6 @@ export default function SignUpPage() {
       </Formik>
     </AnonymousLayout>
   );
+
 
 }

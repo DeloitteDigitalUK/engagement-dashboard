@@ -10,13 +10,13 @@ import Loading from './components/Loading';
 
 import NotFoundPage from './pages/NotFoundPage';
 
-import SignUpPage from './pages/SignUpPage';
-import LogInPage from './pages/LogInPage';
-import PasswordResetPage from './pages/PasswordResetPage';
+import SignUpPage from './pages/user/SignUpPage';
+import LogInPage from './pages/user/LogInPage';
+import PasswordResetPage from './pages/user/PasswordResetPage';
 
 import HomePage from './pages/HomePage';
 
-import UserProfilePage from './pages/UserProfilePage';
+import UserProfilePage from './pages/user/UserProfilePage';
 
 const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
   <Route

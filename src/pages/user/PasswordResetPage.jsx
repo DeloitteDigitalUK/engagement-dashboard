@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from "react-router-dom";
 
-import { Button, Link, Grid } from '@material-ui/core';
+import { Button, Link, Grid, Box } from '@material-ui/core';
 import { Alert } from "@material-ui/lab";
 
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -10,8 +10,8 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import AnonymousLayout, { useAnonymousStyles } from '../layouts/AnonymousLayout';
-import { useFirebase } from '../firebase';
+import AnonymousLayout, { useAnonymousStyles } from '../../layouts/AnonymousLayout';
+import { useFirebase } from '../../firebase';
 
 const formSchema = Yup.object({
   email: Yup.string("Enter your email address").email("Invalid email address").required("Email is required").default(""),
@@ -52,11 +52,13 @@ export default function PasswordResetPage() {
       >
         {({ submitForm, isSubmitting }) => (
           <Form className={classes.form} noValidate>
+            
+            <Box my={2}>
+              {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
+              {statusMessage && <Alert className={classes.alert} severity="info">{statusMessage}</Alert>}
+            </Box>
+
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
-                {statusMessage && <Alert className={classes.alert} severity="info">{statusMessage}</Alert>}
-              </Grid>
               <Grid item xs={12}>
                 <Field
                   component={TextField}
@@ -70,6 +72,7 @@ export default function PasswordResetPage() {
                 />
               </Grid>
             </Grid>
+
             <Button
               type="submit"
               fullWidth
@@ -81,6 +84,7 @@ export default function PasswordResetPage() {
             >
               Send instructions
             </Button>
+            
             <Grid container justify="flex-end">
               <Grid item>
                 <Link variant="body2" to="/login" component={RouterLink}>
