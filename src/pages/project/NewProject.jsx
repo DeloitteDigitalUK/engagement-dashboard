@@ -11,14 +11,7 @@ import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import StatusMessages from '../../components/StatusMessages';
 import FormDescription from '../../components/FormDescription';
 
-import { useStatusMessages, submitHandler } from '../../utils/formHelpers';
-
-const validateEmail = Yup.string().email().required();
-const listOfEmails = {
-  name: 'is-list-of-email-addresses',
-  message: 'Please enter a list of email addresses, one per line',
-  test: value => !value || value.split(/[\r\n,;]/).every(v => !v || validateEmail.isValidSync(v.trim()))
-};
+import { useStatusMessages, submitHandler, isListOfEmails } from '../../utils/formHelpers';
 
 const formSchema = Yup.object({
   name: Yup.string().label("Name").required().default(""),
@@ -27,9 +20,9 @@ const formSchema = Yup.object({
   enableInsights: Yup.bool().required().default(true),
   enableReleases: Yup.bool().required().default(true),
 
-  administrators: Yup.string().label("Administrators").trim().test(listOfEmails).default(""),
-  authors: Yup.string().label("Authors").trim().test(listOfEmails).default(""),
-  members: Yup.string().label("Team members").trim().test(listOfEmails).default(""),
+  administrators: Yup.string().label("Administrators").trim().test(isListOfEmails).default(""),
+  authors: Yup.string().label("Authors").trim().test(isListOfEmails).default(""),
+  members: Yup.string().label("Team members").trim().test(isListOfEmails).default(""),
 });
 
 const knownErrors = {

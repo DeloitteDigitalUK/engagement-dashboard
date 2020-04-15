@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import * as Yup from 'yup';
 
 /**
  * Hook to manage status message state
@@ -44,3 +45,14 @@ export function submitHandler({
     setSubmitting(false);
   };
 }
+
+const validateEmail = Yup.string().email().required();
+
+/**
+ * Use in a Yup `test()` to validate a list of email addresses in a text box.
+ */
+export const isListOfEmails = {
+  name: 'is-list-of-email-addresses',
+  message: 'Please enter a list of email addresses, one per line',
+  test: value => !value || value.split(/[\r\n,;]/).every(v => !v || validateEmail.isValidSync(v.trim()))
+};
