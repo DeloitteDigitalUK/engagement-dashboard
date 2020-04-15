@@ -18,6 +18,8 @@ import HomePage from './pages/HomePage';
 
 import UserProfilePage from './pages/user/UserProfilePage';
 
+import NewProjectPage from "./pages/project/NewProject";
+
 const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
   <Route
     {...rest}
@@ -64,6 +66,8 @@ export default function App() {
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/"><HomePage user={user} /></PrivateRoute>
 
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/profile"><UserProfilePage user={user} /></PrivateRoute>
+
+        <PrivateRoute isAuthenticated={isAuthenticated} exact path="/new-project"><NewProjectPage user={user} /></PrivateRoute>
 
         <Route path="*"><NotFoundPage /></Route>
       </Switch>
