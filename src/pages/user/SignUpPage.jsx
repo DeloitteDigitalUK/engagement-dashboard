@@ -91,7 +91,6 @@ export default function SignUpPage() {
                   id="password"
                   name="password"
                   label="Password"
-                  autoComplete="current-password"
                   variant="outlined"
                   fullWidth
                   required
@@ -104,7 +103,6 @@ export default function SignUpPage() {
                     id="confirmPassword"
                     name="confirmPassword"
                     label="Confirm password"
-                    autoComplete="confirm-password"
                     variant="outlined"
                     fullWidth
                     required

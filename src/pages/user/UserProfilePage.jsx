@@ -120,7 +120,6 @@ export default function UserProfilePage({ user }) {
                   id="currentPassword"
                   name="currentPassword"
                   label="Current password"
-                  autoComplete="current-password"
                   variant="outlined"
                   fullWidth
                   required
@@ -133,7 +132,6 @@ export default function UserProfilePage({ user }) {
                   id="newPassword"
                   name="newPassword"
                   label="Password"
-                  autoComplete="new-password"
                   variant="outlined"
                   fullWidth
                   required
@@ -146,7 +144,6 @@ export default function UserProfilePage({ user }) {
                     id="confirmPassword"
                     name="confirmPassword"
                     label="Confirm password"
-                    autoComplete="confirm-password"
                     variant="outlined"
                     fullWidth
                     required

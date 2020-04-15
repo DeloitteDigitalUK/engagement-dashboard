@@ -78,7 +78,6 @@ export default function LogInPage() {
                   id="password"
                   name="password"
                   label="Password"
-                  autoComplete="current-password"
                   variant="outlined"
                   fullWidth
                   required
