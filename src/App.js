@@ -41,7 +41,7 @@ const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
 /**
  * Root component, responsible for routing and global redirections
  */
-export default function App({ testMode=false }) {
+export default function App() {
 
   const [ user, userInitalizing, userError ] = useAuthState();
   const isAuthenticated = (user !== null && user !== undefined);
