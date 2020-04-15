@@ -13,10 +13,10 @@ import AnonymousLayout, { useAnonymousStyles } from '../../layouts/AnonymousLayo
 import { useFirebase } from '../../firebase';
 
 const formSchema = Yup.object({
-  name: Yup.string().required("Name is required").default(""),
-  email: Yup.string().email("Invalid email address").required("Email is required").default(""),
-  password: Yup.string().min(8, "Password must contain at least 8 characters").required("Password is required").default(""),
-  confirmPassword: Yup.string().required("Please confirm your password").oneOf([Yup.ref("password")], "Passwords do not match").default("")
+  name: Yup.string().label("Name").required("Name is required").default(""),
+  email: Yup.string().label("Email address").email("Invalid email address").required("Email is required").default(""),
+  password: Yup.string().label("Password").min(8, "Password must contain at least 8 characters").required("Password is required").default(""),
+  confirmPassword: Yup.string().label("Password confirmation").required("Please confirm your password").oneOf([Yup.ref("password")], "Passwords do not match").default("")
 });
 
 const knownErrors = {

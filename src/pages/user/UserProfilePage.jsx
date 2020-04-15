@@ -16,13 +16,13 @@ import FormDescription from '../../components/FormDescription';
 import { useStatusMessages, submitHandler } from '../../utils/formHelpers';
 
 const profileSchema = Yup.object({
-  name: Yup.string().required("Name is required").default(""),
+  name: Yup.string().label("Name").required().default(""),
 });
 
 const passwordSchema = Yup.object({
-  currentPassword: Yup.string().required("Current password is required").default(""),
-  newPassword: Yup.string().min(8, "Password must contain at least 8 characters").required("New password is required").default(""),
-  confirmPassword: Yup.string().required("Please confirm your password").oneOf([Yup.ref("newPassword")], "Passwords do not match").default("")
+  currentPassword: Yup.string().label("Current password").required().default(""),
+  newPassword: Yup.string().label("New password").min(8).required("New password is required").default(""),
+  confirmPassword: Yup.string().label("Password confirmation").required().oneOf([Yup.ref("newPassword")], "Passwords do not match").default("")
 });
 
 const knownErrors = {
