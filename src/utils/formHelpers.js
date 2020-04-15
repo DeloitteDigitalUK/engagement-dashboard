@@ -1,3 +1,20 @@
+import { useState } from 'react';
+
+/**
+ * Hook to manage status message state
+ * 
+ *  const [ messages, setMessages ] = useStatusMessages();
+ *  setMessages({ error: "An error message", status: "A status message"})
+ * 
+ * Either can be omitted (or set to null) to clear the message. To render:
+ * 
+ *  <StatusMessages messages={messages} />
+ */
+export function useStatusMessages() {
+  const [ state, setState ] = useState({status: null, error: null});
+  return [ state, ({ status=null, error=null }={}) => { setState({ status, error })} ];
+}
+
 /**
  * Helper to build an `onSubmit()` handler for a Formik form,
  * setting and clearing status/error messages, displaying an
@@ -6,24 +23,22 @@
 export function submitHandler({
   action,
   success=null,
-  setStatusMessage=null,
-  setErrorMessage=null,
+  setMessages=null,
   knownErrors={}
 }) {
   return async (data, { setSubmitting }) => {
-    setStatusMessage && setStatusMessage(null);
-    setErrorMessage && setErrorMessage(null);
+    setMessages && setMessages();
     try {
       await action(data);
-      if(success && setStatusMessage) {
-        setStatusMessage(success);
+      if(success && setMessages) {
+        setMessages({ status: success });
       }
     } catch(error) {
-      if(error.code in knownErrors && setErrorMessage) {
-        setErrorMessage(knownErrors[error.code]);
+      if(error.code in knownErrors && setMessages) {
+        setMessages({ error: knownErrors[error.code] });
       } else {
         console.log(error);
-        setErrorMessage && setErrorMessage(error.message);
+        setMessages && setMessages({ error: error.message });
       }
     }
     setSubmitting(false);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Button, Grid, Divider, makeStyles } from '@material-ui/core';
 
@@ -13,7 +13,7 @@ import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import StatusMessages from '../../components/StatusMessages';
 import FormDescription from '../../components/FormDescription';
 
-import { submitHandler } from '../../utils/formHelpers';
+import { useStatusMessages, submitHandler } from '../../utils/formHelpers';
 
 const profileSchema = Yup.object({
   name: Yup.string("Enter your name").required("Name is required").default(""),
@@ -41,13 +41,12 @@ export default function UserProfilePage({ user }) {
   const classes = useStyles();
   const firebase = useFirebase();
 
-  const [ errorMessage, setErrorMessage ] = useState(null);
-  const [ statusMessage, setStatusMessage ] = useState(null);
+  const [ messages, setMessages ] = useStatusMessages();
 
   return (
     <AuthenticatedLayout user={user}>
 
-      <StatusMessages error={errorMessage} status={statusMessage} />
+      <StatusMessages messages={messages} />
 
       <FormDescription title="Your details">
         These details are visible to other users in your projects.
@@ -60,8 +59,7 @@ export default function UserProfilePage({ user }) {
           action: ({ name }) => firebase.updateProfile({ name }),
           success: "Changes saved",
           knownErrors,
-          setStatusMessage,
-          setErrorMessage,
+          setMessages,
         })}
       >
         {({ submitForm, isSubmitting }) => (
@@ -108,8 +106,7 @@ export default function UserProfilePage({ user }) {
           action: ({ currentPassword, newPassword }) => firebase.changePassword(currentPassword, newPassword),
           success: "Your password has been changed",
           knownErrors,
-          setStatusMessage,
-          setErrorMessage,
+          setMessages
         })}
       >
         {({ submitForm, isSubmitting }) => (
