@@ -12,7 +12,7 @@ test('can construct an empty object', () => {
     owner: "",
     name: "",
     description: "",
-    updateTypes: [],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
     roles: {}
   });
 });

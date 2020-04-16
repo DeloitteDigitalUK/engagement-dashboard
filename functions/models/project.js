@@ -15,9 +15,13 @@ const projectSchema = Yup.object({
   
   name: Yup.string().required().default(""),
   description: Yup.string().notRequired().default(""),
-  updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([]),
+  updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([
+    UpdateTypes.insights,
+    UpdateTypes.releases,
+  ]),
   
   // map email -> role name
+  // eslint-disable-next-line no-template-curly-in-string
   roles: Yup.object().test('contains-roles', "${path} must contain mappings of email addresses to roles", value => {
     for(let key in value) {
       if(!isEmail.isValidSync(key)) return false;
@@ -32,9 +36,9 @@ const projectSchema = Yup.object({
  */
 class Project extends Model {
 
-  static getSchema() { return projectSchema; };
-  static getCollectionName() { return "projects"; };
+  static getSchema() { return projectSchema; }
+  static getCollectionName() { return "projects"; }
 
-};
+}
 
 module.exports = Project;
