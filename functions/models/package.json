@@ -1,0 +1,18 @@
+{
+  "name": "models",
+  "version": "0.0.1",
+  "description": "Model data shared between cloud functions and client",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "jest": "^25.3.0"
+  },
+  "dependencies": {
+    "lodash.pick": "^4.4.0",
+    "yup": "^0.28.3"
+  }
+}

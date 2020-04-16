@@ -14,6 +14,7 @@
     "firebase": "^7.14.0",
     "formik": "^2.1.4",
     "formik-material-ui": "^2.0.0-beta.1",
+    "models": "file:functions/models",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebase-hooks": "^2.1.1",
