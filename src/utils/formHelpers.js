@@ -27,7 +27,7 @@ export function submitHandler({
   setMessages=null,
   knownErrors={}
 }) {
-  return async (data, { setSubmitting }) => {
+  return async (data) => {
     setMessages && setMessages();
     try {
       await action(data);
@@ -42,10 +42,10 @@ export function submitHandler({
         setMessages && setMessages({ error: error.message });
       }
     }
-    setSubmitting(false);
   };
 }
 
+export const splitLines = /[\r\n,;]/;
 const validateEmail = Yup.string().email().required();
 
 /**
@@ -54,5 +54,5 @@ const validateEmail = Yup.string().email().required();
 export const isListOfEmails = {
   name: 'is-list-of-email-addresses',
   message: 'Please enter a list of email addresses, one per line',
-  test: value => !value || value.split(/[\r\n,;]/).every(v => !v || validateEmail.isValidSync(v.trim()))
+  test: value => !value || value.split(splitLines).every(v => !v || validateEmail.isValidSync(v.trim()))
 };

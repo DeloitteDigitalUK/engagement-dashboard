@@ -62,8 +62,8 @@ export default function UserProfilePage({ user }) {
           setMessages,
         })}
       >
-        {({ submitForm, isSubmitting }) => (
-          <Form noValidate>
+        {({ handleSubmit, isSubmitting }) => (
+          <Form onSubmit={handleSubmit} noValidate>
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
                 <Field
@@ -83,7 +83,6 @@ export default function UserProfilePage({ user }) {
                   variant="contained"
                   color="primary"
                   disabled={isSubmitting}
-                  onClick={submitForm}
                 >
                   Save changes
                 </Button>
@@ -109,8 +108,8 @@ export default function UserProfilePage({ user }) {
           setMessages
         })}
       >
-        {({ submitForm, isSubmitting }) => (
-          <Form noValidate>
+        {({ handleSubmit, isSubmitting }) => (
+          <Form onSubmit={handleSubmit} noValidate>
 
             <Grid container spacing={2} direction="column">
               <Grid item xs={12} md={4}>
@@ -155,7 +154,6 @@ export default function UserProfilePage({ user }) {
                   variant="contained"
                   color="secondary"
                   disabled={isSubmitting}
-                  onClick={submitForm}
                 >
                   Change password
                 </Button>

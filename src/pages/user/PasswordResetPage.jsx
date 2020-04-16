@@ -50,8 +50,8 @@ export default function PasswordResetPage() {
           setSubmitting(false);
         }}
       >
-        {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form} noValidate>
+        {({ handleSubmit, isSubmitting }) => (
+          <Form className={classes.form} onSubmit={handleSubmit} noValidate>
             
             <Box my={2}>
               {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
@@ -80,7 +80,6 @@ export default function PasswordResetPage() {
               color="primary"
               className={classes.submit}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               Send instructions
             </Button>

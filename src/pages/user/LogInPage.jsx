@@ -51,8 +51,8 @@ export default function LogInPage() {
           }
         }}
       >
-        {({ submitForm, isSubmitting }) => (
-          <Form className={classes.form} noValidate>
+        {({ handleSubmit, isSubmitting }) => (
+          <Form className={classes.form} onSubmit={handleSubmit} noValidate>
 
             <Box my={2}>
               {errorMessage && <Alert className={classes.alert} severity="error">{errorMessage}</Alert>}
@@ -92,7 +92,6 @@ export default function LogInPage() {
               color="primary"
               className={classes.submit}
               disabled={isSubmitting}
-              onClick={submitForm}
             >
               Log in
             </Button>
