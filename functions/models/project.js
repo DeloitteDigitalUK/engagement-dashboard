@@ -32,8 +32,8 @@ const projectSchema = Yup.object({
  */
 class Project extends Model {
 
-  static getSchema = () => projectSchema;
-  static getCollectionName = () => "projects";
+  static getSchema() { return projectSchema; };
+  static getCollectionName() { return "projects"; };
 
 };
 

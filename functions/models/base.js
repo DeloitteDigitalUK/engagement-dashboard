@@ -28,13 +28,13 @@ class Model {
    * Define the schema used to validate this instance.
    * Subclasses should override this.
    */
-  static getSchema = () => schema;
+  static getSchema() { return schema; }
 
   /**
    * Return the name of the collection.
    * Subclasses should override this.
    */
-  static getCollectionName = () => "";
+  static getCollectionName() {return ""; }
 
   /**
    * The default constructor takes a data object that conforms to the schema,

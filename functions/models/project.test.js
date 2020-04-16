@@ -15,9 +15,6 @@ test('can construct an empty object', () => {
     updateTypes: [],
     roles: {}
   });
-
-
-
 });
 
 test('can construct a valid object', () => {
