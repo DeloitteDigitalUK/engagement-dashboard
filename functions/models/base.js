@@ -54,7 +54,7 @@ class Model {
    * `withConverter()`.
    */
   static toFirestore(instance) {
-    return this.getSchema().validateSync(instance.toObject(), { stripUnknown: true, stict: false });
+    return this.getSchema().validateSync(instance.toObject());
   }
 
   /**
@@ -73,7 +73,7 @@ class Model {
    */
   update(data) {
     const merged = {...this.toObject(), ...data};
-    const validated = this.constructor.getSchema().validateSync(merged, { stripUnknown: true, stict: false });
+    const validated = this.constructor.getSchema().validateSync(merged);
     for(let key in validated) {
       this[key] = validated[key];
     }
