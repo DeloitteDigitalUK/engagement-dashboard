@@ -4,6 +4,22 @@ const Project = require('./project');
 const UpdateTypes = require('./updateTypes');
 const Roles = require('./roles');
 
+test('can construct an empty object', () => {
+  const p = new Project();
+
+  expect(p.getId()).toEqual(null);
+  expect(p.toObject()).toEqual({
+    owner: "",
+    name: "",
+    description: "",
+    updateTypes: [],
+    roles: {}
+  });
+
+
+
+});
+
 test('can construct a valid object', () => {
   const p = new Project(null, {
     owner: "abcdefg",
@@ -32,7 +48,7 @@ test('can construct a valid object', () => {
 
 test('requires an owner', () => {
   expect(() => new Project(null, {
-    // owner: "abcdefg",
+    owner: null,
     name: "A project",
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
@@ -45,7 +61,7 @@ test('requires an owner', () => {
 });
 
 test('requires a name', () => {
-  expect(() => new Project(null, {
+  const p = new Project(null, {
     owner: "abcdefg",
     // name: "A project",
     description: "My project",
@@ -55,7 +71,9 @@ test('requires a name', () => {
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
     }
-  })).toThrow(Yup.ValidationError);
+  });
+  
+  expect(p.isValid()).toEqual(false)
 });
 
 test('does not require a description', () => {

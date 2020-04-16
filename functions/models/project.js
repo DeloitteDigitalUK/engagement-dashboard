@@ -11,9 +11,9 @@ const isEmail = Yup.string().email();
 const isRole = Yup.string().oneOf(validRoles);
 
 const projectSchema = Yup.object({
-  owner: Yup.string().required(), // user id
+  owner: Yup.string().required().default(""), // user id
   
-  name: Yup.string().required(),
+  name: Yup.string().required().default(""),
   description: Yup.string().notRequired().default(""),
   updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([]),
   

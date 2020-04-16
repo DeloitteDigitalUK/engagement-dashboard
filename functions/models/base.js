@@ -41,14 +41,20 @@ class Model {
    * casts and validates it, and then sets the validated key/value pairs onto
    * the new object. The id is the document ID.
    */
-  constructor(id=null, data={}) {
+  constructor(id=null, data=null) {
     this._id = id;
-    this.update(data);
+
+    // Set schema default values - not necessarily valid yet!
+    Object.assign(this, this.constructor.getSchema().default());
+    
+    if(data) {
+      this.update(data)
+    }
   }
 
   /**
    * Convert an instance of this model to an object that can be stored
-   * in Firestore.
+   * in Firestore. The data is validated (and so the function may throw).
    * 
    * Allows the model sub-class to be used as an argument to Firebase's
    * `withConverter()`.
@@ -72,11 +78,22 @@ class Model {
    * Set and validate fields according to the schema
    */
   update(data) {
-    const merged = {...this.toObject(), ...data};
-    const validated = this.constructor.getSchema().validateSync(merged);
-    for(let key in validated) {
-      this[key] = validated[key];
-    }
+    const schema = Yup.object(pick(this.constructor.getSchema().fields, Object.keys(data)));
+    Object.assign(this, schema.validateSync(data));
+  }
+
+  /**
+   * Validate the current state of the object. May throw a validation error.
+   */
+  validate() {
+    this.constructor.getSchema().validateSync(this.toObject());
+  }
+
+  /**
+   * Return whether or not this object is valid
+   */
+  isValid() {
+    return this.constructor.getSchema().isValidSync(this.toObject());
   }
 
   // Hooks to overide type conversion

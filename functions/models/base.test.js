@@ -3,7 +3,7 @@ const Yup = require('yup');
 
 const testSchema = Yup.object({
   name: Yup.string().default("Anonymous"),
-  email: Yup.string().email().default("")
+  email: Yup.string().email().required().default("")
 });
 
 class TestModel extends Model {
@@ -12,12 +12,19 @@ class TestModel extends Model {
 }
 
 describe("constructor", () => {
-  test('can construct a valid object with defaults', () => {
+  test('can construct a valid object with defaults (even if not valid)', () => {
     const t = new TestModel();
     expect(t.getId()).toEqual(null);
     expect(t.toObject()).toEqual({name: "Anonymous", email: ""});
+    expect(t.isValid()).toEqual(false);
+
+    t.update({
+      email: 'test@example.org'
+    });
+
+    expect(t.isValid()).toEqual(true);
   });
-  
+
   test('can construct a valid object with values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     expect(t.getId()).toEqual("123");
@@ -33,6 +40,7 @@ describe("constructor", () => {
     expect(t.getId()).toEqual("123");
     expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
   });
+
 });
 
 describe("updating the object", () => {
@@ -52,10 +60,13 @@ describe("updating the object", () => {
   test('can partially update the object', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     
+    expect(t.getId()).toEqual("123");
+    expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
+
     t.update({
       name: "James"
     });
-
+    
     expect(t.getId()).toEqual("123");
     expect(t.toObject()).toEqual({name: "James", email: "test@example.org"});
   });
@@ -96,6 +107,26 @@ describe("calculating paths", () => {
           t2 = new TestModel("321");
     
     expect(t2.getPath(t1)).toEqual("testModels/123/testModels/321");
+  });
+});
+
+describe("explicit validation", () => {
+  test('validate() method', () => {
+    const t = new TestModel("123");
+    expect(() => t.validate()).toThrow(Yup.ValidationError);
+    t.update({
+      email: 'test@example.org'
+    });
+    expect(() => t.validate()).not.toThrow(Yup.ValidationError);
+  });
+
+  test('isValid() method', () => {
+    const t = new TestModel("123");
+    expect(t.isValid()).toEqual(false);
+    t.update({
+      email: 'test@example.org'
+    });
+    expect(t.isValid()).toEqual(true);
   });
 });
 
