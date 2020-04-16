@@ -142,6 +142,12 @@ describe("the class is a Firestore converter", () => {
     const c = TestModel.toFirestore(t);
     expect(c).toEqual({name: "Anonymous", email: "test@example.org"});
   });
+
+  test('validates on conversion to Firestore', () => {
+    const t = new TestModel("123", {name: "John"});
+    expect(t.isValid()).toEqual(false);
+    expect(() => TestModel.toFirestore(t)).toThrow(Yup.ValidationError);
+  });
   
   test('can convert from Firestore', () => {
   
