@@ -4,7 +4,9 @@ import { useHistory } from 'react-router-dom';
 
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import ProjectForm from '../../components/ProjectForm';
-import { Project } from 'models';
+
+import { Project, Roles } from 'models';
+
 import { useFirebase } from '../../firebase';
 
 const knownErrors = {}
@@ -13,7 +15,11 @@ export default function NewProjectPage({ user }) {
 
   const history = useHistory();
   const firebase = useFirebase();
-  const project = new Project();
+  const project = new Project(null, {
+    roles: {
+      [user.email]: Roles.owner
+    }
+  });
 
   return (
     <AuthenticatedLayout user={user}>

@@ -18,11 +18,11 @@ describe('projectToForm', () => {
   
   test('can convert a project with data', () => {
     const p = new Project(null, {
-      owner: '123',
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
       roles: {
+        'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
         'test2@example.org': Roles.author,
         'test3@example.org': Roles.author,
@@ -46,6 +46,12 @@ describe('formToProject', () => {
 
   test('can convert a form to a project', () => {
 
+    const project = new Project(null, {
+      roles: {
+        'test@example.org': Roles.owner,
+      }
+    })
+
     const data = {
       name: "My project",
       description: "A description",
@@ -56,11 +62,12 @@ describe('formToProject', () => {
       members: "test41@example.org",
     };
 
-    expect(formDataToProjectData(data)).toEqual({
+    expect(formDataToProjectData(project, data)).toEqual({
       name: "My project",
       description: "A description",
       updateTypes: [UpdateTypes.releases],
       roles: {
+        'test@example.org': Roles.owner,
         'test11@example.org': Roles.administrator,
         'test21@example.org': Roles.author,
         'test31@example.org': Roles.author,
@@ -72,12 +79,12 @@ describe('formToProject', () => {
 
   test('round trip', () => {
 
-    const p = new Project(null, {
-      owner: '123',
+    const project = new Project(null, {
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
       roles: {
+        'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
         'test2@example.org': Roles.author,
         'test3@example.org': Roles.author,
@@ -85,18 +92,18 @@ describe('formToProject', () => {
       }
     });
 
-    const formData = projectToFormData(p),
-          projectData = formDataToProjectData(formData),
-          replacementProject = new Project(null, {owner: '123'});
+    const formData = projectToFormData(project),
+          projectData = formDataToProjectData(project, formData),
+          replacementProject = new Project(null);
 
     replacementProject.update(projectData);
 
     expect(replacementProject.toObject()).toEqual({
-      owner: "123",
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
       roles: {
+        'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
         'test2@example.org': Roles.author,
         'test3@example.org': Roles.author,

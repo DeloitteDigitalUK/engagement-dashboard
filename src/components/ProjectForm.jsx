@@ -55,23 +55,24 @@ export function projectToFormData(project) {
   return form;
 }
 
-export function formDataToProjectData(form) {
-  let project = {};
+export function formDataToProjectData(project, form) {
+  let data = {};
 
   // copy over fields where names match
-  Object.assign(project, pick(form, Object.keys(Project.getSchema().fields)));
+  Object.assign(data, pick(form, Object.keys(Project.getSchema().fields)));
   
   // checkboxes -> list
-  project.updateTypes = Object.values(UpdateTypes).filter(v => form[updateTypesToProps[v]]);
+  data.updateTypes = Object.values(UpdateTypes).filter(v => form[updateTypesToProps[v]]);
 
   // lists -> role map (note: order matters in case a user is listed in more than one!)
-  project.roles = fromPairs([].concat(
+  data.roles = fromPairs([].concat(
+    Object.entries(project.roles).filter(([k, v]) => v === Roles.owner),
     form.members.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.member]),
     form.authors.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.author]),
     form.administrators.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.administrator]),
   ));
   
-  return project;
+  return data;
 }
 
 /**
@@ -101,7 +102,7 @@ export default function ProjectForm({
         validationSchema={formSchema}
         initialValues={projectToFormData(project)}
         onSubmit={submitHandler({
-          action: (data) => action(formDataToProjectData(data)),
+          action: (data) => action(formDataToProjectData(project, data)),
           knownErrors,
           setMessages,
         })}

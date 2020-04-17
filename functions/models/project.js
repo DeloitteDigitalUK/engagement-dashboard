@@ -11,8 +11,6 @@ const isEmail = Yup.string().email();
 const isRole = Yup.string().oneOf(validRoles);
 
 const projectSchema = Yup.object({
-  owner: Yup.string().required().default(""), // user id
-  
   name: Yup.string().required().default(""),
   description: Yup.string().notRequired().default(""),
   updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([
@@ -22,13 +20,19 @@ const projectSchema = Yup.object({
   
   // map email -> role name
   // eslint-disable-next-line no-template-curly-in-string
-  roles: Yup.object().test('contains-roles', "${path} must contain mappings of email addresses to roles", value => {
-    for(let key in value) {
-      if(!isEmail.isValidSync(key)) return false;
-      if(!isRole.isValidSync(value[key])) return false;
-    }
-    return true;
-  }).default({})
+  roles: Yup.object()
+    .test('contains-roles', "${path} must contain mappings of email addresses to roles", value => {
+      for(let key in value) {
+        if(!isEmail.isValidSync(key)) return false;
+        if(!isRole.isValidSync(value[key])) return false;
+      }
+      return true;
+    })
+    // eslint-disable-next-line no-template-curly-in-string
+    .test('must-have-an-owner', "${path} must contain an email address with the role of owner", value => {
+      return Object.values(value).includes(Roles.owner);
+    })
+    .default({})
 });
 
 /**
