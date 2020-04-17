@@ -8,6 +8,8 @@ import * as rfhAuth from 'react-firebase-hooks/auth';
 
 import { createContext, useContext } from 'react';
 
+import { Project } from 'models';
+
 // To configure these, set then in a `.env` or `.env.local` file.
 
 var firebaseConfig = {
@@ -73,7 +75,7 @@ export default class API {
 
     await credentials.user.updateProfile(({
       displayName: name
-    }))
+    }));
 
     await credentials.user.sendEmailVerification();
 
@@ -101,7 +103,7 @@ export default class API {
 
   /**
    * Change password from old (which will be re-authenticated) to new.
-   * May legitimate throw with `error.code` set to:
+   * May legitimately throw with `error.code` set to:
    *   - "auth/wrong-password"
    *   - "auth/weak-password"
    */
@@ -112,6 +114,46 @@ export default class API {
     return user.updatePassword(newPassword);
   }
 
+  // Project CRUD
+
+  /**
+   * Create a new project in the data store. The passed-in `project` instance
+   * will be updated to set `owner` to the user's UID, and to set the newly
+   * created id.
+   */
+  async addProject(user, project) {
+    project.update({
+      owner: user.uid
+    });
+
+    const collection = this.firebase.firestore().collection(Project.getCollectionName());
+    const doc = await collection.withConverter(Project).add(project);
+
+    project.setId(doc.id);
+  }
+
+  /**
+   * Save changes to the given project. The server will enforce that only an
+   * owner or administrator can make changes.
+   */
+  async saveProject(project) {
+    return this.firebase.firestore().doc(project.getPath()).withConverter(Project).set(project);
+  }
+
+  /**
+   * Delete the given project. The server will enforce that only the owner
+   * can do this.
+   */
+  async deleteProject(user, project) {
+    return this.firebase.firestore().doc(project.getPath()).delete();
+  }
+
+  /**
+   * Return a document reference for the given project id
+   */
+  getProjectDocumentReference(projectId) {
+    return this.firebase.firestore().collection(Project.getCollectionName()).withConverter(Project).doc(projectId);
+  }
   
 }
 

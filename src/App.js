@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { Alert } from "@material-ui/lab";
 
 import { useAuthState } from './firebase';
 
 import Loading from './components/Loading';
+import { PrivateRoute } from './utils/routeHelpers';
 
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -18,25 +19,8 @@ import HomePage from './pages/HomePage';
 
 import UserProfilePage from './pages/user/UserProfilePage';
 
-import NewProjectPage from "./pages/project/NewProject";
-
-const PrivateRoute = ({ isAuthenticated, children, ...rest }) => (
-  <Route
-    {...rest}
-    render={({ location }) =>
-      isAuthenticated ? (
-        children
-      ) : (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: location }
-          }}
-        />
-      )
-    }
-  />
-);
+import NewProjectPage from './pages/project/NewProject';
+import ProjectPage from './pages/project/Project';
 
 /**
  * Root component, responsible for routing and global redirections
@@ -64,10 +48,9 @@ export default function App() {
         <Route exact path="/password-reset"><PasswordResetPage /></Route>
 
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/"><HomePage user={user} /></PrivateRoute>
-
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/profile"><UserProfilePage user={user} /></PrivateRoute>
-
         <PrivateRoute isAuthenticated={isAuthenticated} exact path="/new-project"><NewProjectPage user={user} /></PrivateRoute>
+        <PrivateRoute isAuthenticated={isAuthenticated} path="/project/:projectId"><ProjectPage user={user} /></PrivateRoute>
 
         <Route path="*"><NotFoundPage /></Route>
       </Switch>

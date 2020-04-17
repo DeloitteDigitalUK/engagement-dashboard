@@ -8,7 +8,8 @@ import {
   Toolbar,
   Container,
   Link,
-  makeStyles
+  makeStyles,
+  Box,
 } from '@material-ui/core';
 
 import UserMenu from '../components/UserMenu';
@@ -29,9 +30,11 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    '&:hover': {
-      textDecoration: 'none'
-    },
+  },
+  projectTitle: {
+    marginLeft: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    borderLeft: `solid white 1px`
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
@@ -48,7 +51,7 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AuthenticatedLayout({ user, title, titleLink, children }) {
+export default function AuthenticatedLayout({ user, project, children }) {
   
   const classes = useAuthenticatedStyles();
 
@@ -57,9 +60,16 @@ export default function AuthenticatedLayout({ user, title, titleLink, children }
       <CssBaseline />
       <AppBar position="absolute" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Link component={RouterLink} variant="h6" color="inherit" noWrap className={classes.title} to={titleLink? titleLink : "/"}>
-            {title? title : "Engagement Dashboard"}
-          </Link>
+          <Box className={classes.title}>
+            <Link to="/" component={RouterLink} variant="subtitle1" color="inherit" noWrap underline="none">
+              Engagement Dashboard
+            </Link>
+            {project && 
+              <Link to={`/project/${project.getId()}`} component={RouterLink} variant="subtitle2" color="inherit" noWrap underline="none" className={classes.projectTitle}>
+                {project.name}
+              </Link>
+            }
+          </Box>
           <UserMenu user={user} />
         </Toolbar>
       </AppBar>
