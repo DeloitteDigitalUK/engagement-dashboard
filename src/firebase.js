@@ -12,7 +12,7 @@ import { createContext, useContext } from 'react';
 
 import { Project, Roles } from 'models';
 
-// To configure these, set then in a `.env` or `.env.local` file.
+// To configure these, set them in a `.env` or `.env.local` file.
 
 var firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
