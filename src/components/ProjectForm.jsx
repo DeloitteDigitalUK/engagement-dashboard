@@ -68,10 +68,10 @@ export function formDataToProjectData(project, form) {
 
   // lists -> role map (note: order matters in case a user is listed in more than one!)
   data.roles = fromPairs([].concat(
-    Object.entries(project.roles).filter(([k, v]) => v === Roles.owner),
     form.members.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.member]),
     form.authors.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.author]),
     form.administrators.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.administrator]),
+    Object.entries(project.roles).filter(([k, v]) => v === Roles.owner),
   ));
   
   return data;
