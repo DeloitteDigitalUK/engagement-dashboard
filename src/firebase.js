@@ -147,7 +147,7 @@ export default class API {
    * Delete the given project. The server will enforce that only the owner
    * can do this.
    */
-  async deleteProject(user, project) {
+  async deleteProject(project) {
     return this.firebase.firestore().doc(project.getPath()).delete();
   }
 
