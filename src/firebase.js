@@ -123,7 +123,7 @@ export default class API {
    */
   async addProject(user, project) {
 
-    if(project.roles[user.email] !== Roles.owner) {
+    if(!project.hasRole(user.email, Roles.owner)) {
       throw new Yup.ValidationError("Current user is not set as the owner", project.roles, "roles", 'check-ownership');
     }
 

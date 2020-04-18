@@ -217,3 +217,39 @@ test('decodes email addresses in firebase keys', () => {
   });
 
 });
+
+test('hasRole() with single role', () => {
+  const p = new Project(null, {
+    name: "A project",
+    description: "My project",
+    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    roles: {
+      'test@example.org': Roles.owner,
+      'test1@example.org': Roles.administrator,
+      'test2@example.org': Roles.author,
+      'test3@example.org': Roles.member,
+    }
+  });
+
+  expect(p.hasRole('test@example.org', 'owner')).toEqual(true);
+  expect(p.hasRole('test@example.org', 'administrator')).toEqual(false);
+  expect(p.hasRole('test99@example.org', 'member')).toEqual(false);
+});
+
+test('hasRole() with a list of roles', () => {
+  const p = new Project(null, {
+    name: "A project",
+    description: "My project",
+    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    roles: {
+      'test@example.org': Roles.owner,
+      'test1@example.org': Roles.administrator,
+      'test2@example.org': Roles.author,
+      'test3@example.org': Roles.member,
+    }
+  });
+
+  expect(p.hasRole('test@example.org', ['owner', 'administrator'])).toEqual(true);
+  expect(p.hasRole('test@example.org', ['administrator', 'member'])).toEqual(false);
+  expect(p.hasRole('test99@example.org', ['owner', 'administrator', 'author', 'member'])).toEqual(false);
+});

@@ -44,6 +44,16 @@ class Project extends Model {
   static getSchema() { return projectSchema; }
   static getCollectionName() { return "projects"; }
 
+  /**
+   * Test if the given email address has the current role or roles
+   */
+  hasRole(email, roles) {
+    if(!Array.isArray(roles)) {
+      roles = [roles];
+    }
+    return roles.includes(this.roles[email]);
+  }
+
   // we use email addresses as keys in the `roles` table, but Firebase
   // doesn't play nicely with this in queries, so we encode '.' as '@@'
   // (which isn't valid in an email address)

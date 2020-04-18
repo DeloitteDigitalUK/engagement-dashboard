@@ -40,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProjectCard = ({ user, project }) => {
   const classes = useStyles();
-  const role = project.roles[user.email],
-        canEdit = [Roles.owner, Roles.administrator].includes(role);
+  const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
   
   return (
     <Card variant="outlined" className={classes.projectCard}>

@@ -34,7 +34,7 @@ export default function EditProjectPage({ user, project }) {
 
   const firebase = useFirebase();
 
-  const canDelete = project.roles[user.email] === Roles.owner;
+  const canDelete = project.hasRole(user.email, Roles.owner);
 
   const saveProject = async (data) => {
     project.update(data);
