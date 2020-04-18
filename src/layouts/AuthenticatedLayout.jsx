@@ -13,8 +13,9 @@ import {
 } from '@material-ui/core';
 
 import UserMenu from '../components/UserMenu';
+import ProjectMenu from '../components/ProjectMenu';
 
-export const useAuthenticatedStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
@@ -31,11 +32,6 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  projectTitle: {
-    marginLeft: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-    borderLeft: `solid white 1px`
-  },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
@@ -46,14 +42,11 @@ export const useAuthenticatedStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
-  alert: {
-    width: '100%',
-  },
 }));
 
 export default function AuthenticatedLayout({ user, project, children }) {
   
-  const classes = useAuthenticatedStyles();
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -64,11 +57,7 @@ export default function AuthenticatedLayout({ user, project, children }) {
             <Link to="/" component={RouterLink} variant="subtitle1" color="inherit" noWrap underline="none">
               Engagement Dashboard
             </Link>
-            {project && 
-              <Link to={`/project/${project.getId()}`} component={RouterLink} variant="subtitle2" color="inherit" noWrap underline="none" className={classes.projectTitle}>
-                {project.name}
-              </Link>
-            }
+            {project && <ProjectMenu user={user} project={project} />}
           </Box>
           <UserMenu user={user} />
         </Toolbar>
