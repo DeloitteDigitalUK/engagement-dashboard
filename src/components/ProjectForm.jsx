@@ -4,7 +4,9 @@ import pick from 'lodash.pick';
 import invert from 'lodash.invert';
 import fromPairs from 'lodash.frompairs';
 
-import { Button, Grid, FormControl, FormLabel, Typography } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
+import { Button, Grid, FormControl, FormLabel, Typography, makeStyles } from '@material-ui/core';
 
 import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
@@ -75,6 +77,12 @@ export function formDataToProjectData(project, form) {
   return data;
 }
 
+const useStyles = makeStyles((theme) => ({
+  cancelButton: {
+    marginLeft: theme.spacing(1)
+  }
+}));
+
 /**
  * Generic add/edit form for projects, which operate on a `Project` model
  * instance and call `action()`.
@@ -88,7 +96,11 @@ export default function ProjectForm({
   knownErrors
 }) {
 
+  const history = useHistory();
+  const classes = useStyles();
+
   const [ messages, setMessages ] = useStatusMessages();
+
 
   return (
     <>
@@ -212,6 +224,20 @@ export default function ProjectForm({
                   disabled={isSubmitting}
                 >
                   {buttonLabel}
+                </Button>
+                <Button
+                  type="button"
+                  variant="text"
+                  color="inherit"
+                  disabled={isSubmitting}
+                  underlined="always"
+                  className={classes.cancelButton}
+                  onClick={e => {
+                    e.preventDefault();
+                    history.goBack();
+                  }}
+                >
+                  Cancel
                 </Button>
               </Grid>
             </Grid>
