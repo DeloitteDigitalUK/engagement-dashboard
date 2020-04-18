@@ -4,11 +4,13 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+import * as Yup from 'yup';
 import * as rfhAuth from 'react-firebase-hooks/auth';
+import { useDocument, useCollection } from 'react-firebase-hooks/firestore';
 
 import { createContext, useContext } from 'react';
 
-import { Project } from 'models';
+import { Project, Roles } from 'models';
 
 // To configure these, set then in a `.env` or `.env.local` file.
 
@@ -117,17 +119,18 @@ export default class API {
   // Project CRUD
 
   /**
-   * Create a new project in the data store. The passed-in `project` instance
-   * will be updated to set `owner` to the user's UID, and to set the newly
-   * created id.
+   * Create a new project in the data store.
    */
   async addProject(user, project) {
-    project.update({
-      owner: user.uid
-    });
 
-    const collection = this.firebase.firestore().collection(Project.getCollectionName());
-    const doc = await collection.withConverter(Project).add(project);
+    if(project.roles[user.email] !== Roles.owner) {
+      throw new Yup.ValidationError("Current user is not set as the owner", project.roles, "roles", 'check-ownership');
+    }
+
+    const doc = await this.firebase.firestore()
+      .collection(Project.getCollectionName())
+      .withConverter(Project)
+      .add(project);
 
     project.setId(doc.id);
   }
@@ -149,10 +152,48 @@ export default class API {
   }
 
   /**
-   * Return a document reference for the given project id
+   * Return a hook with a `[project, loading, error]` triple.
    */
-  getProjectDocumentReference(projectId) {
-    return this.firebase.firestore().collection(Project.getCollectionName()).withConverter(Project).doc(projectId);
+  useProject(projectId) {
+    const [ doc, loading, error ] = useDocument(
+      this.firebase.firestore()
+        .collection(Project.getCollectionName())
+        .withConverter(Project)
+        .doc(projectId)
+    );
+
+    const project = doc? doc.data() : null;
+    return [project, loading, error];
+  }
+
+  /**
+   * Return a hook with a `[projects, loading, error]` triple
+   * for all projects accessible to this user.
+   */
+  useProjects(user) {
+    const [ query, loading, error ] = useCollection(
+      this.firebase.firestore()
+        .collection(Project.getCollectionName())
+        .withConverter(Project)
+        .where(`roles.${Project.encodeKey(user.email)}`, 'in', [
+          Roles.owner,
+          Roles.administrator,
+          Roles.author,
+          Roles.member
+        ])
+    );
+
+    if(loading || error) {
+      return [ null, loading, error ];
+    }
+
+    // we sort manually because if we add an `orderBy()` clause to the query,
+    // firestore requires is to have a composite index for each combination of
+    // email address (in `roles`) in the `name` attribute, which are not
+    // automatically added. The number of projects should be small anyway.
+    let projects = query.docs.map(p => p.data()).sort((a, b) => ('' + a.name).localeCompare(b.name));
+
+    return [projects, loading, error];
   }
   
 }

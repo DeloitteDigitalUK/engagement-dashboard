@@ -3,7 +3,6 @@ import React from 'react';
 import { Alert } from '@material-ui/lab';
 
 import { useRouteMatch, useParams, Switch, Route } from 'react-router-dom';
-import { useDocument } from 'react-firebase-hooks/firestore';
 
 import AuthenticatedLayout from "../../layouts/AuthenticatedLayout";
 import Loading from '../../components/Loading';
@@ -18,13 +17,11 @@ export default function ProjectPage({ user }) {
   const { projectId } = useParams();
 
   const firebase = useFirebase();
-  const [projectDocument, projectLoading, projectError] = useDocument(firebase.getProjectDocumentReference(projectId));
+  const [ project, projectLoading, projectError ] = firebase.useProject(projectId);
 
   if(projectError) {
     console.error(projectError);
   }
-
-  const project = projectDocument !== undefined? projectDocument.data() : null;
 
   return (
     <AuthenticatedLayout user={user} project={project}>
