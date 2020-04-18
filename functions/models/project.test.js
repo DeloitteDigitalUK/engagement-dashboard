@@ -160,3 +160,60 @@ test('role values must contain known roles', () => {
     }
   })).toThrow(Yup.ValidationError);
 });
+
+test('encodes email addresses in firebase keys', () => {
+  const p = new Project(null, {
+    name: "A project",
+    description: "My project",
+    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    roles: {
+      'test@example.org': Roles.owner,
+      'test1@example.org': Roles.administrator,
+      'test2@example.org': Roles.author,
+      'test3@example.org': Roles.member,
+    }
+  });
+
+  expect(Project.toFirestore(p)).toEqual({
+    name: "A project",
+    description: "My project",
+    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    roles: {
+      'test@example@@org': Roles.owner,
+      'test1@example@@org': Roles.administrator,
+      'test2@example@@org': Roles.author,
+      'test3@example@@org': Roles.member,
+    }
+  });
+});
+
+test('decodes email addresses in firebase keys', () => {
+  const p = Project.fromFirestore({
+    id: '123',
+    data: () => ({
+      name: "A project",
+      description: "My project",
+      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      roles: {
+        'test@example@@org': Roles.owner,
+        'test1@example@@org': Roles.administrator,
+        'test2@example@@org': Roles.author,
+        'test3@example@@org': Roles.member,
+      }
+    })
+  });
+
+  expect(p.getId()).toEqual("123");
+  expect(p.toObject()).toEqual({
+    name: "A project",
+      description: "My project",
+      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      roles: {
+        'test@example.org': Roles.owner,
+        'test1@example.org': Roles.administrator,
+        'test2@example.org': Roles.author,
+        'test3@example.org': Roles.member,
+      }
+  });
+
+});

@@ -12,6 +12,7 @@
     "jest": "^25.3.0"
   },
   "dependencies": {
+    "lodash.frompairs": "^4.0.1",
     "lodash.pick": "^4.4.0",
     "yup": "^0.28.3"
   }
