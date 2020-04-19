@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 
-export default function FormDescription({ title, children, component="h2", variant="h5" }) {
+export default function FormDescription({ title, children, component="h2", variant="h3" }) {
   return (
     <Box my={2}>
       <Typography component={component} variant={variant} gutterBottom>{title}</Typography>

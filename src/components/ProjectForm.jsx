@@ -6,7 +6,7 @@ import fromPairs from 'lodash.frompairs';
 
 import { useHistory } from 'react-router-dom';
 
-import { Button, Grid, FormControl, FormLabel, Typography, makeStyles } from '@material-ui/core';
+import { Button, Grid, FormControl, FormLabel, Typography, Paper, makeStyles } from '@material-ui/core';
 
 import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
@@ -78,6 +78,9 @@ export function formDataToProjectData(project, form) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(1)
+  },
   cancelButton: {
     marginLeft: theme.spacing(1)
   }
@@ -103,7 +106,7 @@ export default function ProjectForm({
 
 
   return (
-    <>
+    <Paper className={classes.paper}>
       <StatusMessages messages={messages} />
 
       <FormDescription title={title}>
@@ -244,7 +247,7 @@ export default function ProjectForm({
           </Form>
         )}
       </Formik>
-    </>
+    </Paper>
   );
 
 }
