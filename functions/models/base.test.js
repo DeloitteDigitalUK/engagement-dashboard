@@ -7,7 +7,7 @@ const testSchema = Yup.object({
 });
 
 class TestModel extends Model {
-  static getSchema() { return testSchema; };
+  static getSchema() { return testSchema; }
   static getCollectionName() { return "testModels"; }
 }
 
