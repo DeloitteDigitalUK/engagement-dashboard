@@ -1,7 +1,65 @@
+rules_version="2"
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write;
+    match /projects/{project} {
+    
+    	function getEmail(req) {
+      	return req.auth.token.email.replace('\\.' , '@@');
+      }
+    
+    	function userHasRole(req, r, roles) {
+      	return (
+        	(req.auth != null) &&
+          (r.data.roles.get(getEmail(req), null) in roles)
+        );
+      }
+      
+      function ownRoleNotChanged(req, old, new) {
+      	let email = getEmail(req);
+      	return old.data.roles[email] == new.data.roles[email];
+      }
+      
+      function ownerNotChanged(old, new) {
+      	return (old.data.owner == new.data.owner);
+      }
+      
+      function isValidProject(r) {
+      	let roles = ['owner', 'administrator', 'author', 'member'];
+        let updateTypes = ['insights', 'releases'];
+      	let requiredKeys = ['name', 'description', 'updateTypes', 'owner', 'roles'].toSet();
+        let possibleKeys = requiredKeys.union([].toSet());
+        
+        return (
+          r.data.keys().toSet().hasAll(requiredKeys) && // all required keys are present
+          possibleKeys.hasAll(r.data.keys()) &&         // no unknown keys
+          r.data.name is string &&                      // name is a string
+          r.data.description is string &&               // description is a string
+          r.data.updateTypes.hasOnly(updateTypes) &&    // only references known update types
+          r.data.roles.values().hasOnly(roles) &&       // only references known roles
+          r.data.roles[r.data.owner] == 'owner'         // has an owner (field and in roles map)
+        );
+      }
+    
+			allow create: if (
+      	userHasRole(request, request.resource, ['owner']) &&
+        isValidProject(request.resource)
+      );
+      
+      allow read: if (
+      	userHasRole(request, resource, ['owner', 'administrator', 'author', 'member'])
+      );
+      
+      allow update: if (
+      	userHasRole(request, resource, ['owner', 'administrator']) &&
+        isValidProject(request.resource) &&
+        ownRoleNotChanged(request, request.resource, resource) &&
+        ownerNotChanged(request.resource, resource)
+      ); 
+      
+      allow delete: if (
+      	userHasRole(request, resource, ['owner'])
+      );
+      
     }
   }
 }
