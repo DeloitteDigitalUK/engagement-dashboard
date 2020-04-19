@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UserProfilePage({ user }) {
 
   const classes = useStyles();
-  const firebase = useFirebase();
+  const api = useAPI();
 
   const [ messages, setMessages ] = useStatusMessages();
 
@@ -56,7 +56,7 @@ export default function UserProfilePage({ user }) {
         validationSchema={profileSchema}
         initialValues={{ ...profileSchema.default(), name: user.displayName }}
         onSubmit={submitHandler({
-          action: ({ name }) => firebase.updateProfile({ name }),
+          action: ({ name }) => api.updateProfile({ name }),
           success: "Changes saved",
           knownErrors,
           setMessages,
@@ -102,7 +102,7 @@ export default function UserProfilePage({ user }) {
         validationSchema={passwordSchema}
         initialValues={passwordSchema.default()}
         onSubmit={submitHandler({
-          action: ({ currentPassword, newPassword }) => firebase.changePassword(currentPassword, newPassword),
+          action: ({ currentPassword, newPassword }) => api.changePassword(currentPassword, newPassword),
           success: "Your password has been changed",
           knownErrors,
           setMessages

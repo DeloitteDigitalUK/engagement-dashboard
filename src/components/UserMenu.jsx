@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { IconButton, MenuItem, Menu, Typography, makeStyles } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import { useFirebase } from '../firebase';
+import { useAPI } from '../api';
 
 export const useStyles = makeStyles((theme) => ({
   userName: {
@@ -20,7 +20,7 @@ export default function UserMenu({ user }) {
 
   const classes = useStyles();
   const history = useHistory();
-  const firebase = useFirebase();
+  const api = useAPI();
 
   const handleProfile = () => {
     setMenuOpen(false);
@@ -29,7 +29,7 @@ export default function UserMenu({ user }) {
 
   const handleLogOut = () => {
     setMenuOpen(false);
-    firebase.logOut();
+    api.logOut();
     // App will automatically redirect to login now
   }
 

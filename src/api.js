@@ -34,7 +34,7 @@ export const useAuthState = () => rfhAuth.useAuthState(firebase.auth());
 /**
  * Basic API for the app. Usually accessed via a hook:
  * 
- *  const firebase = useFirebase()
+ *  const api = useAPI()
  * 
  * Does not attempt to fully abstract Firebase, but rather to provide better
  * isolated functions to avoid scattering too much logic in the UI code.
@@ -199,7 +199,7 @@ export default class API {
 }
 
 /**
- * Provide an instance of `API` as React context. Use `useFirebase()` as a convience hook.
+ * Provide an instance of `API` as React context. Use `useAPI()` as a convience hook.
  */
-export const FirebaseContext = createContext(new API());
-export const useFirebase = () => useContext(FirebaseContext);
+export const APIContext = createContext(new API());
+export const useAPI = () => useContext(APIContext);

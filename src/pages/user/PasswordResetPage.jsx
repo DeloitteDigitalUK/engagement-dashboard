@@ -11,7 +11,7 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
 import AnonymousLayout, { useAnonymousStyles } from '../../layouts/AnonymousLayout';
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 const formSchema = Yup.object({
   email: Yup.string().label("Email address").email("Invalid email address").required("Email is required").default(""),
@@ -24,7 +24,7 @@ const knownErrors = {
 export default function PasswordResetPage() {
 
   const classes = useAnonymousStyles();
-  const firebase = useFirebase();
+  const api = useAPI();
 
   const [ errorMessage, setErrorMessage ] = useState(null);
   const [ statusMessage, setStatusMessage ] = useState(null);
@@ -37,7 +37,7 @@ export default function PasswordResetPage() {
         onSubmit={async ({ email }, { setSubmitting }) => {
           setStatusMessage(null);
           try {
-            await firebase.sendPasswordResetEmail(email);
+            await api.sendPasswordResetEmail(email);
             setStatusMessage("Please check your email for further instructions.");
           } catch(error) {
             if(error.code in knownErrors) {

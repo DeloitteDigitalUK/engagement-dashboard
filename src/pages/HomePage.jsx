@@ -20,7 +20,7 @@ import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 
 import { Roles } from 'models';
 
-import { useFirebase } from "../firebase";
+import { useAPI } from "../api";
 
 import AuthenticatedLayout from '../layouts/AuthenticatedLayout';
 import Loading from "../components/Loading";
@@ -59,10 +59,10 @@ const ProjectCard = ({ user, project }) => {
 
 export default function HomePage({ user }) {
   
-  const firebase = useFirebase();
+  const api = useAPI();
   const classes = useStyles();
   
-  const [ projects, loading, error ] = firebase.useProjects(user);
+  const [ projects, loading, error ] = api.useProjects(user);
 
   if(error) {
     console.error(error);

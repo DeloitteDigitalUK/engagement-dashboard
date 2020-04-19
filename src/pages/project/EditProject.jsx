@@ -11,7 +11,7 @@ import {
 
 import { Roles } from 'models';
 
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 import ProjectForm from '../../components/ProjectForm';
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -32,18 +32,18 @@ export default function EditProjectPage({ user, project }) {
   const history = useHistory();
   const classes = useStyles();
 
-  const firebase = useFirebase();
+  const api = useAPI();
 
   const canDelete = project.hasRole(user.email, Roles.owner);
 
   const saveProject = async (data) => {
     project.update(data);
-    await firebase.saveProject(project);
+    await api.saveProject(project);
     history.push(`/project/${project.getId()}`);
   };
 
   const deleteProject = async () => {
-    await firebase.deleteProject(project)
+    await api.deleteProject(project)
     history.push('/');
   };
 

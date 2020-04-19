@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { Alert } from "@material-ui/lab";
 
-import { useAuthState } from './firebase';
+import { useAuthState } from './api';
 
 import Loading from './components/Loading';
 import { PrivateRoute } from './utils/routeHelpers';

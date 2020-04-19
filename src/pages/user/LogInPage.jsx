@@ -10,7 +10,7 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 
 import AnonymousLayout, { useAnonymousStyles } from '../../layouts/AnonymousLayout';
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 const formSchema = Yup.object({
   email: Yup.string().label("Email address").email("Invalid email address").required("Email is required").default(""),
@@ -26,7 +26,7 @@ const knownErrors = {
 export default function LogInPage() {
 
   const classes = useAnonymousStyles();
-  const firebase = useFirebase();
+  const api = useAPI();
   const history = useHistory();
 
   const [ errorMessage, setErrorMessage ] = useState(null);
@@ -38,7 +38,7 @@ export default function LogInPage() {
         initialValues={formSchema.default()}
         onSubmit={async ({ email, password }, { setSubmitting }) => {
           try {
-            await firebase.logIn(email, password);      
+            await api.logIn(email, password);      
             history.push('/');
           } catch(error) {
             if(error.code in knownErrors) {

@@ -12,15 +12,15 @@ import NotFoundPage from '../NotFoundPage';
 import ViewProjectPage from './ViewProject';
 import EditProjectPage from './EditProject';
 
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 export default function ProjectPage({ user }) {
 
   const { path } = useRouteMatch();
   const { projectId } = useParams();
 
-  const firebase = useFirebase();
-  const [ project, projectLoading, projectError ] = firebase.useProject(projectId);
+  const api = useAPI();
+  const [ project, projectLoading, projectError ] = api.useProject(projectId);
 
   if(projectError) {
     console.error(projectError);

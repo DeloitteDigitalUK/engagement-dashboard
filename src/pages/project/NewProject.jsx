@@ -7,14 +7,14 @@ import ProjectForm from '../../components/ProjectForm';
 
 import { Project, Roles } from 'models';
 
-import { useFirebase } from '../../firebase';
+import { useAPI } from '../../api';
 
 const knownErrors = {}
 
 export default function NewProjectPage({ user }) {
 
   const history = useHistory();
-  const firebase = useFirebase();
+  const api = useAPI();
   const project = new Project(null, {
     roles: {
       [user.email]: Roles.owner
@@ -31,7 +31,7 @@ export default function NewProjectPage({ user }) {
         buttonLabel="Create"
         action={async (data) => {
           project.update(data);
-          await firebase.addProject(user, project);
+          await api.addProject(user, project);
           history.push(`/project/${project.getId()}`);
         }}
         knownErrors={knownErrors}
