@@ -5,6 +5,8 @@ import { Link as RouterLink } from "react-router-dom";
 import { makeStyles, Link, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { Roles } from 'models';
+
 export const useStyles = makeStyles((theme) => ({
   projectTitle: {
     marginLeft: theme.spacing(1),
@@ -27,9 +29,11 @@ export default function ProjectMenu({ user, project }) {
       <Link to={`/project/${project.getId()}`} component={RouterLink} variant="subtitle2" color="inherit" noWrap underline="none" className={classes.projectTitle}>
         {project.name}
       </Link>
-      <IconButton to={`/project/${project.getId()}/edit`} component={RouterLink} color="inherit" className={classes.projectEditButton}>
-        <EditIcon fontSize="inherit" />
-      </IconButton>
+      {project.hasRole(user.email, [Roles.owner, Roles.administrator]) && (
+        <IconButton to={`/project/${project.getId()}/edit`} component={RouterLink} color="inherit" className={classes.projectEditButton}>
+          <EditIcon fontSize="inherit" />
+        </IconButton>
+      )}
     </>
   );
 }
