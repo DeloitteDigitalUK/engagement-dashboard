@@ -1,68 +1,77 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Engagement Dashboard
 
-## Available Scripts
+Manage and display interesting information about engagements.
 
-In the project directory, you can run:
+## Architecture
 
-### `npm start`
+The client side uses ReactJS and is managed with
+[create-react-app](https://create-react-app.dev).
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The server side uses Google Firebase (Firstore, Cloud Functions,
+Authentication).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Development pre-requisites
 
-### `npm test`
+- NodeJS (v13.12 tested)
+- Firebase CLI (`npm install -g firebase-tools`)
+- Install all dependencies with `npm install` in the root directory
+- A Java JDK for running the firebase emulators locally
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Creating a firebase environment
 
-### `npm run build`
+The remote Firebase project and associates access keys are deliberately not
+checked into source control.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+A new environment can be created in the Firebase web console, and should have
+the following enabled:
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- Cloud Firestore
+- Email-based authentication
+- Hosting
+- A web app
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+You can also use the firebase CLI to create these, but note that the generated
+configuration in `firebase.json` *is* under source control. The `.firebaserc`
+file that references the remote project is not, however. It should be in the
+root of the repository and contain something like:
 
-### `npm run eject`
+```
+{
+  "projects": {
+    "default": "<project-id>"
+  }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Additionally, you need to configure a number of environment variables for the
+React compiler to be able to interpolate variables that will allow the Firebase 
+JavaScript client to connect to the server. To set these up, create a file
+called `.env.local` in the root of the repository with:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+REACT_APP_API_KEY=<api-key>
+REACT_APP_AUTH_DOMAIN=<domain>.firebaseapp.com
+REACT_APP_DATABASE_URL=https://<app>.firebaseio.com
+REACT_APP_PROJECT_ID=<app>
+REACT_APP_STORAGE_BUCKET=<app>.appspot.com
+REACT_APP_MESSAGING_SENDER_ID=<id>
+REACT_APP_APP_ID=<id>
+```
+The relevant values can all be found in the Firebase web console.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+You can also point these at the Firebase emulators if you run them. See
+the `firebase emulators` commands for more details.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Run app, tests
 
-## Learn More
+Once set up you can run various `npm` scripts:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+* `npm start` will run the webapp locally at `http://localhost:3000`
+* `npm test` will run unit tests in watch mode, automatically re-running tests
+  when files are changed.
+* `npm run integration-test` will run Firestore local emulators and execute
+  integration tests in the `integration-tests` folder.
+* `npm run build` will bundle the webapp into `build` for deployment.
+* `npm run deploy` will build the app (as per `npm run build`) and then deploy
+  it to Firebase hosting, alongside Cloud Functions (in the `functions`
+  directory) and Firestore rules.
