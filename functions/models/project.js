@@ -1,5 +1,7 @@
 const Yup = require('yup');
+
 const fromPairs = require('lodash.frompairs');
+const findKey = require('lodash.findkey');
 
 const Model = require('./base');
 const UpdateTypes = require('./updateTypes');
@@ -57,6 +59,8 @@ class Project extends Model {
   // we use email addresses as keys in the `roles` table, but Firebase
   // doesn't play nicely with this in queries, so we encode '.' as '@@'
   // (which isn't valid in an email address)
+  //
+  // we also automatically set and get the `owner` field
 
   static encodeKey(key) {
     return key.replace('.', '@@');
@@ -70,7 +74,8 @@ class Project extends Model {
     let data = this.getSchema().validateSync(instance.toObject());
     data.roles = fromPairs(
       Object.keys(data.roles).map(k => [Project.encodeKey(k), data.roles[k]])
-    );
+      );
+    data.owner = findKey(data.roles, v => v === Roles.owner);
     return data;
   }
 

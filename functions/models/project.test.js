@@ -178,6 +178,7 @@ test('encodes email addresses in firebase keys', () => {
     name: "A project",
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    owner: 'test@example@@org',
     roles: {
       'test@example@@org': Roles.owner,
       'test1@example@@org': Roles.administrator,
@@ -194,6 +195,7 @@ test('decodes email addresses in firebase keys', () => {
       name: "A project",
       description: "My project",
       updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      owner: 'test@example@@org',
       roles: {
         'test@example@@org': Roles.owner,
         'test1@example@@org': Roles.administrator,
