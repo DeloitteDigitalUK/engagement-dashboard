@@ -32,6 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "integration-test": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest --watchAll integration-tests\"",
+    "integration-test-watch": "jest --watchAll integration-tests",
     "deploy": "firebase deploy"
   },
   "eslintConfig": {
