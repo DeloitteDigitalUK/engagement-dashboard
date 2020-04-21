@@ -8,7 +8,7 @@ describe('Database rules', () => {
   
   test('cannot add unknown collection', async () => {
     const db = await setup();
-    expect(db.collection('foo').add({})).toBeDenied();
+    await expect(db.collection('foo').add({})).toBeDenied();
   });
   
 });

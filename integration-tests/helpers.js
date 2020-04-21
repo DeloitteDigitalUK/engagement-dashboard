@@ -19,17 +19,23 @@ const fs = require('fs');
 module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
 
   const projectId = `rules-spec-${Date.now()}`;
+  
   const app = firebase.initializeTestApp({
     projectId,
     auth
   });
 
+  const adminApp = firebase.initializeAdminApp({
+    projectId
+  });
+
   const db = app.firestore();
+  const adminDb = adminApp.firestore();
 
   // Write mock documents before rules
   if (data) {
     for (const key in data) {
-      const ref = db.doc(key);
+      const ref = adminDb.doc(key);
       await ref.set(data[key]);
     }
   }
@@ -55,30 +61,29 @@ module.exports.tearDown = async () => {
  * rules.
  */
 expect.extend({
-
   async toBeAllowed(x) {
+    let pass = false;
     try {
       await firebase.assertSucceeds(x);
-      return {
-        pass: true,
-        message: () => 'Expected Firebase operation to be allowed, but it was denied'
-      };
+      pass = true;
     } catch (err) {
-
     }
-
-    
+    return {
+      pass,
+      message: () => 'Expected Firebase operation to be allowed, but it was denied'
+    };
   },
-
   async toBeDenied(x) {
+    let pass = false;
     try {
       await firebase.assertFails(x);
+      pass = true;
     } catch (err) {
-      return {
-        pass: false,
-        message: () => 'Expected Firebase operation to be denied, but it was allowed'
-      };
     }
+    return {
+      pass,
+      message: () =>
+        'Expected Firebase operation to be denied, but it was allowed'
+    };
   }
-
 });
