@@ -790,7 +790,7 @@ describe('role checks', () => {
       name: "My project",
       description: "A description",
       owner: "test@example@@org",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      updateTypes: [UpdateTypes.insights, UpdateTypes.release],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -800,7 +800,7 @@ describe('role checks', () => {
       name: "My project",
       description: "A description",
       owner: "test@example@@org",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      updateTypes: [UpdateTypes.insights, UpdateTypes.release],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -812,7 +812,7 @@ describe('role checks', () => {
       name: "My project",
       description: "A description",
       owner: "test@example@@org",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.releases, 'ringer'],
+      updateTypes: [UpdateTypes.insights, UpdateTypes.release, 'ringer'],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -822,7 +822,7 @@ describe('role checks', () => {
       name: "My project",
       description: "A description",
       owner: "test@example@@org",
-      updateTypes: [UpdateTypes.insights, 'ringer', UpdateTypes.releases],
+      updateTypes: [UpdateTypes.insights, 'ringer', UpdateTypes.release],
       roles: {
         "test@example@@org": Roles.owner,
       },

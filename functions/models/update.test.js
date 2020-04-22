@@ -8,12 +8,11 @@ const testSchema = Update.getSchema().concat(Yup.object({
 
 class TestUpdate extends Update {
   static getSchema() { return testSchema; }
-  type = UpdateTypes._test;
 }
 
 Update.registerUpdateType(UpdateTypes._test, TestUpdate);
 
-test('base schema extension works', () => {
+test('sets type automatically', () => {
   const t = new TestUpdate();
   
   expect(t.toObject()).toEqual({
@@ -21,9 +20,9 @@ test('base schema extension works', () => {
     title: "",
     summary: "",
     date: null,
+    team: undefined,
     foo: ""
   });
-
 });
 
 test('checks type on update', () => {
@@ -31,6 +30,7 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
+    team: undefined,
     foo: "bar"
   });
 
@@ -42,6 +42,7 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
+    team: undefined,
     foo: "bar"
   });
 
@@ -51,19 +52,20 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
+    team: undefined,
     foo: "bar"
   });
 
 });
 
 test('can convert from Firestore with correct class', () => {
-
   const fauxSnapshot = {
     data: (options) => ({
       type: UpdateTypes._test,
       title: "Test",
       summary: "",
       date: new Date(2020, 1, 1),
+      team: undefined,
       foo: "bar"
     }),
     id: "123"
@@ -78,6 +80,7 @@ test('can convert from Firestore with correct class', () => {
       title: "Test",
       summary: "",
       date: new Date(2020, 1, 1),
+      team: undefined,
       foo: "bar"
   });
 });

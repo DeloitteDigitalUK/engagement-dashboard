@@ -18,7 +18,7 @@ const projectSchema = Yup.object({
   description: Yup.string().notRequired().default(""),
   updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([
     UpdateTypes.insights,
-    UpdateTypes.releases,
+    UpdateTypes.release,
   ]),
   
   // map email -> role name

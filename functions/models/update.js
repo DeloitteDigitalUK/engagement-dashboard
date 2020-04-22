@@ -10,7 +10,8 @@ const updateSchema = Yup.object({
   title: Yup.string().required().default(""),
   summary: Yup.string().notRequired().default(""),
   date: Yup.date().required().default(null),
-  
+  team: Yup.string().notRequired(),
+
 });
 
 /**
@@ -19,6 +20,7 @@ const updateSchema = Yup.object({
  * - Define a schema that extends the `updateSchema` via `concat()`
  * - *Not* override the collection name (all updates are stored in the same
  *   sub-collection under their project)
+ * - *Not* set the `type` property explicitly
  * - Call `Update.registerUpdateType(UpdateTypes.foo, FooUpdate)`
  * 
  * This will ensure the Firestore load converter returns an instance of the
@@ -31,6 +33,7 @@ class Update extends Model {
 
   static registerUpdateType(type, cls) {
     this.typeRegister[type] = cls;
+    this.typeNameLookup[cls] = type;
   }
 
   static fromFirestore(snapshot, options) {
@@ -45,6 +48,13 @@ class Update extends Model {
     return new cls(snapshot.id, data);
   }
 
+  // automatically set type
+  constructor(id=null, data=null) {
+    super(id, data);
+    this.type = Update.typeNameLookup[this.constructor];
+  }
+
+
   update(data) {
     // ensure we don't accidentally get class and type out of sync
     if(data.type && Update.typeRegister[data.type] !== this.constructor) {
@@ -56,5 +66,6 @@ class Update extends Model {
 }
 
 Update.typeRegister = {};
+Update.typeNameLookup = {};
 
 module.exports = Update;

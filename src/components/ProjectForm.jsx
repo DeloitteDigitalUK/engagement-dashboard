@@ -34,7 +34,7 @@ const formSchema = Yup.object({
 // map individual checkbox values from the form schema to members of the array on the project schema
 const propsToUpdateTypes = {
     enableInsights: UpdateTypes.insights,
-    enableReleases: UpdateTypes.releases,
+    enableReleases: UpdateTypes.release,
   },
   updateTypesToProps = invert(propsToUpdateTypes);
 

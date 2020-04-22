@@ -25,7 +25,7 @@ service cloud.firestore {
       
       function isValidProject(r) {
         let roles = ['owner', 'administrator', 'author', 'member'];
-        let updateTypes = ['insights', 'releases'];
+        let updateTypes = ['release', 'flow', 'insights', 'raid', 'goals'];
         let requiredKeys = ['name', 'description', 'updateTypes', 'owner', 'roles'].toSet();
         let possibleKeys = requiredKeys.union([].toSet());
         

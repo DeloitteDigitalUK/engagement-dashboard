@@ -11,7 +11,7 @@ test('can construct an empty object', () => {
   expect(p.toObject()).toEqual({
     name: "",
     description: "",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {}
   });
 });
@@ -20,7 +20,7 @@ test('can construct a valid object', () => {
   const p = new Project(null, {
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -32,7 +32,7 @@ test('can construct a valid object', () => {
   expect(p.toObject()).toEqual({
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -46,7 +46,7 @@ test('requires an owner', () => {
   expect(() => new Project(null, {
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       // 'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -60,7 +60,7 @@ test('requires a name', () => {
   const p = new Project(null, {
     // name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -76,7 +76,7 @@ test('does not require a description', () => {
   const p = new Project(null, {
     name: "A project",
     // description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -88,7 +88,7 @@ test('does not require a description', () => {
   expect(p.toObject()).toEqual({
     name: "A project",
     description: "",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -165,7 +165,7 @@ test('encodes email addresses in firebase keys', () => {
   const p = new Project(null, {
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -177,7 +177,7 @@ test('encodes email addresses in firebase keys', () => {
   expect(Project.toFirestore(p)).toEqual({
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     owner: 'test@example@@org',
     roles: {
       'test@example@@org': Roles.owner,
@@ -194,7 +194,7 @@ test('decodes email addresses in firebase keys', () => {
     data: () => ({
       name: "A project",
       description: "My project",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      updateTypes: [UpdateTypes.insights, UpdateTypes.release],
       owner: 'test@example@@org',
       roles: {
         'test@example@@org': Roles.owner,
@@ -209,7 +209,7 @@ test('decodes email addresses in firebase keys', () => {
   expect(p.toObject()).toEqual({
     name: "A project",
       description: "My project",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+      updateTypes: [UpdateTypes.insights, UpdateTypes.release],
       roles: {
         'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
@@ -224,7 +224,7 @@ test('hasRole() with single role', () => {
   const p = new Project(null, {
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -242,7 +242,7 @@ test('hasRole() with a list of roles', () => {
   const p = new Project(null, {
     name: "A project",
     description: "My project",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.releases],
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,

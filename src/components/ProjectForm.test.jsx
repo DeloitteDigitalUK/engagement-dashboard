@@ -65,7 +65,7 @@ describe('formToProject', () => {
     expect(formDataToProjectData(project, data)).toEqual({
       name: "My project",
       description: "A description",
-      updateTypes: [UpdateTypes.releases],
+      updateTypes: [UpdateTypes.release],
       roles: {
         'test@example.org': Roles.owner,
         'test11@example.org': Roles.administrator,
