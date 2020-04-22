@@ -71,7 +71,7 @@ class Model {
    */
   static fromFirestore(snapshot, options) {
     const data = snapshot.data(options);
-    return this.fromObject(snapshot.id, data);
+    return new this(snapshot.id, data);
   }
 
   /**
@@ -96,14 +96,8 @@ class Model {
     return this.constructor.getSchema().isValidSync(this.toObject());
   }
 
-  // Hooks to overide type conversion
-
   toObject() {
     return pick(this, Object.keys(this.constructor.getSchema().fields));
-  }
-
-  static fromObject(id, object) {
-    return new this(id, object);
   }
 
   // Helper methods to find the object in Firestore
