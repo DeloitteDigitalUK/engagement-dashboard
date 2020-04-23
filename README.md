@@ -69,8 +69,12 @@ Once set up you can run various `npm` scripts:
 * `npm start` will run the webapp locally at `http://localhost:3000`
 * `npm test` will run unit tests in watch mode, automatically re-running tests
   when files are changed.
-* `npm run integration-test` will run Firestore local emulators and execute
-  integration tests in the `integration-tests` folder.
+* `npm run test:run-emulators` will start the Firebase emulators, after
+  which you can run `npm run test:integration` to run integratoin tests in
+  watch mode. 
+* Alternatively, `npm run ci:integration-test` will run Firestore local
+  emulators and execute integration the integration tests once before shutting
+  the emulators down again.
 * `npm run build` will bundle the webapp into `build` for deployment.
 * `npm run deploy` will build the app (as per `npm run build`) and then deploy
   it to Firebase hosting, alongside Cloud Functions (in the `functions`

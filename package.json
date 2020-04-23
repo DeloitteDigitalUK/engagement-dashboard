@@ -30,6 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:run-emulators": "firebase emulators:start",
     "test:integration": "jest -c integration-tests/jest.json --watch",
     "ci:integration-tests": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest -c integration-tests/jest.json\"",
     "deploy": "firebase deploy",
