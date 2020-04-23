@@ -30,10 +30,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "integration-test": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest integration-tests\"",
-    "integration-test-watch": "jest --watch integration-tests",
-    "deploy": "firebase deploy"
+    "test:integration": "jest -c integration-tests/jest.json --watch",
+    "ci:integration-tests": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest -c integration-tests/jest.json\"",
+    "deploy": "firebase deploy",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
