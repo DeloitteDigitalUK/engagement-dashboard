@@ -4,14 +4,12 @@ const Model = require('./base');
 const UpdateTypes = require('./updateTypes');
 
 const updateSchema = Yup.object({
-
   type: Yup.string().required().oneOf(Object.values(UpdateTypes)),
   
   title: Yup.string().required().default(""),
   summary: Yup.string().notRequired().default(""),
   date: Yup.date().required().default(null),
   team: Yup.string().notRequired(),
-
 });
 
 /**
@@ -30,7 +28,19 @@ class Update extends Model {
 
   static getSchema() { return updateSchema; }
   static getCollectionName() { return "updates"; }
+  
+  /**
+   * When receiving a new update over an API call, it is sometimes desirable
+   * to modify an existing update, rather than creat a new one, e.g. if there
+   * is meant to be only one active update per team. Update types can return a
+   * non-null key name from this static method to enable this behaviour.
+   */
+  static getUpdateKey(data) { return 'id' in data? 'id': null; }
 
+  /**
+   * Call this function with a type name (string) and class (constructor)
+   * for each update type to register.
+   */
   static registerUpdateType(type, cls) {
     this.typeRegister[type] = cls;
     this.typeNameLookup[cls] = type;
@@ -48,9 +58,9 @@ class Update extends Model {
     return new cls(snapshot.id, data);
   }
 
-  // automatically set type
   constructor(id=null, data=null) {
     super(id, data);
+    // automatically set type
     this.type = Update.typeNameLookup[this.constructor];
   }
 
