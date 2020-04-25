@@ -26,6 +26,8 @@ const formSchema = Yup.object({
   enableInsights: Yup.bool().required().default(true),
   enableReleases: Yup.bool().required().default(true),
 
+  teams: Yup.string().label("Teams").trim().default(""),
+
   administrators: Yup.string().label("Administrators").trim().test(isListOfEmails).default(""),
   authors: Yup.string().label("Authors").trim().test(isListOfEmails).default(""),
   members: Yup.string().label("Team members").trim().test(isListOfEmails).default(""),
@@ -49,7 +51,10 @@ export function projectToFormData(project) {
     form[prop] = project.updateTypes.includes(propsToUpdateTypes[prop]);
   }
 
-  // role map -> lists
+  // teams list -> string
+  form.teams = (project.teams || []).join('\n');
+
+  // role map -> strings
   form.administrators = Object.keys(project.roles).filter(v => project.roles[v] === Roles.administrator).sort().join('\n');
   form.authors = Object.keys(project.roles).filter(v => project.roles[v] === Roles.author).sort().join('\n');
   form.members = Object.keys(project.roles).filter(v => project.roles[v] === Roles.member).sort().join('\n');
@@ -66,7 +71,10 @@ export function formDataToProjectData(project, form) {
   // checkboxes -> list
   data.updateTypes = Object.values(UpdateTypes).filter(v => form[updateTypesToProps[v]]);
 
-  // lists -> role map (note: order matters in case a user is listed in more than one!)
+  // strings -> teams list
+  data.teams = form.teams.split(splitLines).map(v => v.trim());
+
+  // strings -> role map (note: order matters in case a user is listed in more than one!)
   data.roles = fromPairs([].concat(
     form.members.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.member]),
     form.authors.split(splitLines).map(v => v.trim()).filter(v => !!v).map(v => [v, Roles.author]),
@@ -148,6 +156,20 @@ export default function ProjectForm({
                   rows={3}
                   rowsMax={8}
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Field
+                    component={TextField}
+                    id="teams"
+                    name="teams"
+                    label="Teams"
+                    placeholder="List of teams, one per line"
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={3}
+                    rowsMax={8}
+                  />
               </Grid>
               <Grid item xs={12} md={6}>
                 <FormControl component="fieldset">

@@ -10,6 +10,7 @@ describe('projectToForm', () => {
       description: "",
       enableInsights: true,
       enableReleases: true,
+      teams: "",
       administrators: "",
       authors: "",
       members: "",
@@ -21,6 +22,7 @@ describe('projectToForm', () => {
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
@@ -34,6 +36,7 @@ describe('projectToForm', () => {
       description: "A description for my project",
       enableInsights: true,
       enableReleases: false,
+      teams: "Alpha\nBeta",
       administrators: "test1@example.org",
       authors: "test2@example.org\ntest3@example.org",
       members: "test4@example.org",
@@ -57,6 +60,7 @@ describe('formToProject', () => {
       description: "A description",
       enableInsights: false,
       enableReleases: true,
+      teams: "Alpha\nBeta",
       administrators: "test11@example.org",
       authors: "test21@example.org\ntest31@example.org",
       members: "test41@example.org",
@@ -66,6 +70,7 @@ describe('formToProject', () => {
       name: "My project",
       description: "A description",
       updateTypes: [UpdateTypes.release],
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example.org': Roles.owner,
         'test11@example.org': Roles.administrator,
@@ -83,6 +88,7 @@ describe('formToProject', () => {
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
@@ -102,6 +108,7 @@ describe('formToProject', () => {
       name: "My project",
       description: "A description for my project",
       updateTypes: [UpdateTypes.insights],
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
