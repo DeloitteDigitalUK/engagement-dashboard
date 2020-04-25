@@ -215,15 +215,53 @@ test('decodes email addresses in firebase keys', () => {
   expect(p.getId()).toEqual("123");
   expect(p.toObject()).toEqual({
     name: "A project",
+    description: "My project",
+    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: ["Alpha", "Beta"],
+    roles: {
+      'test@example.org': Roles.owner,
+      'test1@example.org': Roles.administrator,
+      'test2@example.org': Roles.author,
+      'test3@example.org': Roles.member,
+    }
+  });
+
+});
+
+test('handles invalid data in database if required', () => {
+  // don't show error in test output
+  const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  const p = Project.fromFirestore({
+    id: '123',
+    data: () => ({
+      name: "My project", // will fail validation
       description: "My project",
-      updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+      updateTypes: ["garbage"],
+      owner: 'test@example@@org',
       teams: ["Alpha", "Beta"],
       roles: {
-        'test@example.org': Roles.owner,
-        'test1@example.org': Roles.administrator,
-        'test2@example.org': Roles.author,
-        'test3@example.org': Roles.member,
+        'test@example@@org': Roles.owner,
+        'test1@example@@org': Roles.administrator,
+        'test2@example@@org': Roles.author,
+        'test3@example@@org': Roles.member,
       }
+    })
+  });
+  spy.mockRestore();
+
+  expect(p.getId()).toEqual("123");
+  expect(p.error).toBeTruthy();
+  expect(p.toObject()).toEqual({
+    name: "My project",
+    description: "My project",
+    updateTypes: ["garbage"],
+    teams: ["Alpha", "Beta"],
+    roles: {
+      'test@example.org': Roles.owner,
+      'test1@example.org': Roles.administrator,
+      'test2@example.org': Roles.author,
+      'test3@example.org': Roles.member,
+    }
   });
 
 });

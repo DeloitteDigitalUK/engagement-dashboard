@@ -85,7 +85,14 @@ class Project extends Model {
     data.roles = fromPairs(
       Object.keys(data.roles).map(k => [Project.decodeKey(k), data.roles[k]])
     );
-    return new this(snapshot.id, data);
+    try {
+      return new this(snapshot.id, data);
+    } catch(error) {
+      console.error(error);
+      const broken = new this(snapshot.id, null, error);
+      Object.assign(broken, data);
+      return broken;
+    }
   }
 
 }

@@ -162,6 +162,25 @@ describe("the class is a Firestore converter", () => {
     expect(c.getId()).toEqual("123");
     expect(c.toObject()).toEqual({name: "John", email: "test@example.org"});
   });
+
+  test('will capture errors if data no longer validates', () => {
+
+    const fauxSnapshot = {
+      data: (options) => ({name: "John", email: "garbage"}),
+      id: "123"
+    };
+  
+    // will log error, but avoid polluting test output
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const c = TestModel.fromFirestore(fauxSnapshot, {});
+    spy.mockRestore();
+    
+    expect(c.constructor).toEqual(TestModel);
+    expect(c.error).toBeTruthy();
+    expect(c.getId()).toEqual("123");
+    expect(c.toObject()).toEqual({name: "John", email: "garbage"});
+  });
+
 });
 
 

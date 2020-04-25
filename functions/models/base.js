@@ -41,8 +41,9 @@ class Model {
    * casts and validates it, and then sets the validated key/value pairs onto
    * the new object. The id is the document ID.
    */
-  constructor(id=null, data=null) {
+  constructor(id=null, data=null, error=null) {
     this._id = id;
+    this.error = error;
 
     // Set schema default values - not necessarily valid yet!
     Object.assign(this, this.constructor.getSchema().default());
@@ -71,7 +72,14 @@ class Model {
    */
   static fromFirestore(snapshot, options) {
     const data = snapshot.data(options);
-    return new this(snapshot.id, data);
+    try {
+      return new this(snapshot.id, data);
+    } catch(error) {
+      console.error(error);
+      const broken = new this(snapshot.id, null, error);
+      Object.assign(broken, data);
+      return broken;
+    }
   }
 
   /**
