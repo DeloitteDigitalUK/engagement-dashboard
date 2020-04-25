@@ -11,6 +11,7 @@ import NotFoundPage from '../NotFoundPage';
 
 import ViewProjectPage from './ViewProject';
 import EditProjectPage from './EditProject';
+import NewUpdatePage from './NewUpdate';
 
 import { useAPI } from '../../api';
 
@@ -34,6 +35,7 @@ export default function ProjectPage({ user }) {
         <Switch>
           <Route exact path={path}><ViewProjectPage user={user} project={project} /></Route>
           <Route exact path={`${path}/edit`}><EditProjectPage user={user} project={project} /></Route>
+          <Route exact path={`${path}/new-update`}><NewUpdatePage user={user} project={project} /></Route>
           
           <Route path="*"><NotFoundPage /></Route>
         </Switch>
