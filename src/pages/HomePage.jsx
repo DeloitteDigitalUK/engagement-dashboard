@@ -40,14 +40,23 @@ const useStyles = makeStyles((theme) => ({
 
 const ProjectCard = ({ user, project }) => {
   const classes = useStyles();
-  const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
+  let canEdit;
+
+  try {
+    canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
+  } catch(e) {
+    canEdit = true; // if the project is broken, try to let us edit/delete it (even if the sever-side might reject!)
+  }
   
   return (
     <Card variant="outlined" className={classes.projectCard}>
       <Link to={`/project/${project.getId()}`} component={RouterLink} underline="none">
         <CardContent className={classes.projectCardContent}>
           <Typography color="textPrimary" variant="h5">{project.name}</Typography>
-          <Typography color="textSecondary">{project.description}</Typography>
+          {project.error?
+            <Alert severity="error">This project is broken!</Alert> : 
+            <Typography color="textSecondary">{project.description}</Typography>
+          }
         </CardContent>
       </Link>
       <CardActions>
