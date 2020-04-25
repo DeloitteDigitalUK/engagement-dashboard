@@ -20,6 +20,7 @@ const projectSchema = Yup.object({
     UpdateTypes.insights,
     UpdateTypes.release,
   ]),
+  teams: Yup.array().of(Yup.string()).notRequired().default([]),
   
   // map email -> role name
   roles: Yup.object()

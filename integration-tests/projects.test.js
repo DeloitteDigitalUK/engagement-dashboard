@@ -19,6 +19,7 @@ describe('conversion', () => {
       name: "My project",
       description: "A description",
       updateTypes: [UpdateTypes.insights],
+      teams: [],
       roles: {
         'test@example.org': Roles.owner
       }
@@ -42,6 +43,7 @@ describe('conversion', () => {
       name: "My project",
       description: "A description",
       updateTypes: [UpdateTypes.insights],
+      teams: [],
       roles: {
         'test@example.org': Roles.owner
       }
@@ -55,6 +57,7 @@ describe('conversion', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -73,6 +76,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "rouge@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "rouge@example@@org": Roles.owner,
       },
@@ -91,6 +95,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       }
@@ -101,6 +106,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "rouge@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "rouge@example@@org": Roles.owner,
       },
@@ -119,6 +125,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "rogue@example@@org": Roles.owner,
       }
@@ -129,6 +136,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "rogue@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       }
@@ -139,6 +147,7 @@ describe('role checks', () => {
       description: "A description",
       owner: 'rouge@example@@org',
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         'rouge@example@@org': Roles.owner,
       }
@@ -152,6 +161,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -171,6 +181,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -180,6 +191,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
@@ -190,6 +202,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
@@ -200,6 +213,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
@@ -210,6 +224,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
         },
@@ -233,6 +248,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -242,6 +258,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
@@ -252,6 +269,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
@@ -262,6 +280,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
@@ -272,6 +291,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
         },
@@ -295,6 +315,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -304,6 +325,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
@@ -314,6 +336,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
@@ -324,6 +347,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
@@ -334,6 +358,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
         },
@@ -357,6 +382,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -366,6 +392,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
@@ -376,6 +403,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
@@ -386,6 +414,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
@@ -396,6 +425,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
         },
@@ -419,6 +449,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -428,6 +459,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
@@ -438,6 +470,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
@@ -448,6 +481,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test2@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
@@ -472,6 +506,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -482,6 +517,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -492,6 +528,7 @@ describe('role checks', () => {
       // description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -502,6 +539,7 @@ describe('role checks', () => {
       description: "A description",
       // owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -512,6 +550,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       // updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -522,6 +561,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       // roles: {
       //   "test@example@@org": Roles.owner,
       // },
@@ -539,6 +579,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -550,6 +591,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -560,6 +602,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -570,6 +613,7 @@ describe('role checks', () => {
       // description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -580,6 +624,7 @@ describe('role checks', () => {
       description: "A description",
       // owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -590,6 +635,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       // updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -600,6 +646,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       // roles: {
       //   "test@example@@org": Roles.owner,
       // },
@@ -617,6 +664,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -628,6 +676,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -639,6 +688,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -657,6 +707,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -668,6 +719,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -678,6 +730,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -695,6 +748,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -706,6 +760,7 @@ describe('role checks', () => {
       description: 11,
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -716,6 +771,7 @@ describe('role checks', () => {
       description: true,
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -733,6 +789,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -746,6 +803,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: "foo",
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -756,6 +814,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: false,
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -768,6 +827,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -778,6 +838,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -791,6 +852,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -801,6 +863,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -813,6 +876,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights, UpdateTypes.release, 'ringer'],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
@@ -823,10 +887,74 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights, 'ringer', UpdateTypes.release],
+      teams: [],
       roles: {
         "test@example@@org": Roles.owner,
       },
     })).toBeDenied();
+
+  });
+
+  test('teams must be a list', async () => {
+    const db = await setup({
+      uid: '123',
+      email: 'test@example.org',
+    }, {
+      [`${coll}/1`]: {
+        name: "My project",
+        description: "A description",
+        owner: "test@example@@org",
+        updateTypes: [UpdateTypes.insights,],
+        teams: ["Foo"],
+        roles: {
+          "test@example@@org": Roles.owner,
+        },
+      }
+    });
+
+    await expect(db.collection(coll).add({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: "Bar",
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+    })).toBeDenied();
+
+    await expect(db.collection(coll).doc('1').set({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: null,
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+    })).toBeDenied();
+
+    await expect(db.collection(coll).add({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: ["Bar"],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+    })).toBeAllowed();
+
+    await expect(db.collection(coll).doc('1').set({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: ["Bar"],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+    })).toBeAllowed();
 
   });
   
@@ -840,6 +968,7 @@ describe('role checks', () => {
         description: "A description",
         owner: "test@example@@org",
         updateTypes: [UpdateTypes.insights,],
+        teams: [],
         roles: {
           "test@example@@org": Roles.owner,
         },
@@ -871,6 +1000,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {},
     })).toBeDenied();
 
@@ -879,6 +1009,7 @@ describe('role checks', () => {
       description: "A description",
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
+      teams: [],
       roles: {},
     })).toBeDenied();
     

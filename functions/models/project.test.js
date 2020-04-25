@@ -12,6 +12,7 @@ test('can construct an empty object', () => {
     name: "",
     description: "",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: [],
     roles: {}
   });
 });
@@ -21,6 +22,7 @@ test('can construct a valid object', () => {
     name: "A project",
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: ["Alpha", "Beta"],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -33,6 +35,7 @@ test('can construct a valid object', () => {
     name: "A project",
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: ["Alpha", "Beta"],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -89,6 +92,7 @@ test('does not require a description', () => {
     name: "A project",
     description: "",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: [],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -166,6 +170,7 @@ test('encodes email addresses in firebase keys', () => {
     name: "A project",
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    teams: ["Alpha", "Beta"],
     roles: {
       'test@example.org': Roles.owner,
       'test1@example.org': Roles.administrator,
@@ -179,6 +184,7 @@ test('encodes email addresses in firebase keys', () => {
     description: "My project",
     updateTypes: [UpdateTypes.insights, UpdateTypes.release],
     owner: 'test@example@@org',
+    teams: ["Alpha", "Beta"],
     roles: {
       'test@example@@org': Roles.owner,
       'test1@example@@org': Roles.administrator,
@@ -196,6 +202,7 @@ test('decodes email addresses in firebase keys', () => {
       description: "My project",
       updateTypes: [UpdateTypes.insights, UpdateTypes.release],
       owner: 'test@example@@org',
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example@@org': Roles.owner,
         'test1@example@@org': Roles.administrator,
@@ -210,6 +217,7 @@ test('decodes email addresses in firebase keys', () => {
     name: "A project",
       description: "My project",
       updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+      teams: ["Alpha", "Beta"],
       roles: {
         'test@example.org': Roles.owner,
         'test1@example.org': Roles.administrator,
