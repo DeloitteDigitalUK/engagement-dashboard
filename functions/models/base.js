@@ -83,11 +83,17 @@ class Model {
    */
   static fromFirestore(snapshot, options) {
     const data = snapshot.data(options);
+    return this._constructFromData(this, snapshot.id, data);
+  }
+
+  // helper method in case `fromFirestore` needs to be overidden
+  static _constructFromData(cls, id, data) {
     try {
-      return new this(snapshot.id, data);
+      return new cls(id, data);
     } catch(error) {
+      console.error();
       console.error(error);
-      const broken = new this(snapshot.id, null, null, error);
+      const broken = new cls(id, null, null, error);
       Object.assign(broken, data);
       return broken;
     }
@@ -121,6 +127,9 @@ class Model {
 
   // Helper methods to find the object in Firestore
 
+  /**
+   * Return the full document path for this object
+   */
   getPath() {
     if(!this.id) {
       throw new Error("Cannot construct a path for an object with no id");

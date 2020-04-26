@@ -47,15 +47,15 @@ class Update extends Model {
   }
 
   static fromFirestore(snapshot, options) {
-    const data = snapshot.data(options);
+    const data = snapshot.data(options),
+          cls = data.type in this.typeRegister? this.typeRegister[data.type] : this;
     
-    // look up class in the registry
-    const cls = this.typeRegister[data.type];
-    if(!cls) {
-      return new this(snapshot.id, data);
+    // convert Firebase timestamp to date
+    if(data.date && data.date.toDate) {
+      data.date = data.date.toDate();
     }
 
-    return new cls(snapshot.id, data);
+    return this._constructFromData(cls, snapshot.id, data);
   }
 
   constructor(id=null, data=null, parent=null, error=null) {
