@@ -20,7 +20,7 @@ test('sets type automatically', () => {
     title: "",
     summary: "",
     date: null,
-    team: undefined,
+    team: null,
     foo: ""
   });
 });
@@ -30,7 +30,7 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
-    team: undefined,
+    team: null,
     foo: "bar"
   });
 
@@ -42,7 +42,7 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
-    team: undefined,
+    team: null,
     foo: "bar"
   });
 
@@ -52,7 +52,7 @@ test('checks type on update', () => {
     title: "Test",
     summary: "",
     date: new Date(2020, 1, 1),
-    team: undefined,
+    team: null,
     foo: "bar"
   });
 
@@ -65,7 +65,7 @@ test('can convert from Firestore with correct class', () => {
       title: "Test",
       summary: "",
       date: new Date(2020, 1, 1),
-      team: undefined,
+      team: null,
       foo: "bar"
     }),
     id: "123"
@@ -80,7 +80,7 @@ test('can convert from Firestore with correct class', () => {
       title: "Test",
       summary: "",
       date: new Date(2020, 1, 1),
-      team: undefined,
+      team: null,
       foo: "bar"
   });
 });

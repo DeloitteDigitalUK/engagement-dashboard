@@ -9,7 +9,7 @@ const updateSchema = Yup.object({
   title: Yup.string().required().default(""),
   summary: Yup.string().notRequired().default(""),
   date: Yup.date().required().default(null),
-  team: Yup.string().notRequired(),
+  team: Yup.string().notRequired().nullable().default(null),
 });
 
 /**

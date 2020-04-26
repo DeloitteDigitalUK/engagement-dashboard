@@ -9,7 +9,7 @@ test('can construct a new update', () => {
     title: "",
     summary: "",
     date: null,
-    team: undefined,
+    team: null,
     raidItems: []
   });
 });
