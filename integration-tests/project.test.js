@@ -64,6 +64,41 @@ describe('conversion', () => {
     });
   });
 
+  test('can recover a broken object', async () => {
+    const db = await setup({
+        uid: '123',
+        email: 'test@example.org'
+      }, {
+        [`${coll}/123`]: {
+          name: "My project",
+          description: "A description",
+          owner: "test@example@@org",
+          updateTypes: ['not valid'],
+          teams: [],
+          roles: {
+            "test@example@@org": Roles.owner,
+          },
+        }
+      });
+    
+    // hide expected error logging
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const p1 = (await db.doc(`${coll}/123`).withConverter(Project).get()).data();
+    spy.mockRestore();
+
+    expect(p1.error).toBeTruthy();
+    expect(p1.toObject()).toEqual({
+      name: "My project",
+      description: "A description",
+      updateTypes: ['not valid'],
+      teams: [],
+      roles: {
+        "test@example.org": Roles.owner,
+      },
+    });
+
+  });
+
 });
 
 describe('role checks', () => {
