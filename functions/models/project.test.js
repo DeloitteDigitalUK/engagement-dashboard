@@ -7,7 +7,7 @@ const Roles = require('./roles');
 test('can construct an empty object', () => {
   const p = new Project();
 
-  expect(p.getId()).toEqual(null);
+  expect(p.id).toEqual(null);
   expect(p.toObject()).toEqual({
     name: "",
     description: "",
@@ -212,7 +212,7 @@ test('decodes email addresses in firebase keys', () => {
     })
   });
 
-  expect(p.getId()).toEqual("123");
+  expect(p.id).toEqual("123");
   expect(p.toObject()).toEqual({
     name: "A project",
     description: "My project",
@@ -249,7 +249,7 @@ test('handles invalid data in database if required', () => {
   });
   spy.mockRestore();
 
-  expect(p.getId()).toEqual("123");
+  expect(p.id).toEqual("123");
   expect(p.error).toBeTruthy();
   expect(p.toObject()).toEqual({
     name: "My project",

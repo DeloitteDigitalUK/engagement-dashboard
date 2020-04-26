@@ -37,17 +37,17 @@ export default function ProjectMenu({ user, project }) {
   
   function redirectToAddForm(type) {
     return () => {
-      history.push(`/project/${project.getId()}/new-update?type=${type}`)
+      history.push(`/project/${project.id}/new-update?type=${type}`)
     }
   }
 
   return (
     <>
-      <Link to={`/project/${project.getId()}`} component={RouterLink} variant="subtitle2" color="inherit" noWrap underline="none" className={classes.projectTitle}>
+      <Link to={`/project/${project.id}`} component={RouterLink} variant="subtitle2" color="inherit" noWrap underline="none" className={classes.projectTitle}>
         {project.name}
       </Link>
       {project.hasRole(user.email, [Roles.owner, Roles.administrator]) && (
-        <IconButton to={`/project/${project.getId()}/edit`} component={RouterLink} color="inherit" className={classes.projectEditButton}>
+        <IconButton to={`/project/${project.id}/edit`} component={RouterLink} color="inherit" className={classes.projectEditButton}>
           <EditIcon fontSize="inherit" />
         </IconButton>
       )}

@@ -10,7 +10,7 @@ import { useDocument, useCollection } from 'react-firebase-hooks/firestore';
 
 import { createContext, useContext } from 'react';
 
-import { Project, Roles } from 'models';
+import { Project, Update, Roles } from 'models';
 
 // To configure these, set them in a `.env` or `.env.local` file.
 
@@ -128,11 +128,11 @@ export default class API {
     }
 
     const doc = await this.firebase.firestore()
-      .collection(Project.getCollectionName())
+      .collection(Project.getCollectionPath())
       .withConverter(Project)
       .add(project);
 
-    project.setId(doc.id);
+    project.id = doc.id;
   }
 
   /**
@@ -140,7 +140,10 @@ export default class API {
    * owner or administrator can make changes.
    */
   async saveProject(project) {
-    return this.firebase.firestore().doc(project.getPath()).withConverter(Project).set(project);
+    return this.firebase.firestore()
+      .doc(project.getPath())
+      .withConverter(Project)
+      .set(project);
   }
 
   /**
@@ -148,7 +151,9 @@ export default class API {
    * can do this.
    */
   async deleteProject(project) {
-    return this.firebase.firestore().doc(project.getPath()).delete();
+    return this.firebase.firestore()
+      .doc(project.getPath())
+      .delete();
   }
 
   /**
@@ -157,7 +162,7 @@ export default class API {
   useProject(projectId) {
     const [ doc, loading, error ] = useDocument(
       this.firebase.firestore()
-        .collection(Project.getCollectionName())
+        .collection(Project.getCollectionPath())
         .withConverter(Project)
         .doc(projectId)
     );
@@ -173,7 +178,7 @@ export default class API {
   useProjects(user) {
     const [ query, loading, error ] = useCollection(
       this.firebase.firestore()
-        .collection(Project.getCollectionName())
+        .collection(Project.getCollectionPath())
         .withConverter(Project)
         .where(`roles.${Project.encodeKey(user.email)}`, 'in', [
           Roles.owner,
@@ -194,6 +199,74 @@ export default class API {
     let projects = query.docs.map(p => p.data()).sort((a, b) => ('' + a.name).localeCompare(b.name));
 
     return [projects, loading, error];
+  }
+
+  // Update CRUD
+
+  /**
+   * Create a new update in the data store.
+   */
+  async addUpdate(update) {
+    if(!update.parent) {
+      throw new Yup.ValidationError("Update does not have a parent", update.id, "parent", 'check-parent');
+    }
+
+    const doc = await this.firebase.firestore()
+      .collection(Update.getCollectionPath(project))
+      .withConverter(Update)
+      .add(update);
+
+    update.id = doc.id;
+  }
+
+  /**
+   * Save changes to the given update. The server will enforce that only an
+   * author, owner or administrator can make changes.
+   */
+  async saveUpdate(update) {
+    if(!update.parent) {
+      throw new Yup.ValidationError("Update does not have a parent", update.id, "parent", 'check-parent');
+    }
+
+    return this.firebase.firestore()
+      .doc(update.getPath())
+      .withConverter(Update)
+      .set(update);
+  }
+
+  /**
+   * Delete the given update. The server will enforce that only an author, owner
+   * or administrator can do this.
+   */
+  async deleteUpdate(update) {
+    if(!update.parent) {
+      throw new Yup.ValidationError("Update does not have a parent", update.id, "parent", 'check-parent');
+    }
+
+    return this.firebase.firestore()
+      .doc(update.getPath())
+      .delete();
+  }
+
+
+  /**
+   * Return a hook with a `[update, loading, error]` triple.
+   */
+  useUpdate(project, updateId) {
+    const [ doc, loading, error ] = useDocument(
+      this.firebase.firestore()
+        .collection(Update.getCollectionPath(project))
+        .withConverter(Update)
+        .doc(updateId)
+    );
+    
+    let update = null;
+    if(doc) {
+      update = doc.data();
+      update.parent = project;
+    }
+
+    return [update, loading, error];
   }
   
 }

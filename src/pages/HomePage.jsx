@@ -50,7 +50,7 @@ const ProjectCard = ({ user, project }) => {
   
   return (
     <Card variant="outlined" className={classes.projectCard}>
-      <Link to={`/project/${project.getId()}`} component={RouterLink} underline="none">
+      <Link to={`/project/${project.id}`} component={RouterLink} underline="none">
         <CardContent className={classes.projectCardContent}>
           <Typography color="textPrimary" variant="h5">{project.name}</Typography>
           {project.error?
@@ -60,7 +60,7 @@ const ProjectCard = ({ user, project }) => {
         </CardContent>
       </Link>
       <CardActions>
-        {canEdit && <Button size="small" to={`/project/${project.getId()}/edit`} component={RouterLink}>Edit</Button>}
+        {canEdit && <Button size="small" to={`/project/${project.id}/edit`} component={RouterLink}>Edit</Button>}
       </CardActions>
     </Card>
   );
@@ -98,7 +98,7 @@ export default function HomePage({ user }) {
         
         <Grid container spacing={2}>
           {projects.map(project => (
-            <Grid item xs={12} md={6} lg={4} key={project.getId()}>
+            <Grid item xs={12} md={6} lg={4} key={project.id}>
               <ProjectCard project={project} user={user} />
             </Grid>
           ))}

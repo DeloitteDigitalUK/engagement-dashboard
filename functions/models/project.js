@@ -89,7 +89,7 @@ class Project extends Model {
       return new this(snapshot.id, data);
     } catch(error) {
       console.error(error);
-      const broken = new this(snapshot.id, null, error);
+      const broken = new this(snapshot.id, null, null, error);
       Object.assign(broken, data);
       return broken;
     }

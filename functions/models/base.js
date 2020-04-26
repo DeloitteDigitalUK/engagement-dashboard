@@ -15,7 +15,8 @@ const schema = Yup.object({});
  * 
  * Each type should also define its parent collection name, returned by
  * `ModelClass.getCollectionName()`. This in turn will allow `getPath()` to
- * calculate the path to an instance (assuming it has an id set).
+ * calculate the path to an instance (assuming it has an id set), and
+ * `getCollectionPath()` to work correctly on the class.
  * 
  * The Model class implements the `FirebaseConverter` API (without an explicit
  * dependency on Firebase libraries), allowing you to use the *class* of your
@@ -34,15 +35,25 @@ class Model {
    * Return the name of the collection.
    * Subclasses should override this.
    */
-  static getCollectionName() {return ""; }
+  static getCollectionName() { return ""; }
+
+  /**
+   * Get the actual path to the collection, possibly chained off a parent
+   * instance.
+   */
+  static getCollectionPath(parent=null) {
+    return parent? `${parent.getPath()}/${this.getCollectionName()}` : this.getCollectionName();
+  }
 
   /**
    * The default constructor takes a data object that conforms to the schema,
    * casts and validates it, and then sets the validated key/value pairs onto
-   * the new object. The id is the document ID.
+   * the new object. The id is the document ID. The parent is a parent of this
+   * object, used for calculating paths.
    */
-  constructor(id=null, data=null, error=null) {
-    this._id = id;
+  constructor(id=null, data=null, parent=null, error=null) {
+    this.id = id;
+    this.parent = parent;
     this.error = error;
 
     // Set schema default values - not necessarily valid yet!
@@ -76,7 +87,7 @@ class Model {
       return new this(snapshot.id, data);
     } catch(error) {
       console.error(error);
-      const broken = new this(snapshot.id, null, error);
+      const broken = new this(snapshot.id, null, null, error);
       Object.assign(broken, data);
       return broken;
     }
@@ -110,21 +121,12 @@ class Model {
 
   // Helper methods to find the object in Firestore
 
-  getId() {
-    return this._id;
-  }
-
-  setId(value) {
-    this._id = value;
-  }
-
-  getPath(parent=null) {
-    if(!this.getId()) {
+  getPath() {
+    if(!this.id) {
       throw new Error("Cannot construct a path for an object with no id");
     }
 
-    const path = `${this.constructor.getCollectionName()}/${this.getId()}`
-    return parent !== null? `${parent.getPath()}/${path}` : path;
+    return `${this.constructor.getCollectionPath(this.parent)}/${this.id}`
   }
 
 }

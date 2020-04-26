@@ -32,7 +32,7 @@ export default function NewProjectPage({ user }) {
         action={async (data) => {
           project.update(data);
           await api.addProject(user, project);
-          history.push(`/project/${project.getId()}`);
+          history.push(`/project/${project.id}`);
         }}
         knownErrors={knownErrors}
         />

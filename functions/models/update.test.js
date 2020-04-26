@@ -74,7 +74,7 @@ test('can convert from Firestore with correct class', () => {
   const c = Update.fromFirestore(fauxSnapshot, {});
   
   expect(c.constructor).toEqual(TestUpdate);
-  expect(c.getId()).toEqual("123");
+  expect(c.id).toEqual("123");
   expect(c.toObject()).toEqual({
     type: UpdateTypes._test,
       title: "Test",

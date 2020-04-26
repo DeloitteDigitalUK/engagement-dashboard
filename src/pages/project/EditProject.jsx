@@ -39,7 +39,7 @@ export default function EditProjectPage({ user, project }) {
   const saveProject = async (data) => {
     project.update(data);
     await api.saveProject(project);
-    history.push(`/project/${project.getId()}`);
+    history.push(`/project/${project.id}`);
   };
 
   const deleteProject = async () => {

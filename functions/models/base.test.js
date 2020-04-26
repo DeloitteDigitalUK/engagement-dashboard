@@ -14,7 +14,7 @@ class TestModel extends Model {
 describe("constructor", () => {
   test('can construct a valid object with defaults (even if not valid)', () => {
     const t = new TestModel();
-    expect(t.getId()).toEqual(null);
+    expect(t.id).toEqual(null);
     expect(t.toObject()).toEqual({name: "Anonymous", email: ""});
     expect(t.isValid()).toEqual(false);
 
@@ -27,7 +27,7 @@ describe("constructor", () => {
 
   test('can construct a valid object with values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
-    expect(t.getId()).toEqual("123");
+    expect(t.id).toEqual("123");
     expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
   });
   
@@ -37,7 +37,7 @@ describe("constructor", () => {
   
   test('strips unknown values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org", foo: "bar"});
-    expect(t.getId()).toEqual("123");
+    expect(t.id).toEqual("123");
     expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
   });
 
@@ -47,27 +47,27 @@ describe("updating the object", () => {
   test('can update values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
 
-    t.setId("321");
+    t.id = "321";
     t.update({
       name: "James",
       email: "james@example.org"
     });
 
-    expect(t.getId()).toEqual("321");
+    expect(t.id).toEqual("321");
     expect(t.toObject()).toEqual({name: "James", email: "james@example.org"});
   });
 
   test('can partially update the object', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     
-    expect(t.getId()).toEqual("123");
+    expect(t.id).toEqual("123");
     expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
 
     t.update({
       name: "James"
     });
     
-    expect(t.getId()).toEqual("123");
+    expect(t.id).toEqual("123");
     expect(t.toObject()).toEqual({name: "James", email: "test@example.org"});
   });
   
@@ -80,13 +80,13 @@ describe("updating the object", () => {
   test('ignores unknown values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     
-    t.setId("321");
+    t.id = "321";
     t.update({
       name: "James",
       foo: "bar"
     });
 
-    expect(t.getId()).toEqual("321");
+    expect(t.id).toEqual("321");
     expect(t.toObject()).toEqual({name: "James", email: "test@example.org"});
   });
 });
@@ -104,10 +104,19 @@ describe("calculating paths", () => {
   
   test('can calculate path with parent', () => {
     const t1 = new TestModel("123"),
-          t2 = new TestModel("321");
+          t2 = new TestModel("321", null, t1, null);
     
     expect(t2.getPath(t1)).toEqual("testModels/123/testModels/321");
   });
+
+  test('can calculate collection path with and without parent', () => {
+    const t1 = new TestModel("123"),
+          t2 = new TestModel("321", null, t1, null);
+    
+    expect(TestModel.getCollectionPath()).toEqual("testModels");
+    expect(TestModel.getCollectionPath(t1)).toEqual("testModels/123/testModels");
+  });
+
 });
 
 describe("explicit validation", () => {
@@ -159,7 +168,7 @@ describe("the class is a Firestore converter", () => {
     const c = TestModel.fromFirestore(fauxSnapshot, {});
     
     expect(c.constructor).toEqual(TestModel);
-    expect(c.getId()).toEqual("123");
+    expect(c.id).toEqual("123");
     expect(c.toObject()).toEqual({name: "John", email: "test@example.org"});
   });
 
@@ -177,7 +186,7 @@ describe("the class is a Firestore converter", () => {
     
     expect(c.constructor).toEqual(TestModel);
     expect(c.error).toBeTruthy();
-    expect(c.getId()).toEqual("123");
+    expect(c.id).toEqual("123");
     expect(c.toObject()).toEqual({name: "John", email: "garbage"});
   });
 

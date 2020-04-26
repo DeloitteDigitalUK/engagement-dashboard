@@ -58,8 +58,8 @@ class Update extends Model {
     return new cls(snapshot.id, data);
   }
 
-  constructor(id=null, data=null, error=null) {
-    super(id, data, error);
+  constructor(id=null, data=null, parent=null, error=null) {
+    super(id, data, parent, error);
     // automatically set type
     this.type = Update.typeNameLookup[this.constructor];
   }

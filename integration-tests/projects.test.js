@@ -1,7 +1,7 @@
 const { setup, tearDown } = require('./helpers');
 const { Project, UpdateTypes, Roles } = require('models');
 
-const coll = Project.getCollectionName();
+const coll = Project.getCollectionPath();
 
 afterAll(async () => {
   await tearDown();
@@ -29,7 +29,7 @@ describe('conversion', () => {
     const doc = await ref.get();
     const p2 = doc.data();
   
-    expect(ref.id).toEqual(p2.getId());
+    expect(ref.id).toEqual(p2.id);
     expect(p1.toObject()).toEqual(p2.toObject());
   });
   
