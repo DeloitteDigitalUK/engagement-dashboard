@@ -24,8 +24,8 @@ service cloud.firestore {
       }
       
       function isValidProject(r) {
-        let roles = ['owner', 'administrator', 'author', 'member'];
         let updateTypes = ['release', 'flow', 'insights', 'raid', 'goals'];
+        let roles = ['owner', 'administrator', 'author', 'member'];
         let requiredKeys = ['name', 'description', 'updateTypes', 'teams', 'owner', 'roles'].toSet();
         let possibleKeys = requiredKeys.union([].toSet());
         
@@ -40,7 +40,8 @@ service cloud.firestore {
           r.data.roles[r.data.owner] == 'owner'             // has an owner (field and in roles map)
         );
       }
-    
+
+      // CRUD rules
       allow create: if (
         userHasRole(request, request.resource, ['owner']) &&
         isValidProject(request.resource)
@@ -60,6 +61,54 @@ service cloud.firestore {
       allow delete: if (
         userHasRole(request, resource, ['owner'])
       );
+
+      // Updates
+      match /updates/{update} {
+
+        function canViewUpdate(request) {
+          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author', 'member']);
+        }
+        
+        function canModifyUpdate(request) {
+          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author']);
+        }
+
+        function isValidUpdate(u) {
+          let updateTypes = ['release', 'flow', 'insights', 'raid', 'goals'].toSet();
+          let requiredKeys = ['type', 'title', 'summary', 'date', 'team'].toSet();
+          let possibleKeys = requiredKeys.union(['cycleTimeData', 'authorId', 'authorName', 'text', 'raidItems', 'releaseDate', 'status'].toSet());
+          
+          return (
+            u.data.keys().toSet().hasAll(requiredKeys) &&     // all required keys are present
+            possibleKeys.hasAll(u.data.keys()) &&             // no unknown keys
+            updateTypes.hasAll([u.data.type]) &&              // known update type
+            u.data.title is string &&                         // title is a string
+            u.data.summary is string &&                       // summary is a string
+            u.data.date is timestamp &&                       // date is a date
+            (u.data.team == null || u.data.team is string)    // team is null or string
+          );
+        }
+
+        // CRUD rules
+        allow create: if (
+          canModifyUpdate(request) &&
+          isValidUpdate(request.resource)
+        );
+        
+        allow read: if (
+          canViewUpdate(request)
+        );
+        
+        allow update: if (
+          canModifyUpdate(request) &&
+          isValidUpdate(request.resource)
+        ); 
+        
+        allow delete: if (
+          canModifyUpdate(request)
+        );
+
+      }
       
     }
   }
