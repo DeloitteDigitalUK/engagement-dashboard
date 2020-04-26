@@ -31,8 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:run-emulators": "firebase emulators:start",
-    "test:integration": "jest -c integration-tests/jest.json --watch",
-    "ci:integration-tests": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest -c integration-tests/jest.json\"",
+    "test:integration": "jest -c integration-tests/jest.json --watch --runInBand",
+    "ci:integration-tests": "firebase emulators:exec --only firestore \"./node_modules/.bin/jest --runInBand -c integration-tests/jest.json\"",
     "deploy": "firebase deploy",
     "eject": "react-scripts eject"
   },
