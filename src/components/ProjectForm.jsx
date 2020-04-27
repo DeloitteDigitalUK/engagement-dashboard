@@ -72,7 +72,7 @@ export function formDataToProjectData(project, form) {
   data.updateTypes = Object.values(UpdateTypes).filter(v => form[updateTypesToProps[v]]);
 
   // strings -> teams list
-  data.teams = form.teams.split(splitLines).map(v => v.trim());
+  data.teams = form.teams.trim()? form.teams.split(splitLines).map(v => v.trim()) : [];
 
   // strings -> role map (note: order matters in case a user is listed in more than one!)
   data.roles = fromPairs([].concat(
