@@ -87,7 +87,7 @@ export function formDataToProjectData(project, form) {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1, 2, 2, 2)
   },
   cancelButton: {
     marginLeft: theme.spacing(1)
