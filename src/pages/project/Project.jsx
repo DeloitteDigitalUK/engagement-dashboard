@@ -4,7 +4,6 @@ import { Alert } from '@material-ui/lab';
 
 import { useRouteMatch, useParams, Switch, Route } from 'react-router-dom';
 
-import AuthenticatedLayout from "../../layouts/AuthenticatedLayout";
 import Loading from '../../components/Loading';
 
 import NotFoundPage from '../NotFoundPage';
@@ -29,20 +28,26 @@ export default function ProjectPage({ user }) {
     console.error(projectError);
   }
 
-  return (
-    <AuthenticatedLayout user={user} project={project}>
-      {projectLoading? <Loading /> :
-       projectError? <Alert severity="error">{projectError.message}</Alert> :
-       !project? <NotFoundPage /> :
-        <Switch>
-          <Route exact path={path}><ViewProjectPage user={user} project={project} /></Route>
-          <Route exact path={`${path}/edit`}><EditProjectPage user={user} project={project} /></Route>
-          <Route exact path={`${path}/new-update`}><NewUpdatePage user={user} project={project} /></Route>
-          <Route path={`${path}/:updateId`}><UpdatePage user={user} project={project}/></Route>
+  if(projectLoading) {
+    return <Loading />;
+  }
 
-          <Route path="*"><NotFoundPage /></Route>
-        </Switch>
-      }
-    </AuthenticatedLayout>
+  if(projectError) {
+    return <Alert severity="error">{projectError.message}</Alert>;
+  }
+
+  if(!project) {
+    return <NotFoundPage />
+  }
+
+  return (
+    <Switch>
+      <Route exact path={path}><ViewProjectPage user={user} project={project} /></Route>
+      <Route exact path={`${path}/edit`}><EditProjectPage user={user} project={project} /></Route>
+      <Route exact path={`${path}/new-update`}><NewUpdatePage user={user} project={project} /></Route>
+      <Route path={`${path}/:updateId`}><UpdatePage user={user} project={project}/></Route>
+
+      <Route path="*"><NotFoundPage /></Route>
+    </Switch>
   ); 
 }

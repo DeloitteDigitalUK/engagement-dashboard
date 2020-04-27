@@ -24,10 +24,19 @@ export default function UpdatePage({ user, project }) {
     console.error(updateError);
   }
 
+  if(updateLoading) {
+    return <Loading />;
+  }
+
+  if(updateError) {
+    return <Alert severity="error">{updateError.message}</Alert>;
+  }
+
+  if(!update) {
+    return <NotFoundPage />;
+  }
+
   return (
-    updateLoading? <Loading /> :
-    updateError? <Alert severity="error">{updateError.message}</Alert> :
-    !update? <NotFoundPage /> :
     <Switch>
       {/* <Route exact path={path}><ViewUpdatePage user={user} project={project} update={update} /></Route>
       <Route exact path={`${path}/edit`}><EditUpdatePage user={user} project={project} update={update} /></Route> */}

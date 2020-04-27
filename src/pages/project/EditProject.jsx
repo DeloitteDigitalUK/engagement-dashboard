@@ -8,13 +8,13 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { Roles } from 'models';
-
 import { useAPI } from '../../api';
 
+import AuthenticatedLayout from "../../layouts/AuthenticatedLayout";
 import ProjectForm from '../../components/ProjectForm';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import ConfirmationDialog from '../../components/ConfirmationDialog';
 
 const knownErrors = {}
@@ -48,7 +48,7 @@ export default function EditProjectPage({ user, project }) {
   };
 
   return (
-    <>
+    <AuthenticatedLayout user={user} project={project}>
       <ProjectForm
         project={project}
         title="Edit project"
@@ -79,8 +79,7 @@ export default function EditProjectPage({ user, project }) {
             </Alert>
           </>
         )}
-
-      </>
+    </AuthenticatedLayout>
   );
 
 }

@@ -23,7 +23,6 @@ export default function NewProjectPage({ user }) {
 
   return (
     <AuthenticatedLayout user={user}>
-
       <ProjectForm
         project={project}
         title="Create project"
@@ -36,7 +35,6 @@ export default function NewProjectPage({ user }) {
         }}
         knownErrors={knownErrors}
         />
-
     </AuthenticatedLayout>
   );
 
