@@ -28,6 +28,9 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// to get trace debugging for Firestore operations, uncomment this line
+// firebase.setLogLevel('debug');
+
 // Expose variants of  `react-firebase-hooks` hooks configured to use this firebase instance
 export const useAuthState = () => rfhAuth.useAuthState(firebase.auth());
 
