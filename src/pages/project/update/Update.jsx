@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert } from '@material-ui/lab';
 
-import { useRouteMatch, useParams, Switch, Route } from 'react-router-dom';
+import { useParams, Switch, Route } from 'react-router-dom';
 
 import Loading from '../../../components/Loading';
 import NotFoundPage from '../../NotFoundPage';
@@ -14,7 +14,7 @@ import { useAPI } from '../../../api';
 
 export default function UpdatePage({ user, project }) {
 
-  const { path } = useRouteMatch();
+  // const { path } = useRouteMatch();
   const { updateId } = useParams();
 
   const api = useAPI();

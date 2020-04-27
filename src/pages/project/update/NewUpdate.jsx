@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 
-import { useAPI } from '../../../api';
+// import { useAPI } from '../../../api';
 
-const knownErrors = {}
+// const knownErrors = {}
 
 export default function UpdateUpdatePage({ user, project }) {
 
-  const history = useHistory();
+  // const history = useHistory();
   const location = useLocation();
-  const api = useAPI();
+  // const api = useAPI();
 
   const queryParams = new URLSearchParams(location.search);
 
