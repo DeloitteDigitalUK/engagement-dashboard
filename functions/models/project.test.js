@@ -173,7 +173,7 @@ test('encodes email addresses in firebase keys', () => {
     teams: ["Alpha", "Beta"],
     roles: {
       'test@example.org': Roles.owner,
-      'test1@example.org': Roles.administrator,
+      'test1@example.org.uk': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
     }
@@ -187,7 +187,7 @@ test('encodes email addresses in firebase keys', () => {
     teams: ["Alpha", "Beta"],
     roles: {
       'test@example@@org': Roles.owner,
-      'test1@example@@org': Roles.administrator,
+      'test1@example@@org@@uk': Roles.administrator,
       'test2@example@@org': Roles.author,
       'test3@example@@org': Roles.member,
     }
@@ -205,7 +205,7 @@ test('decodes email addresses in firebase keys', () => {
       teams: ["Alpha", "Beta"],
       roles: {
         'test@example@@org': Roles.owner,
-        'test1@example@@org': Roles.administrator,
+        'test1@example@@org@@uk': Roles.administrator,
         'test2@example@@org': Roles.author,
         'test3@example@@org': Roles.member,
       }
@@ -220,7 +220,7 @@ test('decodes email addresses in firebase keys', () => {
     teams: ["Alpha", "Beta"],
     roles: {
       'test@example.org': Roles.owner,
-      'test1@example.org': Roles.administrator,
+      'test1@example.org.uk': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
     }

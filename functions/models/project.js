@@ -64,11 +64,11 @@ class Project extends Model {
   // we also automatically set and get the `owner` field
 
   static encodeKey(key) {
-    return key.replace('.', '@@');
+    return key.replace(/\./g, '@@');
   }
 
   static decodeKey(key) {
-    return key.replace('@@', '.');
+    return key.replace(/@@/g, '.');
   }
 
   static toFirestore(instance) {
