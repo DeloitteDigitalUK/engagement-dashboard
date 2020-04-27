@@ -2,13 +2,14 @@ const Yup = require('yup');
 
 const Model = require('./base');
 const UpdateTypes = require('./updateTypes');
+const { transformDate } = require('./utils');
 
 const updateSchema = Yup.object({
   type: Yup.string().required().oneOf(Object.values(UpdateTypes)),
   
   title: Yup.string().required().default(""),
   summary: Yup.string().notRequired().default(""),
-  date: Yup.date().required().default(null),
+  date: Yup.date().transform(transformDate).required().default(null),
   team: Yup.string().notRequired().nullable().default(null),
 });
 
@@ -49,12 +50,6 @@ class Update extends Model {
   static fromFirestore(snapshot, options) {
     const data = snapshot.data(options),
           cls = data.type in this.typeRegister? this.typeRegister[data.type] : this;
-    
-    // convert Firebase timestamp to date
-    if(data.date && data.date.toDate) {
-      data.date = data.date.toDate();
-    }
-
     return this._constructFromData(cls, snapshot.id, data);
   }
 

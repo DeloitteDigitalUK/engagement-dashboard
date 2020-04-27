@@ -85,7 +85,19 @@ service cloud.firestore {
             u.data.title is string &&                         // title is a string
             u.data.summary is string &&                       // summary is a string
             u.data.date is timestamp &&                       // date is a date
-            (u.data.team == null || u.data.team is string)    // team is null or string
+            (u.data.team == null || u.data.team is string) && // team is null or string
+            (
+              (                                                 
+                u.data.type == 'insights' &&
+                u.data.authorId is string &&
+                u.data.authorName is string &&
+                u.data.text is string
+              ) ||
+              (                                                 
+                u.data.type == 'flow' &&
+                u.data.cycleTimeData is list
+              )
+            )
           );
         }
 

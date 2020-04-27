@@ -59,12 +59,20 @@ test('checks type on update', () => {
 });
 
 test('can convert from Firestore with correct class', () => {
+
+  // simulate Firestore timestamp
+  class FauxTimestamp {
+    toDate() {
+      return new Date(2020, 1, 1);
+    }  
+  }
+
   const fauxSnapshot = {
     data: (options) => ({
       type: UpdateTypes._test,
       title: "Test",
       summary: "",
-      date: new Date(2020, 1, 1),
+      date: new FauxTimestamp(),
       team: null,
       foo: "bar"
     }),

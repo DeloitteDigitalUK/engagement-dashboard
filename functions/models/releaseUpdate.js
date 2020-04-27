@@ -1,9 +1,11 @@
-const Update = require('./update');
-const UpdateTypes = require('./updateTypes');
 const Yup = require('yup');
 
+const Update = require('./update');
+const UpdateTypes = require('./updateTypes');
+const { transformDate } = require('./utils');
+
 const releaseUpdateSchema = Update.getSchema().concat(Yup.object({
-  releaseDate: Yup.date().notRequired(),
+  releaseDate: Yup.date().transform(transformDate).notRequired().nullable().default(null),
   status: Yup.string().oneOf(['in-progress', 'complete', 'overdue']).required().default('in-progress'),
   text: Yup.string().required().default(""),
 }));

@@ -10,7 +10,7 @@ test('can construct a new update', () => {
     summary: "",
     date: null,
     team: null,
-    releaseDate: undefined,
+    releaseDate: null,
     status: 'in-progress',
     text: ""
   });

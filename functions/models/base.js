@@ -91,7 +91,7 @@ class Model {
     try {
       return new cls(id, data);
     } catch(error) {
-      console.error();
+      console.error(`Unable to load document with id ${id} in ${this.getCollectionName()}`);
       console.error(error);
       const broken = new cls(id, null, null, error);
       Object.assign(broken, data);

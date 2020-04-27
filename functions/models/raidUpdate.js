@@ -1,6 +1,8 @@
+const Yup = require('yup');
+
 const Update = require('./update');
 const UpdateTypes = require('./updateTypes');
-const Yup = require('yup');
+const { transformDate } = require('./utils');
 
 const raidUpdateSchema = Update.getSchema().concat(Yup.object({
   raidItems: Yup.array().of(Yup.object({
@@ -8,7 +10,7 @@ const raidUpdateSchema = Update.getSchema().concat(Yup.object({
     summary: Yup.string().required().default(""),
     url: Yup.string().url().notRequired(),
     priority: Yup.string().oneOf(['low', 'medium', 'high']).notRequired(),
-    date: Yup.date().notRequired(),
+    date: Yup.date().transform(transformDate).notRequired().nullable().default(null)
   })).required().default([])
 }));
 
