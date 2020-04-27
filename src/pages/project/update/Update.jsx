@@ -10,7 +10,7 @@ import NotFoundPage from '../../NotFoundPage';
 // import ViewUpdatePage from './ViewUpdate';
 // import EditUpdatePage from './EditUpdate';
 
-import { useAPI } from '../../api';
+import { useAPI } from '../../../api';
 
 export default function UpdatePage({ user, project }) {
 

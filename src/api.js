@@ -212,7 +212,7 @@ export default class API {
     }
 
     const doc = await this.firebase.firestore()
-      .collection(Update.getCollectionPath(project))
+      .collection(Update.getCollectionPath(update.parent))
       .withConverter(Update)
       .add(update);
 
