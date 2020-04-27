@@ -74,7 +74,7 @@ service cloud.firestore {
         }
 
         function isValidUpdate(u) {
-          let updateTypes = ['release', 'flow', 'insights', 'raid', 'goals'].toSet();
+          let updateTypes = ['insights', 'flow', 'release', 'raid', 'goals'].toSet();
           let requiredKeys = ['type', 'title', 'summary', 'date', 'team'].toSet();
           let possibleKeys = requiredKeys.union(['cycleTimeData', 'authorId', 'authorName', 'text', 'raidItems', 'releaseDate', 'status'].toSet());
           
@@ -96,6 +96,22 @@ service cloud.firestore {
               (                                                 
                 u.data.type == 'flow' &&
                 u.data.cycleTimeData is list
+              ) ||
+              (                                                 
+                u.data.type == 'release' &&
+                (u.data.releaseDate is timestamp || u.data.releaseDate == null) &&
+                u.data.status is string &&
+                u.data.text is string
+              ) ||
+              (                                                 
+                u.data.type == 'raid' &&
+                u.data.raidItems is list
+              ) ||
+              (                                                 
+                u.data.type == 'goals' &&
+                u.data.authorId is string &&
+                u.data.authorName is string &&
+                u.data.text is string
               )
             )
           );
