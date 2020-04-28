@@ -14,6 +14,9 @@ import { nullToString, stringToNull } from '../../utils/formHelpers';
 const useStyles = makeStyles((theme) => ({
   cancelButton: {
     marginLeft: theme.spacing(1)
+  },
+  lightField: {
+    marginLeft: theme.spacing(0.5)
   }
 }));
 
@@ -42,8 +45,12 @@ export function toUpdateValues(data) {
  * Common form fields for updates
  */
 export function UpdateFields({project}) {
+
+  const classes = useStyles();
+
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
+      
       <Grid item xs={12} md={3}>
         <Field
           component={TextField}
@@ -70,21 +77,23 @@ export function UpdateFields({project}) {
         />
       </Grid>
 
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={2}>
         <Field
+          className={classes.lightField}
           component={KeyboardDatePicker}
           id="date"
           name="date"
           label="Date"
           disableToolbar
+          fullWidth
           variant="inline"
           format="DD/MM/YYYY"
         />
       </Grid>
 
       {project.teams && project.teams.length > 0 && (
-        <Grid item xs={12} md={6}>
-          <FormControl>
+        <Grid item xs={12} md={2}>
+          <FormControl fullWidth className={classes.lightField}>
             <InputLabel htmlFor="team">Team</InputLabel>
             <Field
               component={Select}

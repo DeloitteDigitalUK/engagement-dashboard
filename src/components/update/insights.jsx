@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { Grid } from '@material-ui/core';
-import { Formik, Form } from 'formik';
+import { Grid, FormControl, FormHelperText } from '@material-ui/core';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { UpdateTypes, InsightsUpdate } from 'models';
+
+import WysiwygEditor from '../../components/WysiwygEditor';
 
 import { submitHandler } from '../../utils/formHelpers';
 import { UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
@@ -21,7 +23,11 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
   const editing = !!update;
 
   if(!editing) {
-    update = new InsightsUpdate(null, {type: UpdateTypes.insights});
+    update = new InsightsUpdate(null, {
+      type: UpdateTypes.insights,
+      authorId: user.uid,
+      authorName: user.displayName
+    });
   }
   
   return (
@@ -29,14 +35,11 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
           validationSchema={InsightsUpdate.getSchema()}
           initialValues={{
             ...toInitialValues(update),
+            text: "Text **here**"
           }}
           onSubmit={submitHandler({
             action: (data) => {
-              update.update({
-                ...toUpdateValues(data),
-                authorId: user.uid,
-                authorName: user.displayName
-              });
+              update.update(toUpdateValues(data));
               save(update);
             },
             knownErrors,
@@ -49,7 +52,15 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
               <UpdateFields project={project} />
               
-
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <Field
+                    name="text"
+                    component={WysiwygEditor}
+                    />
+                  <FormHelperText variant="outlined" error><ErrorMessage name="text" /></FormHelperText>
+                </FormControl>
+              </Grid>
 
               <UpdateButtons editing={editing} isSubmitting={isSubmitting} cancel={cancel} />
 
