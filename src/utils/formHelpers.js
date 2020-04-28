@@ -56,3 +56,11 @@ export const isListOfEmails = {
   message: 'Please enter a list of email addresses, one per line',
   test: value => !value || value.split(splitLines).every(v => !v || validateEmail.isValidSync(v.trim()))
 };
+
+export function nullToString(v) {
+  return v === null? "(null)" : v;
+}
+
+export function stringToNull(v) {
+  return v === "(null)"? null : v;
+}
