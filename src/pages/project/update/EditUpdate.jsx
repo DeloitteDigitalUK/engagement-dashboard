@@ -59,7 +59,7 @@ export default function EditUpdatePage({ user, project, update }) {
   const UpdateForm = views.addForm;
 
   return (
-    <AuthenticatedLayout user={user} project={project}>
+    <AuthenticatedLayout user={user} project={project} update={update}>
       <Paper className={classes.paper}>
         <StatusMessages messages={messages} />
 

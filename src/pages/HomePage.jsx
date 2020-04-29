@@ -106,13 +106,9 @@ export default function HomePage({ user }) {
 
         <Divider className={classes.divider} />
 
-        <Grid container>
-          <Grid item>
-            <Button variant="contained" color="primary" startIcon={<AddCircleOutlineIcon />} to="/new-project" component={RouterLink}>
-              New project
-            </Button>
-          </Grid>
-        </Grid>
+        <Button variant="contained" color="primary" startIcon={<AddCircleOutlineIcon />} to="/new-project" component={RouterLink}>
+          New project
+        </Button>
       </>}
 
     </AuthenticatedLayout>

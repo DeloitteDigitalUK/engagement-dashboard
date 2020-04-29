@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme) => ({
   },
   lightField: {
     marginLeft: theme.spacing(0.5)
+  },
+  teamLabel: {
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    verticalAlign: 'top'
   }
 }));
 
@@ -58,13 +63,16 @@ export function UpdateSummary({ update }) {
  * Common full view elements for updates
  */
 export function UpdateHeader({ update }) {
+
+  const classes = useStyles();
+
   return (
     <Grid container>
       <Grid item xs={10} md={10}>
-        <Typography component="h2" variant="h3" gutterBottom>{update.title}</Typography>
-      </Grid>
-      <Grid item xs={2} md={2}>
-        {update.team && <Chip label={update.team} variant="default" color="primary" />}    
+        <Typography component="h2" variant="h3" gutterBottom>
+          {update.title}
+          {update.team && <Chip color="primary" variant="outlined" label={update.team} className={classes.teamLabel} size="small" />}
+        </Typography>
       </Grid>
       <Grid item xs={12} md={12}>
         <Typography variant="subtitle2">By {update.authorName} on {moment(update.date).format("DD MMM YYYY")}</Typography>

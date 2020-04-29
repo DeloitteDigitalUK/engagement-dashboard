@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, FormControl, FormHelperText, Box, Divider } from '@material-ui/core';
+import { Grid, FormControl, FormHelperText, Box, makeStyles } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Markdown from 'react-markdown';
 
@@ -11,16 +11,23 @@ import WysiwygEditor from '../../components/WysiwygEditor';
 import { submitHandler } from '../../utils/formHelpers';
 import { UpdateSummary, UpdateHeader, UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
 
+const useStyles = makeStyles((theme) => ({
+  content: {
+    ...theme.typography.body1
+  }
+}));
+
 function InsightsSummary({ update }) {
   return <UpdateSummary update={update} />;
 }
 
 function InsightsView({ update }) {
+  const classes = useStyles();
+
   return (
     <>
       <UpdateHeader update={update} />
-      <Divider />
-      <Box>
+      <Box className={classes.content}>
         <Markdown source={update.text} />
       </Box>
     </>
