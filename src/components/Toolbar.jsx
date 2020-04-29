@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import { makeStyles, Link, IconButton, Toolbar, Box, Button, Typography, Menu, MenuItem } from '@material-ui/core';
+import { makeStyles, Link, IconButton, Toolbar, Box, Button, Typography, Menu, MenuItem, Hidden } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import { useAPI } from '../api';
@@ -23,7 +23,7 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 1),
   },
   editButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(1)
   },
   userName: {
     marginLeft: theme.spacing(1)
@@ -55,7 +55,8 @@ export default function AuthenticatedToolbar({ user, project, update, editLink=n
     <Toolbar className={classes.toolbar}>
       <Box className={classes.title}>
         <Link to="/" component={RouterLink} variant="subtitle1" color="inherit" noWrap underline="none">
-          Engagement Dashboard
+          <Hidden smDown>Engagement Dashboard</Hidden>
+          <Hidden mdUp>ED</Hidden>
         </Link>
         {project &&
           <>
@@ -84,7 +85,7 @@ export default function AuthenticatedToolbar({ user, project, update, editLink=n
         color="inherit"
       >
         <AccountCircle />
-        <Typography component="small" className={classes.userName}>{user.displayName}</Typography>
+        <Hidden smDown><Typography component="small" className={classes.userName}>{user.displayName}</Typography></Hidden>
       </IconButton>
       <Menu
         id="menu-user-profile"
