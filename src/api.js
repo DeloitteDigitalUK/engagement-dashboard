@@ -266,6 +266,10 @@ export default class API {
     let update = null;
     if(doc) {
       update = doc.data();
+      if(!update) {
+        return [null, loading, error];
+      }
+      
       update.parent = project;
     }
 

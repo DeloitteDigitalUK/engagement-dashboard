@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function UpdateUpdatePage({ user, project }) {
+export default function NewUpdatePage({ user, project }) {
 
   const history = useHistory();
   const location = useLocation();

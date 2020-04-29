@@ -1,21 +1,30 @@
 import React from 'react';
 
-import { Grid, FormControl, FormHelperText } from '@material-ui/core';
+import { Grid, FormControl, FormHelperText, Box, Divider } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import Markdown from 'react-markdown';
 
 import { UpdateTypes, InsightsUpdate } from 'models';
 
 import WysiwygEditor from '../../components/WysiwygEditor';
 
 import { submitHandler } from '../../utils/formHelpers';
-import { UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
+import { UpdateSummary, UpdateHeader, UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
 
-function InsightsSummary() {
-
+function InsightsSummary({ update }) {
+  return <UpdateSummary update={update} />;
 }
 
-function InsightsView() {
-
+function InsightsView({ update }) {
+  return (
+    <>
+      <UpdateHeader update={update} />
+      <Divider />
+      <Box>
+        <Markdown source={update.text} />
+      </Box>
+    </>
+  );
 }
 
 function InsightsForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
@@ -27,16 +36,13 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
       type: UpdateTypes.insights,
       authorId: user.uid,
       authorName: user.displayName
-    });
+    }, project);
   }
   
   return (
       <Formik
           validationSchema={InsightsUpdate.getSchema()}
-          initialValues={{
-            ...toInitialValues(update),
-            text: "Text **here**"
-          }}
+          initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
             action: (data) => {
               update.update(toUpdateValues(data));

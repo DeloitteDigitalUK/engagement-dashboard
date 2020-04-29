@@ -43,7 +43,7 @@ export default function EditProjectPage({ user, project }) {
   };
 
   const deleteProject = async () => {
-    await api.deleteProject(project)
+    await api.deleteProject(project);
     history.push('/');
   };
 

@@ -1,7 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 
-import { Grid, FormControl, MenuItem, InputLabel, Button, makeStyles } from '@material-ui/core';
+import { Grid, FormControl, MenuItem, InputLabel, Button, makeStyles, Typography, Chip } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import { Field } from 'formik';
@@ -42,9 +43,41 @@ export function toUpdateValues(data) {
 }
 
 /**
+ * Common summary view elements for updates
+ */
+export function UpdateSummary({ update }) {
+  return (
+    <>
+      <Typography component="h2" variant="h3" gutterBottom>{update.title}</Typography>
+      <Typography paragraph>{update.summary}</Typography>
+    </>
+  );
+}
+
+/**
+ * Common full view elements for updates
+ */
+export function UpdateHeader({ update }) {
+  return (
+    <Grid container>
+      <Grid item xs={10} md={10}>
+        <Typography component="h2" variant="h3" gutterBottom>{update.title}</Typography>
+      </Grid>
+      <Grid item xs={2} md={2}>
+        {update.team && <Chip label={update.team} variant="default" color="primary" />}    
+      </Grid>
+      <Grid item xs={12} md={12}>
+        <Typography variant="subtitle2">By {update.authorName} on {moment(update.date).format("DD MMM YYYY")}</Typography>
+        <Typography paragraph>{update.summary}</Typography>
+      </Grid>
+    </Grid>
+  );
+}
+
+/**
  * Common form fields for updates
  */
-export function UpdateFields({project}) {
+export function UpdateFields({ project }) {
 
   const classes = useStyles();
 
