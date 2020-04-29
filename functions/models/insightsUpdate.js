@@ -3,9 +3,9 @@ const UpdateTypes = require('./updateTypes');
 const Yup = require('yup');
 
 const insightsUpdateSchema = Update.getSchema().concat(Yup.object({
-  authorId: Yup.string().required().default(""),
-  authorName: Yup.string().required().default(""),
-  text: Yup.string().required().default(""),
+  authorId: Yup.string().label("Author ID").required().default(""),
+  authorName: Yup.string().label("Author name").required().default(""),
+  text: Yup.string().label("Text").required().default(""),
 }));
 
 class InsightsUpdate extends Update {

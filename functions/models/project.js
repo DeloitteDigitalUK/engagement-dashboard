@@ -14,13 +14,15 @@ const isEmail = Yup.string().email();
 const isRole = Yup.string().oneOf(validRoles);
 
 const projectSchema = Yup.object({
-  name: Yup.string().required().default(""),
-  description: Yup.string().notRequired().default(""),
-  updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).default([
+  name: Yup.string().label("Project name").required().default(""),
+  description: Yup.string().label("Description").notRequired().default(""),
+  updateTypes: Yup.array().of(Yup.string().oneOf(validUpdateTypes)).label("Enabled update types").default([
+    UpdateTypes.goals,
     UpdateTypes.insights,
     UpdateTypes.release,
+    UpdateTypes.raid
   ]),
-  teams: Yup.array().of(Yup.string()).notRequired().default([]),
+  teams: Yup.array().of(Yup.string()).label("Teams").notRequired().default([]),
   
   // map email -> role name
   roles: Yup.object()

@@ -11,7 +11,7 @@ test('can construct an empty object', () => {
   expect(p.toObject()).toEqual({
     name: "",
     description: "",
-    updateTypes: [UpdateTypes.insights, UpdateTypes.release],
+    updateTypes: [UpdateTypes.goals, UpdateTypes.insights, UpdateTypes.release, UpdateTypes.raid],
     teams: [],
     roles: {}
   });

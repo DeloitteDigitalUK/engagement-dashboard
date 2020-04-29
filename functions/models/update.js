@@ -7,10 +7,10 @@ const { transformDate } = require('./utils');
 const updateSchema = Yup.object({
   type: Yup.string().required().oneOf(Object.values(UpdateTypes)),
   
-  title: Yup.string().required().default(""),
-  summary: Yup.string().notRequired().default(""),
-  date: Yup.date().transform(transformDate).required().default(null),
-  team: Yup.string().notRequired().nullable().default(null),
+  title: Yup.string().label("Title").required().default(""),
+  summary: Yup.string().label("Summary").notRequired().default(""),
+  date: Yup.date().label("Date").transform(transformDate).required().default(null),
+  team: Yup.string().label("Team").notRequired().nullable().default(null),
 });
 
 /**
