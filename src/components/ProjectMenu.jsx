@@ -51,7 +51,7 @@ export default function ProjectMenu({ user, project }) {
           <EditIcon fontSize="inherit" />
         </IconButton>
       )}
-      {project.hasRole(user.email, [Roles.owner, Roles.administrator, Roles.author]) && (
+      {project.hasRole(user.email, [Roles.owner, Roles.administrator, Roles.author]) && project.updateTypes && project.updateTypes.length > 0 && (
         <>
           <IconButton
             aria-label="Add update menu"
@@ -71,11 +71,11 @@ export default function ProjectMenu({ user, project }) {
             open={menuOpen}
             onClose={() => setMenuOpen(false)}
           >
-            <MenuItem onClick={redirectToAddForm(UpdateTypes.goals)}>Goals</MenuItem>
-            <MenuItem onClick={redirectToAddForm(UpdateTypes.raid)}>RAID</MenuItem>
-            <MenuItem onClick={redirectToAddForm(UpdateTypes.insights)}>Insights</MenuItem>
-            <MenuItem onClick={redirectToAddForm(UpdateTypes.release)}>Release</MenuItem>
-            <MenuItem onClick={redirectToAddForm(UpdateTypes.flow)}>Team flow</MenuItem>
+            {project.updateTypes.includes(UpdateTypes.goals) && <MenuItem onClick={redirectToAddForm(UpdateTypes.goals)}>Goals</MenuItem>}
+            {project.updateTypes.includes(UpdateTypes.insights) && <MenuItem onClick={redirectToAddForm(UpdateTypes.insights)}>Insights</MenuItem>}
+            {project.updateTypes.includes(UpdateTypes.release) && <MenuItem onClick={redirectToAddForm(UpdateTypes.release)}>Release</MenuItem>}
+            {project.updateTypes.includes(UpdateTypes.raid) && <MenuItem onClick={redirectToAddForm(UpdateTypes.raid)}>RAID</MenuItem>}
+            {project.updateTypes.includes(UpdateTypes.flow) && <MenuItem onClick={redirectToAddForm(UpdateTypes.flow)}>Team flow</MenuItem>}
           </Menu>
         </>
       )}

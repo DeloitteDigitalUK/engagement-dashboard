@@ -23,8 +23,11 @@ const formSchema = Yup.object({
   name: Yup.string().label("Name").required().default(""),
   description: Yup.string().label("Description").default(""),
 
+  enableGoals: Yup.bool().required().default(true),
   enableInsights: Yup.bool().required().default(true),
   enableReleases: Yup.bool().required().default(true),
+  enableRaid: Yup.bool().required().default(true),
+  enableFlow: Yup.bool().required().default(false),
 
   teams: Yup.string().label("Teams").trim().default(""),
 
@@ -35,8 +38,11 @@ const formSchema = Yup.object({
 
 // map individual checkbox values from the form schema to members of the array on the project schema
 const propsToUpdateTypes = {
+    enableGoals: UpdateTypes.goals,
     enableInsights: UpdateTypes.insights,
     enableReleases: UpdateTypes.release,
+    enableRaid: UpdateTypes.raid,
+    enableFlow: UpdateTypes.flow
   },
   updateTypesToProps = invert(propsToUpdateTypes);
 
@@ -173,21 +179,54 @@ export default function ProjectForm({
               </Grid>
               <Grid item xs={12} md={6}>
                 <FormControl component="fieldset">
-                <FormLabel component="legend">Enabled update types</FormLabel>
-                  <Field
-                    component={CheckboxWithLabel}
-                    Label={{ label: "Insights" }}
-                    type="checkbox"
-                    id="enableInsights"
-                    name="enableInsights"
-                  />
-                  <Field
-                    component={CheckboxWithLabel}
-                    Label={{ label: "Releases" }}
-                    type="checkbox"
-                    id="enableReleases"
-                    name="enableReleases"
-                  />
+                  <FormLabel component="legend">Enabled update types</FormLabel>
+                  <Grid container>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        component={CheckboxWithLabel}
+                        Label={{ label: "Goals" }}
+                        type="checkbox"
+                        id="enableGoals"
+                        name="enableGoals"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        component={CheckboxWithLabel}
+                        Label={{ label: "Insights" }}
+                        type="checkbox"
+                        id="enableInsights"
+                        name="enableInsights"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        component={CheckboxWithLabel}
+                        Label={{ label: "Releases" }}
+                        type="checkbox"
+                        id="enableReleases"
+                        name="enableReleases"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        component={CheckboxWithLabel}
+                        Label={{ label: "RAID items" }}
+                        type="checkbox"
+                        id="enableRaid"
+                        name="enableRaid"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Field
+                        component={CheckboxWithLabel}
+                        Label={{ label: "Flow metrics" }}
+                        type="checkbox"
+                        id="enableFlow"
+                        name="enableFlow"
+                      />
+                    </Grid>
+                  </Grid>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
