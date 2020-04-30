@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ProjectCard = ({ user, project }) => {
+function ProjectCard({ user, project }) {
   const classes = useStyles();
   let canEdit;
 
