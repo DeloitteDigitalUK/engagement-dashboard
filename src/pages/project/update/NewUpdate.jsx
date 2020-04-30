@@ -40,8 +40,8 @@ export default function NewUpdatePage({ user, project }) {
     return <Alert severity="error">Update type not found!</Alert>;
   }
 
-  function save(update) {
-    api.addUpdate(update);
+  async function save(update) {
+    await api.addUpdate(update);
     history.push(`/project/${project.id}/update/${update.id}`);
   }
 
