@@ -4,13 +4,12 @@ import * as Insights from './insights';
 function assertConformance(mod) {
   if(
     !('updateType' in mod) ||
-    !('summaryCriteria' in mod) ||
     !('summaryView' in mod) ||
     !('fullView' in mod) ||
     !('addForm' in mod) ||
     !('editForm' in mod)
   ) {
-    throw new Error(`${mod} is not valid - this should never happen`);
+    throw new Error(`${mod.updateType} is not valid - this should never happen`);
   }
 
   return mod;
