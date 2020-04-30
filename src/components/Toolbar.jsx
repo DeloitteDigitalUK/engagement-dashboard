@@ -8,9 +8,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useAPI } from '../api';
 
 export const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
   title: {
     flexGrow: 1,
   },
@@ -52,11 +49,11 @@ export default function AuthenticatedToolbar({ user, project, update, editLink=n
   }
   
   return (
-    <Toolbar className={classes.toolbar}>
+    <Toolbar>
       <Box className={classes.title}>
         <Link to="/" component={RouterLink} variant="subtitle1" color="inherit" noWrap underline="none">
-          <Hidden smDown>Engagement Dashboard</Hidden>
-          <Hidden mdUp>ED</Hidden>
+          <Hidden xsDown>Engagement Dashboard</Hidden>
+          <Hidden smUp>ED</Hidden>
         </Link>
         {project &&
           <>
