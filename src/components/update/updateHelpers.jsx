@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
   },
   teamLabel: {
     marginLeft: theme.spacing(2),
-    marginTop: theme.spacing(1),
     verticalAlign: 'top'
   }
 }));
@@ -51,10 +50,16 @@ export function toUpdateValues(data) {
  * Common summary view elements for updates
  */
 export function UpdateSummary({ update }) {
+  
+  const classes = useStyles();
+
   return (
     <>
-      <Typography component="h2" variant="h3" gutterBottom>{update.title}</Typography>
-      <Typography paragraph>{update.summary}</Typography>
+      <Typography color="textPrimary" component="h2" variant="h5" gutterBottom>
+        {update.title}
+        {update.team && <Chip color="primary" variant="outlined" label={update.team} className={classes.teamLabel} size="small" />}
+      </Typography>
+      <Typography color="textSecondary" paragraph>{update.summary}</Typography>
     </>
   );
 }

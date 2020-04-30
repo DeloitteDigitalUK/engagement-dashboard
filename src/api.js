@@ -275,6 +275,38 @@ export default class API {
 
     return [update, loading, error];
   }
+
+  /**
+   * Return a hook with a `[updates, loading, error]` triple
+   * for all updates under this project matching the criteria
+   */
+  useUpdates(project, team=null, updateType=null, limit=null) {
+    let query = this.firebase.firestore()
+      .collection(Update.getCollectionPath(project))
+      .withConverter(Update)
+      .orderBy('date', 'desc');
+    
+    if(team) {
+      query = query.where('team', '==', team);
+    }
+
+    if(updateType) {
+      query = query.where('type', '==', updateType);
+    }
+
+    if(limit) {
+      query = query.limit(limit)
+    }
+
+    const [ querySnapshot, loading, error ] = useCollection(query);
+
+    if(loading || error) {
+      return [ null, loading, error ];
+    }
+
+    const updates = querySnapshot.docs.map(u => u.data());
+    return [updates, loading, error];
+  }
   
 }
 
