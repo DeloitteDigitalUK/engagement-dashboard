@@ -7,7 +7,7 @@ import { Roles } from 'models';
 import AuthenticatedLayout from "../../../layouts/AuthenticatedLayout";
 import updateViews from '../../../components/update';
 
-export default function EditUpdatePage({ user, project, update }) {
+export default function ViewUpdatePage({ user, project, update }) {
 
   const views = updateViews[update.type];
   if(!views) {
