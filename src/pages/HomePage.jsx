@@ -7,7 +7,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardActions,
   Button,
   Typography,
   Divider,
@@ -47,21 +46,20 @@ function ProjectCard({ user, project }) {
   } catch(e) {
     canEdit = true; // if the project is broken, try to let us edit/delete it (even if the sever-side might reject!)
   }
+
+  const link = canEdit && project.error? `/project/${project.id}/edit` : `/project/${project.id}`;
   
   return (
     <Card variant="outlined" className={classes.projectCard}>
-      <Link to={`/project/${project.id}`} component={RouterLink} underline="none">
+      <Link to={link} component={RouterLink} underline="none">
         <CardContent className={classes.projectCardContent}>
           <Typography color="textPrimary" variant="h5">{project.name}</Typography>
           {project.error?
-            <Alert severity="error">This project is broken!</Alert> : 
+            <Alert severity="error">This project is broken! You may be able to edit it.</Alert> : 
             <Typography color="textSecondary">{project.description}</Typography>
           }
         </CardContent>
       </Link>
-      <CardActions>
-        {canEdit && <Button size="small" to={`/project/${project.id}/edit`} component={RouterLink}>Edit</Button>}
-      </CardActions>
     </Card>
   );
 }
