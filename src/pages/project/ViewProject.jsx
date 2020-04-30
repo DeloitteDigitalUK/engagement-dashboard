@@ -166,7 +166,6 @@ export default function ViewProjectPage({ user, project }) {
       <Typography component="h2" variant="h3" gutterBottom>{project.name}</Typography>
       <Typography paragraph>{project.description}</Typography>
 
-
       <FilterToolbar {...{project, canAdd, updateType, setUpdateType, team, setTeam}} />
       
       <Box my={2}>
