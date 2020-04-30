@@ -85,10 +85,6 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 }
 
 export const updateType = UpdateTypes.insights;
-export const summaryCriteria = () => ({
-  orderBy: ['date', 'desc'],
-  limit: 3,
-});
 export const summaryView = InsightsSummary;
 export const fullView = InsightsView;
 export const addForm = InsightsForm;
