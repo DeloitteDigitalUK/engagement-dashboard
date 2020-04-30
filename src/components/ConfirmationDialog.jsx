@@ -12,7 +12,8 @@ export default function ConfirmationDialog({
   open,
   cancel,
   confirm,
-  confirmColor="primary"
+  text,
+  confirmColor="primary",
 }) {
   return (
     <Dialog
@@ -26,9 +27,7 @@ export default function ConfirmationDialog({
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="delete-confirm-description">
-          When you delete a project, all users will immediately lose
-          access to it, and all updates will be permanently deleted.
-          This action cannot be done.
+          {text}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

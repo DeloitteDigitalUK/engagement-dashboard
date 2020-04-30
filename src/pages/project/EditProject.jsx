@@ -74,6 +74,7 @@ export default function EditProjectPage({ user, project }) {
                 cancel={() => setDeleteConfirmOpen(false)}
                 confirm={deleteProject}
                 confirmColor="secondary"
+                text="When you delete a project, all users will immediately lose access to it, and all updates will be permanently deleted. This action cannot be undone."
                 />
 
             </Alert>

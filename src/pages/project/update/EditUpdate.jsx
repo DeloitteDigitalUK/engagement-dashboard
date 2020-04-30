@@ -84,7 +84,7 @@ export default function EditUpdatePage({ user, project, update }) {
       <Alert severity="error">
         <AlertTitle>Delete update</AlertTitle>
         <Typography paragraph>
-          This action cannot be undone!
+          This action cannot be done.
         </Typography>
         <Button variant="contained" color="secondary" onClick={() => setDeleteConfirmOpen(true)}>Delete</Button>
         
@@ -93,6 +93,7 @@ export default function EditUpdatePage({ user, project, update }) {
           cancel={() => setDeleteConfirmOpen(false)}
           confirm={deleteUpdate}
           confirmColor="secondary"
+          text="This action cannot be undone."
           />
 
       </Alert>
