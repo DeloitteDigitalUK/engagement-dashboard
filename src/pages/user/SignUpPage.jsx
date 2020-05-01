@@ -45,7 +45,7 @@ export default function SignUpPage() {
             if(error.code in knownErrors) {
               setErrorMessage(knownErrors[error.code]);
             } else {
-              console.log(error);
+              console.error(error);
               setErrorMessage(error.message);
             }
             setSubmitting(false);
