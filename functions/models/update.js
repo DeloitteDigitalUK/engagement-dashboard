@@ -44,7 +44,7 @@ class Update extends Model {
    */
   static registerUpdateType(type, cls) {
     this.typeRegister[type] = cls;
-    this.typeNameLookup[cls] = type;
+    cls._updateType = type;
   }
 
   static fromFirestore(snapshot, options) {
@@ -55,8 +55,8 @@ class Update extends Model {
 
   constructor(id=null, data=null, parent=null, error=null) {
     super(id, data, parent, error);
-    // automatically set type
-    this.type = Update.typeNameLookup[this.constructor];
+    // automatically set type even if not in the data (and override if it is)
+    this.type = this.constructor._updateType;
   }
 
 
@@ -71,6 +71,5 @@ class Update extends Model {
 }
 
 Update.typeRegister = {};
-Update.typeNameLookup = {};
 
 module.exports = Update;

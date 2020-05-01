@@ -127,13 +127,16 @@ function UpdateCard({ project, update }) {
   const classes = useStyles();
 
   const views = updateViews[update.type];
-  const UpdateView = views? views.summaryView : <Alert severity="error">Update type {update.type} not found for update {update.id}!</Alert>;
+  const UpdateView = views? views.SummaryView : null;
 
   return (
     <Card variant="outlined" className={classes.updateCard}>
       <Link to={`/project/${project.id}/update/${update.id}`} component={RouterLink} underline="none">
         <CardContent>
-          <UpdateView update={update} />
+          {UpdateView?
+            <UpdateView update={update} /> : 
+            <Alert severity="error">Update type {update.type} not found for update {update.id}!</Alert>
+          }
         </CardContent>
       </Link>
     </Card>

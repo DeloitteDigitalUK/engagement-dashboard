@@ -49,7 +49,7 @@ export default function NewUpdatePage({ user, project }) {
     history.goBack();
   }
 
-  const UpdateForm = views.addForm;
+  const UpdateForm = views.AddForm;
 
   return (
     <AuthenticatedLayout user={user} project={project}>

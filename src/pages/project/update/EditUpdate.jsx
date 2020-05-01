@@ -56,7 +56,7 @@ export default function EditUpdatePage({ user, project, update }) {
     history.push(`/project/${project.id}`);
   };
 
-  const UpdateForm = views.addForm;
+  const UpdateForm = views.EditForm
 
   return (
     <AuthenticatedLayout user={user} project={project} update={update}>

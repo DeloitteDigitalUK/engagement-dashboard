@@ -1,13 +1,13 @@
-import * as Insights from './insights';
+import Insights from './insights';
 
 // Check that each update UI follows the right conventions at least
 function assertConformance(mod) {
   if(
     !('updateType' in mod) ||
-    !('summaryView' in mod) ||
-    !('fullView' in mod) ||
-    !('addForm' in mod) ||
-    !('editForm' in mod)
+    !('SummaryView' in mod) ||
+    !('FullView' in mod) ||
+    !('AddForm' in mod) ||
+    !('EditForm' in mod)
   ) {
     throw new Error(`${mod.updateType} is not valid - this should never happen`);
   }
@@ -24,6 +24,8 @@ function assertConformance(mod) {
  *  - `addForm`: component rendering an add form
  *  - `editForm`: component rendering an edit form
  */
-export default {
+const lookup = {
   [Insights.updateType]: assertConformance(Insights),
 };
+
+export default lookup;

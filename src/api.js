@@ -304,7 +304,7 @@ export default class API {
       return [ null, loading, error ];
     }
 
-    const updates = querySnapshot.docs.map(u => u.data());
+    const updates = querySnapshot.docs.map(u => { let n = u.data(); n.parent = project; return n; });
     return [updates, loading, error];
   }
   

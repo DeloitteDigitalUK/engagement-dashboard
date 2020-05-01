@@ -1,8 +1,9 @@
 # Engagement Dashboard ToDo
 
-## Immediate
+## Bugs
 
-- [ ] Test and fix responsive UI
+
+## Immediate
 
 - [ ] Create views for Flow updates
 - [ ] Create views for Goals updates
@@ -21,6 +22,8 @@
 - [ ] Create command line client to use this API and create an update (as a
       simple tool and as an example of using the API).
 
+- [ ] Create error boundaries around update and project renders
+- [ ] Test and fix responsive UI
 
 ## Longer term
 

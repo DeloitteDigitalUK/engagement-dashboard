@@ -17,7 +17,7 @@ export default function ViewUpdatePage({ user, project, update }) {
   const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator, Roles.author]);
   const editLink = `/project/${project.id}/update/${update.id}/edit`;
 
-  const UpdateView = views.fullView;
+  const UpdateView = views.FullView;
 
   return (
     <AuthenticatedLayout user={user} project={project} update={update} editLink={canEdit? editLink: null}>

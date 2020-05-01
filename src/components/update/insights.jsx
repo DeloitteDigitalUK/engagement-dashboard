@@ -84,8 +84,10 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
   );
 }
 
-export const updateType = UpdateTypes.insights;
-export const summaryView = InsightsSummary;
-export const fullView = InsightsView;
-export const addForm = InsightsForm;
-export const editForm = InsightsForm;
+export default {
+  updateType: UpdateTypes.insights,
+  SummaryView: InsightsSummary,
+  FullView: InsightsView,
+  AddForm: InsightsForm,
+  EditForm: InsightsForm,
+};
