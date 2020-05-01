@@ -12,7 +12,7 @@ import { KeyboardDatePicker } from 'formik-material-ui-pickers'
 
 import { nullToString, stringToNull } from '../../utils/formHelpers';
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   cancelButton: {
     marginLeft: theme.spacing(1)
   },
@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
   teamLabel: {
     marginLeft: theme.spacing(2),
     verticalAlign: 'top'
+  },
+  content: {
+    ...theme.typography.body1
   }
 }));
 
@@ -31,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 export function toInitialValues(update) {
   return {
     ...update.toObject(),
-    date: new Date(),
+    date: update.date? update.date : new Date(),
     team: nullToString(update.team)
   };
 }
@@ -80,7 +83,7 @@ export function UpdateHeader({ update }) {
         </Typography>
       </Grid>
       <Grid item xs={12} md={12}>
-        <Typography variant="subtitle2">By {update.authorName} on {moment(update.date).format("DD MMM YYYY")}</Typography>
+        <Typography variant="subtitle2">{update.authorName? `By ${update.authorName} on ` : ""}{moment(update.date).format("DD MMM YYYY")}</Typography>
         <Typography paragraph>{update.summary}</Typography>
       </Grid>
     </Grid>
@@ -94,10 +97,9 @@ export function UpdateFields({ project }) {
 
   const classes = useStyles();
 
-  return (
-    <MuiPickersUtilsProvider utils={MomentUtils}>
-      
-      <Grid item xs={12} md={3}>
+  return (<>
+    
+    <Grid item xs={12} md={3}>
         <Field
           component={TextField}
           id="title"
@@ -124,17 +126,19 @@ export function UpdateFields({ project }) {
       </Grid>
 
       <Grid item xs={12} md={2}>
-        <Field
-          className={classes.lightField}
-          component={KeyboardDatePicker}
-          id="date"
-          name="date"
-          label="Date"
-          disableToolbar
-          fullWidth
-          variant="inline"
-          format="DD/MM/YYYY"
-        />
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <Field
+            className={classes.lightField}
+            component={KeyboardDatePicker}
+            id="date"
+            name="date"
+            label="Date"
+            disableToolbar
+            fullWidth
+            variant="inline"
+            format="DD/MM/YYYY"
+            />
+        </MuiPickersUtilsProvider>
       </Grid>
 
       {project.teams && project.teams.length > 0 && (
@@ -152,8 +156,7 @@ export function UpdateFields({ project }) {
           </FormControl>
         </Grid>
       )}
-    </MuiPickersUtilsProvider>
-  );
+  </>);
 }
 
 export function UpdateButtons({editing, isSubmitting, cancel}) {

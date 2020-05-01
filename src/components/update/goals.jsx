@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, FormControl, FormHelperText, Box, makeStyles } from '@material-ui/core';
+import { Grid, FormControl, FormHelperText, Box } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Markdown from 'react-markdown';
 
@@ -9,13 +9,15 @@ import { UpdateTypes, GoalsUpdate } from 'models';
 import WysiwygEditor from '../../components/WysiwygEditor';
 
 import { submitHandler } from '../../utils/formHelpers';
-import { UpdateSummary, UpdateHeader, UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
-
-const useStyles = makeStyles((theme) => ({
-  content: {
-    ...theme.typography.body1
-  }
-}));
+import {
+  UpdateSummary,
+  UpdateHeader,
+  UpdateFields,
+  UpdateButtons,
+  toInitialValues,
+  toUpdateValues,
+  useStyles
+} from './updateHelpers';
 
 function GoalsSummary({ update }) {
   return <UpdateSummary update={update} />;
@@ -40,7 +42,6 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
 
   if(!editing) {
     update = new GoalsUpdate(null, {
-      type: UpdateTypes.goals,
       authorId: user.uid,
       authorName: user.displayName
     }, project);
