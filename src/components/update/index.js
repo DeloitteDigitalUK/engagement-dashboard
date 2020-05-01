@@ -1,5 +1,6 @@
 import Insights from './insights';
 import Goals from './goals';
+import Release from './release';
 
 // Check that each update UI follows the right conventions at least
 function assertConformance(mod) {
@@ -28,4 +29,5 @@ function assertConformance(mod) {
 export default {
   [Insights.updateType]: assertConformance(Insights),
   [Goals.updateType]: assertConformance(Goals),
+  [Release.updateType]: assertConformance(Release),
 };
