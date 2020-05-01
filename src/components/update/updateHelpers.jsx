@@ -53,7 +53,6 @@ export function toUpdateValues(data) {
  * Common summary view elements for updates
  */
 export function UpdateSummary({ update }) {
-  
   const classes = useStyles();
 
   return (
@@ -71,7 +70,6 @@ export function UpdateSummary({ update }) {
  * Common full view elements for updates
  */
 export function UpdateHeader({ update }) {
-
   const classes = useStyles();
 
   return (
@@ -93,8 +91,7 @@ export function UpdateHeader({ update }) {
 /**
  * Common form fields for updates
  */
-export function UpdateFields({ project }) {
-
+export function UpdateFields({ project, hideSummary=false, hideDate }) {
   const classes = useStyles();
 
   return (<>
@@ -111,37 +108,41 @@ export function UpdateFields({ project }) {
         />
       </Grid>
       
-      <Grid item xs={12} md={6}>
-        <Field
-          component={TextField}
-          id="summary"
-          name="summary"
-          label="Summary"
-          variant="outlined"
-          fullWidth
-          multiline
-          rows={2}
-          rowsMax={8}
-        />
-      </Grid>
-
-      <Grid item xs={12} md={2}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
+      {!hideSummary && 
+        <Grid item xs={12} md={6}>
           <Field
-            className={classes.lightField}
-            component={KeyboardDatePicker}
-            id="date"
-            name="date"
-            label="Date"
-            disableToolbar
+            component={TextField}
+            id="summary"
+            name="summary"
+            label="Summary"
+            variant="outlined"
             fullWidth
-            variant="inline"
-            format="DD/MM/YYYY"
-            />
-        </MuiPickersUtilsProvider>
-      </Grid>
+            multiline
+            rows={2}
+            rowsMax={8}
+          />
+        </Grid>
+      }
 
-      {project.teams && project.teams.length > 0 && (
+      {!hideDate && 
+        <Grid item xs={12} md={2}>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <Field
+              className={classes.lightField}
+              component={KeyboardDatePicker}
+              id="date"
+              name="date"
+              label="Update date"
+              disableToolbar
+              fullWidth
+              variant="inline"
+              format="DD/MM/YYYY"
+              />
+          </MuiPickersUtilsProvider>
+        </Grid>
+      }
+
+      {project.teams && project.teams.length > 0 &&
         <Grid item xs={12} md={2}>
           <FormControl fullWidth className={classes.lightField}>
             <InputLabel htmlFor="team">Team</InputLabel>
@@ -155,12 +156,11 @@ export function UpdateFields({ project }) {
             </Field>
           </FormControl>
         </Grid>
-      )}
+      }
   </>);
 }
 
 export function UpdateButtons({editing, isSubmitting, cancel}) {
-
   const classes = useStyles();
 
   return (
