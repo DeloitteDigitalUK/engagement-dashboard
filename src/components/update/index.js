@@ -1,4 +1,5 @@
 import Insights from './insights';
+import Goals from './goals';
 
 // Check that each update UI follows the right conventions at least
 function assertConformance(mod) {
@@ -24,8 +25,7 @@ function assertConformance(mod) {
  *  - `addForm`: component rendering an add form
  *  - `editForm`: component rendering an edit form
  */
-const lookup = {
+export default {
   [Insights.updateType]: assertConformance(Insights),
+  [Goals.updateType]: assertConformance(Goals),
 };
-
-export default lookup;
