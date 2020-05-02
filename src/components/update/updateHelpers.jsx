@@ -25,6 +25,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   content: {
     ...theme.typography.body1
+  },
+  inputTableRow: {
+    verticalAlign: 'top'
   }
 }));
 
