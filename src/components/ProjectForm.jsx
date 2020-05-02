@@ -131,7 +131,7 @@ export default function ProjectForm({
         validationSchema={formSchema}
         initialValues={projectToFormData(project)}
         onSubmit={submitHandler({
-          action: (data) => action(formDataToProjectData(project, data)),
+          action: async (data) => await action(formDataToProjectData(project, data)),
           knownErrors,
           setMessages,
         })}

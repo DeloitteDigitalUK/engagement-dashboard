@@ -34,7 +34,6 @@ export const useStyles = makeStyles((theme) => ({
 export function toInitialValues(update) {
   return {
     ...update.toObject(),
-    date: update.date? update.date : new Date(),
     team: nullToString(update.team)
   };
 }

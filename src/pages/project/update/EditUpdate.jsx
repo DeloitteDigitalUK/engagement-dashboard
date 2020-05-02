@@ -52,7 +52,7 @@ export default function EditUpdatePage({ user, project, update }) {
   }
 
   const deleteUpdate = async () => {
-    await api.deleteUpdate(update);
+    api.deleteUpdate(update);
     history.push(`/project/${project.id}`);
   };
 

@@ -40,6 +40,7 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
   if(!editing) {
     update = new InsightsUpdate(null, {
+      date: new Date(),
       authorId: user.uid,
       authorName: user.displayName
     }, project);
@@ -50,9 +51,9 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
           validationSchema={InsightsUpdate.getSchema()}
           initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
-            action: (data) => {
+            action: async (data) => {
               update.update(toUpdateValues(data));
-              save(update);
+              await save(update);
             },
             knownErrors,
             setMessages,

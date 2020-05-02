@@ -62,12 +62,12 @@ function ReleaseForm({ user, project, update, save, cancel, setMessages, knownEr
           validationSchema={ReleaseUpdate.getSchema()}
           initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
-            action: (data) => {
+            action: async (data) => {
               update.update(toUpdateValues(data));
               update.summary = update.releaseDate?
                 `Release on ${moment(update.releaseDate).format("MM/DD/YYYY")} is ${releaseStatuses[update.status]}.` :
                 `Release is ${releaseStatuses[update.status]}.`;
-              save(update);
+              await save(update);
             },
             knownErrors,
             setMessages,

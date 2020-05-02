@@ -40,6 +40,7 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
 
   if(!editing) {
     update = new GoalsUpdate(null, {
+      date: new Date(),
       authorId: user.uid,
       authorName: user.displayName
     }, project);
@@ -50,9 +51,9 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
           validationSchema={GoalsUpdate.getSchema()}
           initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
-            action: (data) => {
+            action: async (data) => {
               update.update(toUpdateValues(data));
-              save(update);
+              await save(update);
             },
             knownErrors,
             setMessages,
