@@ -86,6 +86,7 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
 
 export default {
   updateType: UpdateTypes.goals,
+  title: "goals",
   SummaryView: GoalsSummary,
   FullView: GoalsView,
   AddForm: GoalsForm,

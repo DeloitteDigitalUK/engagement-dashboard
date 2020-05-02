@@ -86,6 +86,7 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
 export default {
   updateType: UpdateTypes.insights,
+  title: "insights",
   SummaryView: InsightsSummary,
   FullView: InsightsView,
   AddForm: InsightsForm,

@@ -131,6 +131,7 @@ function ReleaseForm({ user, project, update, save, cancel, setMessages, knownEr
 
 export default {
   updateType: UpdateTypes.release,
+  title: "release",
   SummaryView: ReleaseSummary,
   FullView: ReleaseView,
   AddForm: ReleaseForm,
