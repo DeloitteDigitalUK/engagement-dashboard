@@ -26,14 +26,12 @@ function GoalsSummary({ update }) {
 function GoalsView({ update }) {
   const classes = useStyles();
 
-  return (
-    <>
-      <UpdateHeader update={update} />
-      <Box className={classes.content}>
-        <Markdown source={update.text} />
-      </Box>
-    </>
-  );
+  return (<>
+    <UpdateHeader update={update} />
+    <Box className={classes.content}>
+      <Markdown source={update.text} />
+    </Box>
+  </>);
 }
 
 function GoalsForm({ user, project, update, save, cancel, setMessages, knownErrors }) {

@@ -26,14 +26,12 @@ function InsightsSummary({ update }) {
 function InsightsView({ update }) {
   const classes = useStyles();
 
-  return (
-    <>
-      <UpdateHeader update={update} />
-      <Box className={classes.content}>
-        <Markdown source={update.text} />
-      </Box>
-    </>
-  );
+  return (<>
+    <UpdateHeader update={update} />
+    <Box className={classes.content}>
+      <Markdown source={update.text} />
+    </Box>
+  </>);
 }
 
 function InsightsForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
