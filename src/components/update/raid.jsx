@@ -132,7 +132,7 @@ function RaidForm({ user, project, update, save, cancel, setMessages, knownError
               <MuiPickersUtilsProvider utils={MomentUtils}>
 
                 <Grid item xs={12} md={12}>
-                  <FormLabel className={classes.lightField}>RAID items</FormLabel>                      
+                  <FormLabel className={classes.lightField}>RAID items</FormLabel>
                   <FieldArray name="raidItems">
                     {(arrayHelpers) => <>
                       <Table>
