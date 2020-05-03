@@ -2,13 +2,11 @@
 
 ## Bugs
 
+- [ ] Flow update dates are parsed using American date format
 
 ## Immediate
 
 - [ ] Create views for Flow updates
-- [ ] Create views for Goals updates
-- [ ] Create views for RAID updates
-- [ ] Create views for Release updates
 
 - [ ] Improve how updates are displayed on the project summary, e.g. group
       by type, limit number of updates for each type, etc.

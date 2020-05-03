@@ -28,6 +28,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   inputTableRow: {
     verticalAlign: 'top'
+  },
+  invalidCell: {
+    backgroundColor: theme.palette.error.light
   }
 }));
 

@@ -19,6 +19,7 @@
     "formik": "^2.1.4",
     "formik-material-ui": "^2.0.0-beta.1",
     "formik-material-ui-pickers": "0.0.8",
+    "jexcel": "^4.1.2",
     "lodash.frompairs": "^4.0.1",
     "lodash.invert": "^4.3.0",
     "lodash.pick": "^4.4.0",

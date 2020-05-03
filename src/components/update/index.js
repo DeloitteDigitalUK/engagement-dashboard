@@ -2,6 +2,7 @@ import Insights from './insights';
 import Goals from './goals';
 import Release from './release';
 import Raid from './raid';
+import Flow from './flow';
 
 // Check that each update UI follows the right conventions at least
 function assertConformance(mod) {
@@ -34,4 +35,5 @@ export default {
   [Goals.updateType]: assertConformance(Goals),
   [Release.updateType]: assertConformance(Release),
   [Raid.updateType]: assertConformance(Raid),
+  [Flow.updateType]: assertConformance(Flow),
 };
