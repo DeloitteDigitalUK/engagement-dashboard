@@ -2,7 +2,20 @@ import React from 'react';
 import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 
-import { Grid, MenuItem, FormLabel, TableHead, Table, TableCell, TableBody, TableRow, IconButton, Button, FormHelperText, Link } from '@material-ui/core';
+import {
+  Grid,
+  MenuItem,
+  FormLabel,
+  TableHead,
+  Table,
+  TableCell,
+  TableBody,
+  TableRow,
+  IconButton,
+  Button,
+  FormHelperText,
+  Link
+} from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import { Select, TextField } from 'formik-material-ui';
@@ -78,12 +91,7 @@ function RaidForm({ user, project, update, save, cancel, setMessages, knownError
 
   const editing = !!update;
 
-  if(!editing) {
-    update = new RaidUpdate(null, {
-      date: new Date(),
-    }, project);
-  }
-
+  const initialValues = {};
   const blankRow = {
     type: 'risk',
     summary: "",
@@ -92,10 +100,21 @@ function RaidForm({ user, project, update, save, cancel, setMessages, knownError
     date: null,
   };
 
+  
+  if(!editing) {
+    update = new RaidUpdate(null, {
+      date: new Date(),
+    }, project);
+    initialValues.raidItems = [{...blankRow}];
+  }
+  
   return (
       <Formik
           validationSchema={RaidUpdate.getSchema()}
-          initialValues={toInitialValues(update)}
+          initialValues={{
+            ...toInitialValues(update),
+            ...initialValues
+          }}
           onSubmit={submitHandler({
             action: async (data) => {
               update.update(toUpdateValues(data));
