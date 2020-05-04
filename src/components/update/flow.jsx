@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import moment from 'moment';
 import * as Yup from 'yup';
 
-import { Grid, FormHelperText, FormControl, FormLabel } from '@material-ui/core';
+import { Grid, FormHelperText, FormControl, FormLabel, Typography, Box } from '@material-ui/core';
 import { Formik, Form, ErrorMessage, Field } from 'formik';
 
 import jexcel from 'jexcel';
@@ -208,13 +208,16 @@ function FlowForm({ user, project, update, save, cancel, setMessages, knownError
               <Grid item xs={8}>
                 <FormControl className={classes.lightField}>
                   <FormLabel>Work items</FormLabel>
-                  <FormHelperText variant="standard">
-                    Record the commitment (start) and completion (end) dates
-                    for relevant work items below. Commitment date and key
-                    (e.g. name or reference) are required. Work item type
-                    and a link to more details are optional. You may also paste
-                    data from a spreadsheet.
-                  </FormHelperText>
+                  <Box marginTop={1}>
+                    <Typography variant="body2" paragraph>
+                      Record the commitment (start) and completion (end) dates
+                      for relevant work items below. Commitment date and a key
+                      work item key (e.g. a name or reference) are required.
+                      Work item type and a link to more details are optional.
+                      You may also paste data from a spreadsheet. Please enter
+                      dates in "DD/MM/YYYY" or "YYYY-MM-DD" format.
+                    </Typography>
+                  </Box>
                   <Field
                     name="cycleTimeData"
                     component={InputSpreadsheet}
