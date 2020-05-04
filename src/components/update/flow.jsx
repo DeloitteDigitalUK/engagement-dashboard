@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import moment from 'moment';
 import * as Yup from 'yup';
 
 import { Grid, FormHelperText, FormControl, FormLabel } from '@material-ui/core';
@@ -20,11 +21,37 @@ import {
 } from './updateHelpers';
 
 import "../../../node_modules/jexcel/dist/jexcel.css";
-import moment from 'moment';
 
 // helpers for jExcel table component (oh the joys of integrating a DOM-based lirary with React...)
 
-const emptyRow = Yup.reach(FlowUpdate.getSchema(), `cycleTimeData[]`).default()
+const displayDateFormat = "DD/MM/YYYY";
+const parseDateFormats = [
+  displayDateFormat,
+  "YYYY-MM-DD"
+];
+
+export function toStringCell(val) {
+  return val === null? "" : val;
+}
+
+export function fromStringCell(val) {
+  // handling of \0 is a workaround for https://github.com/paulhodel/jexcel/issues/948
+  return val === "" || val === "\0"? null : val;
+}
+
+export function toDateCell(val) {
+  return val instanceof Date? moment(val).format(displayDateFormat) : "";
+}
+
+export function fromDateCell(val) {
+  // handling of \0 is a workaround for https://github.com/paulhodel/jexcel/issues/948
+  if(!val || val === "\0") {
+    return null;
+  }
+
+  const parsed = moment(val, parseDateFormats);
+  return parsed.isValid()? parsed.toDate() : null;
+}
 
 function ctFieldValidator(fieldName) {
   const field = Yup.reach(FlowUpdate.getSchema(), `cycleTimeData[].${fieldName}`)
@@ -33,41 +60,35 @@ function ctFieldValidator(fieldName) {
   }
 }
 
-function coerceValue(jexcel, col, value) {
-  const validator = jexcel.options.columns[col].validate;
+export function itemToRow(columns, item) {
+  return columns.map(col => col.toCell(item[col.name]));
+}
 
-  let coerced = value;
+export function coerceValue(col, value) {
+  const { validate, fromCell, toCell } = col;
   
-  if(coerced === "") {
-    coerced = null;
-  }
-  
-  if(validator) {
+  let coerced = fromCell(value);
+
+  if(validate) {
     try {
-      coerced = validator(coerced);
+      coerced = validate(coerced);
     } catch(e) {
       // validation errors are ok
     }
   }
       
-  // this is a bit hacky, but we store the date as a string in a format
-  // that we know the schema validator will later cast correctly
-  if(coerced instanceof Date) {
-    coerced = moment(coerced).format("DD/MM/YYYY");
-  }
-
-  return coerced;
+  return toCell(coerced);
 }
 
 function validateRow(jexcel, row, classes) {
   const rowData = jexcel.getRowData(row);
   for(const [col, columnDefinition] of tableColumns.entries()) {
-    const validator = columnDefinition.validate;
-    const value = rowData[col];
+    const { validate, fromCell } = columnDefinition;
+    const value = fromCell(rowData[col]);
 
-    if(validator) {
+    if(validate) {
       try {
-        validator(value || null);
+        validate(value);
         jexcel.getCell([col, row]).classList.remove(classes.invalidCell);
       } catch(e) {
         jexcel.getCell([col, row]).classList.add(classes.invalidCell);
@@ -76,24 +97,25 @@ function validateRow(jexcel, row, classes) {
   }
 }
 
-function saveTableData(jexcel, form, field) {
-  const columns = jexcel.getConfig().columns;
-  const data = jexcel.getData().map(row => row.reduce((prev, cur, idx) => ({...prev, [columns[idx].name]: cur || null}), {}));
-  form.setFieldValue(field.name, data);
-}
-function itemToRow(item) {
-  return tableColumns.map(col => col.translate(item[col.name]));
+export function saveTableData(data, columns, form, field) {
+  form.setFieldValue(field.name, 
+    data.map(row => row.reduce(
+        (prev, cur, idx) => ({...prev, [columns[idx].name]: columns[idx].fromCell(cur) || null}),
+        {}
+      )
+    )
+  );
 }
 
 // table definition
 
 const tableColumns = [
   // we could use the `calendar` type but it's annoying to have to use the mouse to select each date
-  { type: 'text', width: '140px', title: 'Commitment date', name: 'commitmentDate', validate: ctFieldValidator('commitmentDate'), translate: val => val instanceof Date? moment(val).format('DD/MM/YYYY') : null },
-  { type: 'text', width: '140px', title: 'Completion date', name: 'completionDate', validate: ctFieldValidator('completionDate'), translate: val => val instanceof Date? moment(val).format('DD/MM/YYYY') : null },
-  { type: 'text', width: '140px', title: 'Item key',        name: 'item',           validate: ctFieldValidator('item'),           translate: val => val },
-  { type: 'text', width: '140px', title: 'Item type',       name: 'itemType',       validate: ctFieldValidator('itemType'),       translate: val => val },
-  { type: 'text', width: '140px', title: 'Link',            name: 'url',            validate: ctFieldValidator('url'),            translate: val => val },
+  { type: 'text', width: '140px', title: 'Commitment date', name: 'commitmentDate', validate: ctFieldValidator('commitmentDate'), toCell: toDateCell,   fromCell: fromDateCell },
+  { type: 'text', width: '140px', title: 'Completion date', name: 'completionDate', validate: ctFieldValidator('completionDate'), toCell: toDateCell,   fromCell: fromDateCell },
+  { type: 'text', width: '140px', title: 'Item key',        name: 'item',           validate: ctFieldValidator('item'),           toCell: toStringCell, fromCell: fromStringCell },
+  { type: 'text', width: '140px', title: 'Item type',       name: 'itemType',       validate: ctFieldValidator('itemType'),       toCell: toStringCell, fromCell: fromStringCell },
+  { type: 'text', width: '140px', title: 'Link',            name: 'url',            validate: ctFieldValidator('url'),            toCell: toStringCell, fromCell: fromStringCell },
 ];
 
 
@@ -113,49 +135,35 @@ function InputSpreadsheet({ field, form }) {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    const tableData = field.value.map(itemToRow);
-
-    if(tableData.length === 0) {
-      tableData.push(itemToRow(emptyRow));
-    }
-
     const tableOptions = {
-      data: tableData,
+      data: field.value.map(v => itemToRow(tableColumns, v)),
       columns: tableColumns,
+      minDimensions: [tableColumns.length, 1],
       allowInsertColumn: false,
       parseFormulas: false,
       about: false,
       onbeforechange: function(instance, cell, x, y, value) {
-        return coerceValue(instance.jexcel, x, value);
+        return coerceValue(instance.jexcel.options.columns[x], value);
       },
       onchange: function(instance, cell, x, y, value) {
         validateRow(instance.jexcel, y, classes);
         return value;
       },
       onafterchanges: function(instance, records) {
-        saveTableData(instance.jexcel, form, field);
+        saveTableData(instance.jexcel.getData(), instance.jexcel.options.columns, form, field);
       },
       onbeforedeleterow: function(instance, row, number) {
         // don't permit deleting all rows (workaround for https://github.com/paulhodel/jexcel/issues/947)
         return number !== instance.jexcel.rows.length;
       },
       ondeleterow: function(instance) {
-        saveTableData(instance.jexcel, form, field);
+        saveTableData(instance.jexcel.getData(), instance.jexcel.options.columns, form, field);
       },
-      onbeforepaste: function(instance, data, x, y) {
-        // if the last cell is empty, we get a weird null value (see )
-        if(data && data[data.length-1] === "\t") {
-          data = data.slice(0, data.length-1);
-        }
-        return data;
-      },
-      onpaste: function(instance, data, x, y) {
-        // debugger
-      }
     };
     
     const ss = jexcel(tableRef.current, tableOptions);
     return () => ss.destroy();
+  
   // delberately don't re-run this effect on re-render - we handle "state"
   // imperatively using the Formik API :-/
   // eslint-disable-next-line react-hooks/exhaustive-deps

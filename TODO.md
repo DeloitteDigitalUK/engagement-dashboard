@@ -2,7 +2,6 @@
 
 ## Bugs
 
-- [ ] Flow update dates are parsed using American date format
 
 ## Immediate
 
