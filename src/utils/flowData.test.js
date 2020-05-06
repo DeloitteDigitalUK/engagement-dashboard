@@ -5,6 +5,7 @@ import {
   cycleTimes,
   averageCycleTimes,
   throughput,
+  wip,
 } from './flowData';
 
 test('cycleTimes', () => {
@@ -39,36 +40,53 @@ test('averageCycleTimes', () => {
     { completionDate: new Date(2020, 0, 1), cycleTime: 2 },
     { completionDate: new Date(2020, 0, 5), cycleTime: 3 },
 
-    { completionDate: new Date(2020, 0, 9), cycleTime: 4 },
-    { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
-    { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
-
     { completionDate: new Date(2020, 0, 14), cycleTime: 2 },
     { completionDate: new Date(2020, 0, 15), cycleTime: 5 },
     { completionDate: new Date(2020, 0, 16), cycleTime: 2 },
+
+    { completionDate: new Date(2020, 0, 9), cycleTime: 4 },
+    { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
+    { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
+
   ], timeFormat('%Y-%m-%d'), timeMonday)).toEqual([
     { period: '2019-12-30', averageCycleTime: 2},
     { period: '2020-01-06', averageCycleTime: 4},
     { period: '2020-01-13', averageCycleTime: 3},
-  ])
+  ]);
 });
 
 test('throughput', () => {
   expect(throughput([
     { completionDate: new Date(2020, 0, 2), cycleTime: 1 },
     { completionDate: new Date(2020, 0, 5), cycleTime: 3 },
-
-    { completionDate: new Date(2020, 0, 9), cycleTime: 4 },
-    { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
-    { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
-
+    
     { completionDate: new Date(2020, 0, 14), cycleTime: 2 },
     { completionDate: new Date(2020, 0, 15), cycleTime: 5 },
     { completionDate: new Date(2020, 0, 16), cycleTime: 2 },
     { completionDate: new Date(2020, 0, 18), cycleTime: 2 },
+
+    { completionDate: new Date(2020, 0, 9), cycleTime: 4 },
+    { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
+    { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
   ], timeFormat('%Y-%m-%d'), timeMonday)).toEqual([
     { period: '2019-12-30', throughput: 2},
     { period: '2020-01-06', throughput: 3},
     { period: '2020-01-13', throughput: 4},
-  ])
+  ]);
+});
+
+test('wip', () => {
+  expect(wip([
+    { commitmentDate: new Date(2020, 0, 1), completionDate: new Date(2020, 0, 2), itemType: null  },
+    { commitmentDate: new Date(2020, 0, 1), completionDate: new Date(2020, 0, 1), itemType: 'foo' },
+    { commitmentDate: new Date(2020, 0, 3), completionDate: new Date(2020, 0, 6), itemType: 'bar' },
+    { commitmentDate: new Date(2020, 0, 4), completionDate: null,                 itemType: 'foo' }, // open until today
+    { commitmentDate: null,                 completionDate: null,                 itemType: null  }, // skip
+    { commitmentDate: null,                 completionDate: new Date(2020, 0, 5), itemType: null  }, // skip
+  ], null, timeFormat('%Y-%m-%d'), timeMonday, new Date(2020, 0, 21))).toEqual([
+    { period: '2019-12-30', wip: 4},
+    { period: '2020-01-06', wip: 2},
+    { period: '2020-01-13', wip: 1},
+    { period: '2020-01-20', wip: 1},
+  ]);
 });
