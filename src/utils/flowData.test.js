@@ -1,6 +1,4 @@
 import { timeMonday } from 'd3-time';
-import { timeFormat } from 'd3-time-format';
-
 import {
   cycleTimes,
   averageCycleTimes,
@@ -48,10 +46,10 @@ test('averageCycleTimes', () => {
     { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
     { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
 
-  ], timeFormat('%Y-%m-%d'), timeMonday)).toEqual([
-    { period: '2019-12-30', averageCycleTime: 2},
-    { period: '2020-01-06', averageCycleTime: 4},
-    { period: '2020-01-13', averageCycleTime: 3},
+  ], timeMonday)).toEqual([
+    { period: new Date(2019, 11, 30), averageCycleTime: 2},
+    { period: new Date(2020, 0, 6), averageCycleTime: 4},
+    { period: new Date(2020, 0, 13), averageCycleTime: 3},
   ]);
 });
 
@@ -68,10 +66,10 @@ test('throughput', () => {
     { completionDate: new Date(2020, 0, 9), cycleTime: 4 },
     { completionDate: new Date(2020, 0, 9), cycleTime: 2 },
     { completionDate: new Date(2020, 0, 10), cycleTime: 6 },
-  ], timeFormat('%Y-%m-%d'), timeMonday)).toEqual([
-    { period: '2019-12-30', throughput: 2},
-    { period: '2020-01-06', throughput: 3},
-    { period: '2020-01-13', throughput: 4},
+  ], timeMonday)).toEqual([
+    { period: new Date(2019, 11, 30), throughput: 2},
+    { period: new Date(2020, 0, 6), throughput: 3},
+    { period: new Date(2020, 0, 13), throughput: 4},
   ]);
 });
 
@@ -83,10 +81,10 @@ test('wip', () => {
     { commitmentDate: new Date(2020, 0, 4), completionDate: null,                 itemType: 'foo' }, // open until today
     { commitmentDate: null,                 completionDate: null,                 itemType: null  }, // skip
     { commitmentDate: null,                 completionDate: new Date(2020, 0, 5), itemType: null  }, // skip
-  ], null, timeFormat('%Y-%m-%d'), timeMonday, new Date(2020, 0, 21))).toEqual([
-    { period: '2019-12-30', wip: 4},
-    { period: '2020-01-06', wip: 2},
-    { period: '2020-01-13', wip: 1},
-    { period: '2020-01-20', wip: 1},
+  ], null, timeMonday, new Date(2020, 0, 21))).toEqual([
+    { period: new Date(2019, 11, 30), wip: 4},
+    { period: new Date(2020, 0, 6), wip: 2},
+    { period: new Date(2020, 0, 13), wip: 1},
+    { period: new Date(2020, 0, 20), wip: 1},
   ]);
 });

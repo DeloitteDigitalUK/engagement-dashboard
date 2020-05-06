@@ -1,5 +1,4 @@
 import { timeDay, timeMonday } from 'd3-time';
-import { timeFormat } from 'd3-time-format';
 import { rollup, mean } from 'd3-array';
 
 /**
@@ -21,13 +20,13 @@ export function cycleTimes(flowData, itemType=null, interval=timeDay) {
  * By default, `period` will be weeks beginning Mondays, formatted according
  * to the locale's default short time format.
  */
-export function averageCycleTimes(cycleTimes, dateFormat=timeFormat('%x'), interval=timeMonday) {
+export function averageCycleTimes(cycleTimes, interval=timeMonday) {
   return Array.from(rollup(
     cycleTimes,
     g => mean(g, v => v.cycleTime),
     v => interval(v.completionDate).valueOf(),
   )).sort((a, b) => (a[0] - b[0])) // sort by date
-    .map(([key, averageCycleTime]) => ({period: dateFormat(new Date(key)), averageCycleTime}));
+    .map(([key, averageCycleTime]) => ({period: new Date(key), averageCycleTime}));
 }
 
 /**
@@ -35,13 +34,13 @@ export function averageCycleTimes(cycleTimes, dateFormat=timeFormat('%x'), inter
  * 
  * By default, `period` will be weeks beginning Mondays.
  */
-export function throughput(cycleTimes, dateFormat=timeFormat('%x'), interval=timeMonday) {
+export function throughput(cycleTimes, interval=timeMonday) {
   return Array.from(rollup(
     cycleTimes,
     g => g.length,
     v => interval(v.completionDate).valueOf(),
   )).sort((a, b) => (a[0] - b[0])) // sort by date
-    .map(([key, throughput]) => ({period: dateFormat(new Date(key)), throughput}));
+    .map(([key, throughput]) => ({period: new Date(key), throughput}));
 }
 
 /**
@@ -51,7 +50,7 @@ export function throughput(cycleTimes, dateFormat=timeFormat('%x'), interval=tim
  * 
  * If `itemType` is given, filters by this type.
  */
-export function wip(flowData, itemType=null, dateFormat=timeFormat('%x'), interval=timeMonday, today=null) {
+export function wip(flowData, itemType=null, interval=timeMonday, today=null) {
   const periods = new Map();
   
   // mostly for testing purposes - allow us to code what `today` is
@@ -83,5 +82,5 @@ export function wip(flowData, itemType=null, dateFormat=timeFormat('%x'), interv
   return Array
     .from(periods)
     .sort((a, b) => (a[0] - b[0])) // sort by date
-    .map(([key, wip]) => ({period: dateFormat(new Date(key)), wip}));
+    .map(([key, wip]) => ({period: new Date(key), wip}));
 }
