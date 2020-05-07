@@ -5,11 +5,14 @@ import * as Yup from 'yup';
 import { Grid, FormHelperText, FormControl, FormLabel, Typography, Box } from '@material-ui/core';
 import { Formik, Form, ErrorMessage, Field } from 'formik';
 
+import Chart from "react-apexcharts";
 import jexcel from 'jexcel';
 
 import { UpdateTypes, FlowUpdate } from 'models';
 
 import { submitHandler } from '../../utils/formHelpers';
+import * as flow from '../../utils/flowData';
+
 import {
   UpdateSummary,
   UpdateHeader,
@@ -21,6 +24,208 @@ import {
 } from './updateHelpers';
 
 import "../../../node_modules/jexcel/dist/jexcel.css";
+
+// pretty charts
+
+const defaultChartOptions = {
+  legend: {
+    position: 'bottom',
+    itemMargin: {
+      vertical: 20
+    }
+  },
+  xaxis: {
+    type: 'datetime',
+    lines: {
+      show: true,
+    },
+    labels: {
+      datetimeFormatter: {
+        year: 'yyyy',
+        month: 'MMM \'yy',
+        day: 'dd MMM',
+        hour: 'HH:mm'
+      }
+    }
+  },
+  yaxis: {
+    labels: {
+      formatter: v => Number.parseFloat(v).toFixed()
+    },
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: v => Number.parseFloat(v).toFixed()
+  },
+  tooltip: {
+    y: {
+      formatter: v => Number.parseFloat(v).toFixed(1)
+    }
+  }
+};
+
+const smallChartOptions = {
+  chart: {
+    toolbar: {
+      show: false,
+    },
+    animations: {
+      enabled: false,
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+};
+
+function FlowSummary({ update }) {
+
+  const itemTypes = update.cycleTimeData.reduce((acc, v) => acc.set(v.itemType, {}), new Map());
+
+  itemTypes.forEach((v, k) => {
+    v.cycleTimes = flow.cycleTimes(update.cycleTimeData, k);
+    v.averageCycleTimes = flow.averageCycleTimes(v.cycleTimes);
+    v.throughput = flow.throughput(v.cycleTimes);
+    v.wip = flow.wip(update.cycleTimeData, k);
+  });
+
+  return (<>
+    <UpdateSummary update={update} />
+
+    <Grid container spacing={2}>
+
+      <Grid item xs={12} md={6}>
+        <Chart
+          options={{
+            ...defaultChartOptions,
+            ...smallChartOptions,
+            theme: {
+              palette: 'palette1'
+            },
+            title: {
+              text: "Average cycle time",
+              align: 'center'
+            }
+          }}
+          series={Array.from(itemTypes).map(([key, data]) => ({
+            name: key? key : "(Default)",
+            data: data.averageCycleTimes.map(({period, averageCycleTime}) => [period.getTime(), averageCycleTime])
+          }))}
+          type="line"
+          />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <Chart
+          options={{
+            ...defaultChartOptions,
+            ...smallChartOptions,
+            theme: {
+              palette: 'palette2'
+            },
+            title: {
+              text: "Throughput",
+              align: 'center'
+            }
+          }}
+          series={Array.from(itemTypes).map(([key, data]) => ({
+            name: key? key : "(Default)",
+            data: data.throughput.map(({period, throughput}) => [period.getTime(), throughput])
+          }))}
+          type="line"
+          />
+      </Grid>
+
+    </Grid>
+
+    
+
+  </>);
+}
+
+function FlowView({ update }) {
+
+  const itemTypes = update.cycleTimeData.reduce((acc, v) => acc.set(v.itemType, {}), new Map());
+
+  itemTypes.forEach((v, k) => {
+    v.cycleTimes = flow.cycleTimes(update.cycleTimeData, k);
+    v.averageCycleTimes = flow.averageCycleTimes(v.cycleTimes);
+    v.throughput = flow.throughput(v.cycleTimes);
+    v.wip = flow.wip(update.cycleTimeData, k);
+  });
+
+  return (<>
+    <UpdateHeader update={update} />
+
+    <Grid container spacing={3}>
+      <Grid item xs={12} md={7}>
+        <Typography color="textPrimary" component="h3" variant="h6" gutterBottom>
+          Average cycle times
+        </Typography>
+        <Typography variant="body1" paragraph>
+          In days, by date completed.
+        </Typography>
+        <Chart
+          options={{
+            ...defaultChartOptions,
+            theme: {
+              palette: 'palette1',
+            }
+          }}
+          series={Array.from(itemTypes).map(([key, data]) => ({
+            name: key? key : "(Default)",
+            data: data.averageCycleTimes.map(({period, averageCycleTime}) => [period.getTime(), averageCycleTime])
+          }))}
+          type="line"
+          />
+      </Grid>
+
+      <Grid item xs={12} md={7}>
+        <Typography color="textPrimary" component="h3" variant="h6" gutterBottom>
+          Weekly throughput
+        </Typography>
+        <Typography variant="body1" paragraph>
+          In items per week, by date completed.
+        </Typography>
+        <Chart
+          options={{
+            ...defaultChartOptions,
+            theme: {
+              palette: 'palette2',
+            }
+          }}
+          series={Array.from(itemTypes).map(([key, data]) => ({
+            name: key? key : "(Default)",
+            data: data.throughput.map(({period, throughput}) => [period.getTime(), throughput])
+          }))}
+          type="line"
+          />
+      </Grid>
+
+      <Grid item xs={12} md={7}>
+        <Typography color="textPrimary" component="h3" variant="h6" gutterBottom>
+          WIP
+        </Typography>
+        <Typography variant="body1" paragraph>
+          Items not finished per week.
+        </Typography>
+        <Chart
+          options={{
+            ...defaultChartOptions,
+            theme: {
+              palette: 'palette3',
+            }
+          }}
+          series={Array.from(itemTypes).map(([key, data]) => ({
+            name: key? key : "(Default)",
+            data: data.wip.slice(-12).map(({period, wip}) => [period.getTime(), wip])
+          }))}
+          type="line"
+          />
+      </Grid>
+    </Grid>
+  </>);
+}
 
 // helpers for jExcel table component (oh the joys of integrating a DOM-based lirary with React...)
 
@@ -118,17 +323,6 @@ const tableColumns = [
   { type: 'text', width: '140px', title: 'Link',            name: 'url',            validate: ctFieldValidator('url'),            toCell: toStringCell, fromCell: fromStringCell },
 ];
 
-
-function FlowSummary({ update }) {
-  return <UpdateSummary update={update} />;
-}
-
-function FlowView({ update }) {
-  return (<>
-    <UpdateHeader update={update} />
-  </>);
-}
-
 function InputSpreadsheet({ field, form }) {
 
   const classes = useStyles();
@@ -174,6 +368,8 @@ function InputSpreadsheet({ field, form }) {
   );
 
 }
+
+// form
 
 function FlowForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
   const classes = useStyles();

@@ -8,9 +8,9 @@ import { rollup, mean } from 'd3-array';
  * 
  * Uncompleted items are excluded.
  */
-export function cycleTimes(flowData, itemType=null, interval=timeDay) {
+export function cycleTimes(flowData, itemType=undefined, interval=timeDay) {
   return flowData
-    .filter(v => (itemType === null || itemType === v.itemType) && v.commitmentDate && v.completionDate)
+    .filter(v => (itemType === undefined || itemType === v.itemType) && v.commitmentDate && v.completionDate)
     .map(v => ({...v, cycleTime: interval.count(v.commitmentDate, v.completionDate)}));
 }
 
@@ -50,7 +50,7 @@ export function throughput(cycleTimes, interval=timeMonday) {
  * 
  * If `itemType` is given, filters by this type.
  */
-export function wip(flowData, itemType=null, interval=timeMonday, today=null) {
+export function wip(flowData, itemType=undefined, interval=timeMonday, today=null) {
   const periods = new Map();
   
   // mostly for testing purposes - allow us to code what `today` is
@@ -62,7 +62,7 @@ export function wip(flowData, itemType=null, interval=timeMonday, today=null) {
 
   flowData.forEach(v => {
     const { commitmentDate: start, completionDate: end, itemType: type } = v;
-    if(!start || (itemType && itemType === type)) {
+    if(!start || (itemType !== undefined && itemType !== type)) {
       return;
     }
 

@@ -81,7 +81,7 @@ test('wip', () => {
     { commitmentDate: new Date(2020, 0, 4), completionDate: null,                 itemType: 'foo' }, // open until today
     { commitmentDate: null,                 completionDate: null,                 itemType: null  }, // skip
     { commitmentDate: null,                 completionDate: new Date(2020, 0, 5), itemType: null  }, // skip
-  ], null, timeMonday, new Date(2020, 0, 21))).toEqual([
+  ], undefined, timeMonday, new Date(2020, 0, 21))).toEqual([
     { period: new Date(2019, 11, 30), wip: 4},
     { period: new Date(2020, 0, 6), wip: 2},
     { period: new Date(2020, 0, 13), wip: 1},
