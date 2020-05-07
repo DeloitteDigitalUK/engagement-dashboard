@@ -5,8 +5,6 @@
 
 ## Immediate
 
-- [ ] Create views for Flow updates
-
 - [ ] Improve how updates are displayed on the project summary, e.g. group
       by type, limit number of updates for each type, etc.
 - [ ] Add pagination to project updates list
