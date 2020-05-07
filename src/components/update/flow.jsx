@@ -109,7 +109,7 @@ function FlowSummary({ update }) {
           }}
           series={Array.from(itemTypes).map(([key, data]) => ({
             name: key? key : "(Default)",
-            data: data.averageCycleTimes.map(({period, averageCycleTime}) => [period.getTime(), averageCycleTime])
+            data: data.averageCycleTimes.slice(-6).map(({period, averageCycleTime}) => [period.getTime(), averageCycleTime])
           }))}
           type="line"
           />
@@ -130,7 +130,7 @@ function FlowSummary({ update }) {
           }}
           series={Array.from(itemTypes).map(([key, data]) => ({
             name: key? key : "(Default)",
-            data: data.throughput.map(({period, throughput}) => [period.getTime(), throughput])
+            data: data.throughput.slice(-6).map(({period, throughput}) => [period.getTime(), throughput])
           }))}
           type="line"
           />
