@@ -1073,6 +1073,43 @@ describe('role checks', () => {
     })).toBeDenied();
 
   });
+
+  test('anonymous cannot view non-existent project', async () => {
+    const db = await setup();
+
+    const p1 = new Project('p1', {
+      name: "My project",
+      description: "A description",
+      updateTypes: [UpdateTypes.insights],
+      teams: [],
+      roles: {
+        'test@example.org': Roles.owner
+      }
+    });
+    
+    await expect(db.doc(p1.getPath()).get()).toBeDenied();
+    
+  });
+
+  test('authenticated can view non-existent project', async () => {
+    const db = await setup({
+      uid: '123',
+      email: 'test@example.org',
+    });
+
+    const p1 = new Project('p1', {
+      name: "My project",
+      description: "A description",
+      updateTypes: [UpdateTypes.insights],
+      teams: [],
+      roles: {
+        'test@example.org': Roles.owner
+      }
+    });
+    
+    await expect(db.doc(p1.getPath()).get()).toBeAllowed();
+    expect((await db.doc(p1.getPath()).get()).exists).toEqual(false);
+  });
   
     
 });

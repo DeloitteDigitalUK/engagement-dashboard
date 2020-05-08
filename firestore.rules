@@ -7,10 +7,13 @@ service cloud.firestore {
         return req.auth.token.email.replace('\\.' , '@@');
       }
     
-      function userHasRole(req, r, roles) {
+      function userHasRole(req, r, roles, allowIfNull) {
         return (
           (req.auth != null) &&
-          (r.data.roles.get(getEmail(req), null) in roles)
+          (
+            (allowIfNull && r == null) ||
+            (r.data.roles.get(getEmail(req), null) in roles)
+          )
         );
       }
       
@@ -43,34 +46,34 @@ service cloud.firestore {
 
       // CRUD rules
       allow create: if (
-        userHasRole(request, request.resource, ['owner']) &&
+        userHasRole(request, request.resource, ['owner'], false) &&
         isValidProject(request.resource)
       );
       
       allow read: if (
-        userHasRole(request, resource, ['owner', 'administrator', 'author', 'member'])
+        userHasRole(request, resource, ['owner', 'administrator', 'author', 'member'], true)
       );
       
       allow update: if (
-        userHasRole(request, resource, ['owner', 'administrator']) &&
+        userHasRole(request, resource, ['owner', 'administrator'], false) &&
         isValidProject(request.resource) &&
         ownRoleNotChanged(request, request.resource, resource) &&
         ownerNotChanged(request.resource, resource)
       ); 
       
       allow delete: if (
-        userHasRole(request, resource, ['owner'])
+        userHasRole(request, resource, ['owner'], false)
       );
 
       // Updates
       match /updates/{update} {
 
         function canViewUpdate(request) {
-          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author', 'member']);
+          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author', 'member'], true);
         }
         
         function canModifyUpdate(request) {
-          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author']);
+          return userHasRole(request, get(/databases/$(database)/documents/projects/$(project)), ['owner', 'administrator', 'author'], false);
         }
 
         function isValidUpdate(u) {
