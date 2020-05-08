@@ -4,14 +4,16 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": [
-      "npm run build",
+    "predeploy": [      
       "npm --prefix \"$RESOURCE_DIR\" run lint"
     ],
     "source": "functions"
   },
   "hosting": {
     "public": "build",
+    "predeploy": [
+      "npm run build"
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
