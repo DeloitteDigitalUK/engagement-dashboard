@@ -16,7 +16,7 @@ const fs = require('fs');
  * }
  * ```
  */
-module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
+exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
 
   const projectId = `rules-spec-${Date.now()}`;
   
@@ -49,10 +49,36 @@ module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules')
   return db;
 };
 
+exports.setupAdmin = async (data=null, rulesFile='firestore.rules') => {
+  const projectId = `rules-spec-${Date.now()}`;
+  
+  const adminApp = firebase.initializeAdminApp({
+    projectId
+  });
+
+  const adminDb = adminApp.firestore();
+
+  // Write mock documents before rules
+  if (data) {
+    for (const key in data) {
+      const ref = adminDb.doc(key);
+      await ref.set(data[key]);
+    }
+  }
+
+  // Load rules
+  await firebase.loadFirestoreRules({
+    projectId,
+    rules: fs.readFileSync(rulesFile, 'utf8')
+  });
+
+  return adminDb;
+};
+
 /**
  * Delete all apps and their data in the test database.
  */
-module.exports.tearDown = async () => {
+exports.tearDown = async () => {
   Promise.all(firebase.apps().map(app => app.delete()));
 };
 
