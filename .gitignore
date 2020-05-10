@@ -36,3 +36,4 @@ yarn-error.log*
 # Testing
 
 test.token
+test.json
