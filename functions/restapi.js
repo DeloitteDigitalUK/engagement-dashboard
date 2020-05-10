@@ -41,9 +41,19 @@ async function validateFirebaseIdToken(req, res, next) {
   }
 }
 
+function stripPrefix(prefix) {
+  return (req, res, next) => {
+    if (req.url.indexOf(`/${prefix}/`) === 0) {
+      req.url = req.url.substring(prefix.length + 1);
+    }
+    next();
+  }
+}
+
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
+app.use(stripPrefix('api'));
 
 app.post('/post-update', (req, res) => {
   res.send(`Posting update to ${req.user.projectId} with role ${req.user.role}`);
