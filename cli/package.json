@@ -1,0 +1,18 @@
+{
+  "name": "engagement-dashboard-cli",
+  "version": "0.0.1",
+  "description": "Command line tool to interact with Engagement Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch --runInBand"
+  },
+  "bin": {
+    "engagement-dashboard": "index.js"
+  },
+  "author": "Martin Aspeli",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "yargs": "^15.3.1"
+  }
+}
