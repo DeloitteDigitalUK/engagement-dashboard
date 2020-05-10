@@ -8,8 +8,11 @@ const { admin } = require('./app');
 const auth = admin.auth();
 
 /**
- * Express middleware to validates ID Tokens in the Authorization HTTP header:
+ * Express middleware to validate ID Tokens in the Authorization HTTP header:
+ * 
  *   `Authorization: Bearer <Firebase ID Token>`
+ * 
+ * You can also use a `__session` cookie.
  */
 async function validateFirebaseIdToken(req, res, next) {
   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
@@ -41,8 +44,9 @@ async function validateFirebaseIdToken(req, res, next) {
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
-app.get('/hello', (req, res) => {
-  res.send(`Hello ${req.user.projectId}`);
+
+app.post('/post-update', (req, res) => {
+  res.send(`Posting update to ${req.user.projectId} with role ${req.user.role}`);
 });
 
 exports.app = functions.https.onRequest(app);
