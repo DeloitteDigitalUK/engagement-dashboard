@@ -10,6 +10,7 @@ import NotFoundPage from '../NotFoundPage';
 
 import ViewProjectPage from './ViewProject';
 import EditProjectPage from './EditProject';
+import ManageTokensPage from './ManageTokens';
 
 import NewUpdatePage from './update/NewUpdate';
 import UpdatePage from './update/Update';
@@ -44,6 +45,7 @@ export default function ProjectPage({ user }) {
     <Switch>
       <Route exact path={path}><ViewProjectPage user={user} project={project} /></Route>
       <Route exact path={`${path}/edit`}><EditProjectPage user={user} project={project} /></Route>
+      <Route exact path={`${path}/manage-tokens`}><ManageTokensPage user={user} project={project} /></Route>
       <Route exact path={`${path}/new-update`}><NewUpdatePage user={user} project={project} /></Route>
       <Route path={`${path}/update/:updateId`}><UpdatePage user={user} project={project}/></Route>
 

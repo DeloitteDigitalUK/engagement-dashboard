@@ -31,4 +31,4 @@ exports.cleanUp = async (db, path, batchSize=400) => {
 
     console.log(`Deleted ${querySnapshot.size} documents.`);
   }
-}
+};

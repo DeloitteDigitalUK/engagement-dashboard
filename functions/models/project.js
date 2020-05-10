@@ -6,6 +6,7 @@ const findKey = require('lodash.findkey');
 const Model = require('./base');
 const UpdateTypes = require('./updateTypes');
 const Roles = require('./roles');
+const { transformDate } = require('./utils');
 
 const validUpdateTypes = new Set(Object.values(UpdateTypes));
 const validRoles = new Set(Object.values(Roles));
@@ -38,7 +39,14 @@ const projectSchema = Yup.object({
     .test('must-have-an-owner', "${path} must contain an email address with the role of owner", value => {
       return Object.values(value).includes(Roles.owner);
     })
-    .default({})
+    .default({}),
+
+  tokens: Yup.array().of(Yup.object({
+    uid: Yup.string().required().default(""),
+    role: Yup.string().oneOf(validRoles).default(Roles.author),
+    creationDate: Yup.date().transform(transformDate).required(),
+    name: Yup.string().required().default(""),
+  })).notRequired().default([])
 });
 
 /**

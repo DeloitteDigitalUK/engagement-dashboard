@@ -7,7 +7,7 @@ const {
   InsightsUpdate
 } = require('models');
 
-const { cleanUp } = require('../functions/cleanup');
+const { cleanUp } = require('../functions/utils/cleanup');
 
 const project = new Project('1', {
   name: "My project",

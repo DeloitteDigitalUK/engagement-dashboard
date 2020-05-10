@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link as RouterLink } from 'react-router-dom';
 
 import {
   Divider,
@@ -21,7 +21,7 @@ const knownErrors = {}
 
 const useStyles = makeStyles((theme) => ({
   divider: {
-    margin: theme.spacing(3, 0)
+    marginTop: theme.spacing(3)
   }
 }));
 
@@ -34,6 +34,7 @@ export default function EditProjectPage({ user, project }) {
 
   const api = useAPI();
 
+  const canManageTokens = project.hasRole(user.email, Roles.owner);
   const canDelete = project.hasRole(user.email, Roles.owner);
 
   const saveProject = async (data) => {
@@ -58,28 +59,39 @@ export default function EditProjectPage({ user, project }) {
         knownErrors={knownErrors}
         />
 
-        {canDelete && (
-          <>
-            <Divider className={classes.divider} />
+      {(canManageTokens || canDelete) && <Divider className={classes.divider} />}
 
-            <Alert severity="error">
-              <AlertTitle>Delete project</AlertTitle>
-              <Typography paragraph>
-                Delete the project and all its updates. This action cannot be undone!
-              </Typography>
-              <Button variant="contained" color="secondary" onClick={() => setDeleteConfirmOpen(true)}>Delete</Button>
-              
-              <ConfirmationDialog
-                open={deleteConfirmOpen}
-                cancel={() => setDeleteConfirmOpen(false)}
-                confirm={deleteProject}
-                confirmColor="secondary"
-                text="When you delete a project, all users will immediately lose access to it, and all updates will be permanently deleted. This action cannot be undone."
-                />
+      {canManageTokens &&
+        <Alert severity="info" className={classes.divider}>
+          <AlertTitle>Manage access tokens</AlertTitle>
+          <Typography paragraph>
+            To allow external tools and systems to push updates to this
+            project, you can create or revoke unique access tokens.
+          </Typography>
+          <Button variant="contained" color="primary" component={RouterLink} to={`/project/${project.id}/manage-tokens`}>
+            Manage
+          </Button>
+        </Alert>
+      }
 
-            </Alert>
-          </>
-        )}
+      {canDelete &&
+        <Alert severity="error" className={classes.divider}>
+          <AlertTitle>Delete project</AlertTitle>
+          <Typography paragraph>
+            Delete the project and all its updates. This action cannot be undone!
+          </Typography>
+          <Button variant="contained" color="secondary" onClick={() => setDeleteConfirmOpen(true)}>Delete</Button>
+          
+          <ConfirmationDialog
+            open={deleteConfirmOpen}
+            cancel={() => setDeleteConfirmOpen(false)}
+            confirm={deleteProject}
+            confirmColor="secondary"
+            text="When you delete a project, all users will immediately lose access to it, and all updates will be permanently deleted. This action cannot be undone."
+            />
+        </Alert>
+      }
+
     </AuthenticatedLayout>
   );
 

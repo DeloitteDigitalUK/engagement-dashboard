@@ -13,7 +13,8 @@ test('can construct an empty object', () => {
     description: "",
     updateTypes: [UpdateTypes.goals, UpdateTypes.insights, UpdateTypes.release, UpdateTypes.raid],
     teams: [],
-    roles: {}
+    roles: {},
+    tokens: []
   });
 });
 
@@ -28,7 +29,13 @@ test('can construct a valid object', () => {
       'test1@example.org': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
-    }
+    },
+    tokens: [{
+      uid: '123',
+      role: Roles.author,
+      creationDate: new Date(2020, 0, 1),
+      name: "Test token"
+    }]
   });
 
   expect(p.toObject()).toEqual({
@@ -41,7 +48,13 @@ test('can construct a valid object', () => {
       'test1@example.org': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
-    }
+    },
+    tokens: [{
+      uid: '123',
+      role: Roles.author,
+      creationDate: new Date(2020, 0, 1),
+      name: "Test token"
+    }]
   });
 });
 
@@ -98,7 +111,8 @@ test('does not require a description', () => {
       'test1@example.org': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
-    }
+    },
+    tokens: []
   });
 });
 
@@ -190,7 +204,8 @@ test('encodes email addresses in firebase keys', () => {
       'test1@example@@org@@uk': Roles.administrator,
       'test2@example@@org': Roles.author,
       'test3@example@@org': Roles.member,
-    }
+    },
+    tokens: []
   });
 });
 
@@ -223,7 +238,8 @@ test('decodes email addresses in firebase keys', () => {
       'test1@example.org.uk': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
-    }
+    },
+    tokens: []
   });
 
 });
@@ -261,7 +277,8 @@ test('handles invalid data in database if required', () => {
       'test1@example.org': Roles.administrator,
       'test2@example.org': Roles.author,
       'test3@example.org': Roles.member,
-    }
+    },
+    tokens: []
   });
 
 });

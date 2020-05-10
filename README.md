@@ -29,6 +29,10 @@ the following enabled:
 - Email-based authentication
 - Hosting
 - A web app
+- IAM access and the "Service Account Token Creator" role created. If this is
+  not enabled, you will see errors in the Cloud Functions log when trying to
+  create an API access token. See
+  https://firebase.google.com/docs/auth/admin/create-custom-tokens
 
 You can also use the firebase CLI to create these, but note that the generated
 configuration in `firebase.json` *is* under source control. The `.firebaserc`
