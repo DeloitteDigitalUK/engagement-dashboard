@@ -1,5 +1,3 @@
-const firebase = require('firebase');
-
 const { nanoid } = require('nanoid');
 const { Project, Roles } = require('models');
 
