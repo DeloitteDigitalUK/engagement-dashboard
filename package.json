@@ -26,6 +26,7 @@
     "jexcel": "^4.1.2",
     "lodash.frompairs": "^4.0.1",
     "lodash.invert": "^4.3.0",
+    "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "markdown-draft-js": "^2.2.0",
     "models": "file:functions/models",

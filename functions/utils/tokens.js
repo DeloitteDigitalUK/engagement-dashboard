@@ -1,13 +1,67 @@
+const firebase = require('firebase');
+
 const { nanoid } = require('nanoid');
 const { Project, Roles } = require('models');
 
 const TOKENS_COLLECTION = '_api_tokens';
 
-exports.issueToken = async (db, role, projectId, name) => {
+exports.verifyAndGetProject = async (db, projectId, email, roles=[Roles.owner]) => {
+
+  const snapshot = await db
+    .collection(Project.getCollectionPath())
+    .doc(projectId)
+    // XXX: in the server cloud function, we get an error calling
+    // `snapshot.data()` in the converter, so we do it manually below instead.
+    // .withConverter(Project)
+    .get();
+  
+  if(!snapshot.exists) {
+    throw new Error(`Project with id ${projectId} does not exist.`)
+  }
+
+  const project = Project.fromFirestore(snapshot, {});
+  
+  if(!project.hasRole(email, roles)) {
+    throw new Error(`User ${email} is not allowed to create tokens for project ${projectId}.`)
+  }
+
+  return project;
+}
+
+exports.issueToken = async (db, project, role, name) => {
   const uid = nanoid(32);
   const token = nanoid(64);
-  await db.collection(TOKENS_COLLECTION).doc(token).set({ projectId, role, uid, name });
-  return { uid, token };
+  const creationDate = new Date();
+
+  // add token to the secret tokens collection
+  await db.collection(TOKENS_COLLECTION).doc(token).set({
+    projectId: project.id,
+    role,
+    uid,
+    name,
+    creationDate
+  });
+  
+  // record uid, name, date against project
+  const tokenData = { uid, role, name, creationDate };
+  
+  // this code would be cleaner with `FieldValue.arrayUnion()` but that is failing
+  // with what looks like a Firebase bug :(
+  const projectRef = db.doc(project.getPath());
+  await db.runTransaction(async t => {
+    const p = (await t.get(projectRef)).data();
+    await t.update(projectRef, {
+      tokens: [...p.tokens, tokenData]
+    });
+  });
+  
+  return token;
+};
+
+exports.findRemovedTokens = (before, after) => {
+  const beforeTokens = (before.tokens || []).map(t => t.uid);
+  const afterTakens = new Set((after.tokens || []).map(t => t.uid));
+  return [...new Set([...beforeTokens].filter(v => !afterTakens.has(v)))];
 };
 
 exports.revokeTokens = async (db, uids) => {
@@ -55,41 +109,4 @@ exports.validateToken = async (db, token, roles) => {
   }
 
   return tokenData;
-}
-
-exports.findRemovedTokens = (before, after) => {
-  const beforeTokens = (before.tokens || []).map(t => t.uid);
-  const afterTakens = new Set((after.tokens || []).map(t => t.uid));
-  return [...new Set([...beforeTokens].filter(v => !afterTakens.has(v)))];
-};
-
-exports.verifyAndGetProject = async (db, projectId, email, roles=[Roles.owner]) => {
-
-  const snapshot = await db
-    .collection(Project.getCollectionPath())
-    .doc(projectId)
-    // XXX: in the server cloud function, we get an error calling
-    // `snapshot.data()` in the converter, so we do it manually below instead.
-    // .withConverter(Project)
-    .get();
-  
-  if(!snapshot.exists) {
-    throw new Error(`Project with id ${projectId} does not exist.`)
-  }
-
-  const project = Project.fromFirestore(snapshot, {});
-  
-  if(!project.hasRole(email, roles)) {
-    throw new Error(`User ${email} is not allowed to create tokens for project ${projectId}.`)
-  }
-
-  return project;
-}
-
-exports.addTokenToProject = async (db, project, uid, role, name) => {
-  const tokenData = { uid, role, name, creationDate: new Date()};
-  project.tokens.push(tokenData);
-  return db.doc(project.getPath()).update({
-    tokens: project.tokens
-  });
 };

@@ -7,8 +7,7 @@ const {
   issueToken,
   revokeTokens,
   findRemovedTokens,
-  verifyAndGetProject,
-  addTokenToProject
+  verifyAndGetProject
 } = require('./utils/tokens');
 
 const db = admin.firestore();
@@ -38,9 +37,7 @@ exports.createNew = functions.https.onCall(async (data, context) => {
   const role = Roles.author;
 
   const project = await verifyAndGetProject(db, data.projectId, email);
-  const { uid, token } = await issueToken(db, role, data.projectId, data.name);
-  await addTokenToProject(db, project, uid, role, data.name);
-  return token;
+  return await issueToken(db, project, role, data.name);
 });
 
 /**
