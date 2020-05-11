@@ -104,7 +104,13 @@ describe('formToProject', () => {
         'test2@example.org': Roles.author,
         'test3@example.org': Roles.author,
         'test4@example.org': Roles.member,
-      }
+      },
+      tokens: [{
+        uid: '123',
+        role: Roles.author,
+        creationDate: new Date(2010, 0, 1),
+        name: "Test token"
+      }]
     });
 
     const formData = projectToFormData(project),
@@ -124,7 +130,8 @@ describe('formToProject', () => {
         'test2@example.org': Roles.author,
         'test3@example.org': Roles.author,
         'test4@example.org': Roles.member,
-      }
+      },
+      tokens: [] // not edited on this page
     });
     
   });
