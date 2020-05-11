@@ -29,6 +29,15 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
+// Use emulators if set in environment
+if(process.env.REACT_APP_EMULATE_FIRESTORE) {
+  firebase.firestore().settings({ host: process.env.REACT_APP_EMULATE_FIRESTORE, ssl: false });
+}
+
+if(process.env.REACT_APP_EMULATE_FUNCTIONS) {
+  firebase.functions().useFunctionsEmulator(process.env.REACT_APP_EMULATE_FUNCTIONS)
+}
+
 // to get trace debugging for Firestore operations, uncomment this line
 // firebase.setLogLevel('debug');
 

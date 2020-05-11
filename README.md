@@ -29,10 +29,6 @@ the following enabled:
 - Email-based authentication
 - Hosting
 - A web app
-- IAM access and the "Service Account Token Creator" role created. If this is
-  not enabled, you will see errors in the Cloud Functions log when trying to
-  create an API access token. See
-  https://firebase.google.com/docs/auth/admin/create-custom-tokens
 
 You can also use the firebase CLI to create these, but note that the generated
 configuration in `firebase.json` *is* under source control. The `.firebaserc`
@@ -63,8 +59,20 @@ REACT_APP_APP_ID=<id>
 ```
 The relevant values can all be found in the Firebase web console.
 
-You can also point these at the Firebase emulators if you run them. See
-the `firebase emulators` commands for more details.
+You can also point the local app at the Firebase emulators if you run them. This
+requires two additional environment variables (in the `.env.local` file or in
+the terminal environment used to launch the webapp with `npm start`):
+
+```
+REACT_APP_EMULATE_FIRESTORE=localhost:8080
+REACT_APP_EMULATE_FUNCTIONS=http://localhost:5001
+```
+
+The emulators must be started before the webapp with:
+
+  $ firebase emulators:start
+
+(or if you prefer: `npm run test:run-emulators`)
 
 ## Run app, tests
 
@@ -75,7 +83,7 @@ Once set up you can run various `npm` scripts:
   when files are changed.
 * `npm run test:run-emulators` will start the Firebase emulators, after
   which you can run `npm run test:integration` to run integration tests in
-  watch mode. 
+  watch mode.
 * Alternatively, `npm run ci:integration-test` will run Firestore local
   emulators and execute integration the integration tests once before shutting
   the emulators down again.
