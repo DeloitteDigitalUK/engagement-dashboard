@@ -26,7 +26,7 @@ exports.verifyAndGetProject = async (db, projectId, email, roles=[Roles.owner]) 
   }
 
   return project;
-}
+};
 
 exports.issueToken = async (db, project, role, name) => {
   const uid = nanoid(32);
