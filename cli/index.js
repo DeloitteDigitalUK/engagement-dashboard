@@ -3,32 +3,21 @@
 // This command line tool serves two purposes:
 //
 //  1. To make it easier to push updates to remote Engagement Dashboard projects
-//     using the API. You grab the remote REST API URL, the Firebase API key,
-//     an access token saved from the app stored in a text file, and a file
-//     containing the JSON data you want to send to the server.
+//     using the API. You supply an access token saved from the app stored in a
+//     text file, and a file containing the JSON data you want to send to the
+//     server.
 //
-//  2. To illustrate how to use the REST API for another integration. The basic
-//     idea is that you first exchange the project API token you downloaded for
-//     a temporary Firebase authentication ID token, and then you use this as
-//     a "Bearer Token" by passing it to the REST API in the `Authorization:`
-//     head.
+//  2. To illustrate how to use the REST API for another integration.
 
 const fs = require('fs');
 const yargs = require('yargs');
 const axios = require('axios').default;
 
-const AUTH_API_URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken';
-
 const args = yargs
+  // If/when we host the app on "official" URL we could default this
   .option('url', {
     alias: 'u',
     describe: 'URL of the API end-point',
-    demandOption: true,
-    requiresArg: true,
-  })
-  .option('api-key', {
-    alias: 'a',
-    describe: 'Firebase API key',
     demandOption: true,
     requiresArg: true,
   })
@@ -48,39 +37,10 @@ const args = yargs
   })
   .argv;
 
-// Authenticate using the Google Identity Toolkit API. It would be even easier
-// to use the Firebase client SDK (`auth.signInWithToken()`), but this
-// demonstrates a purely REST-based approach better
-
-async function logIn(apiKey, token) {
-
-  // POST to https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=<API_KEY>
-  // With: Content-Type: application/json
-  // With: `token` and `returnSecureToken: true` sent in the request body (JSON encoded).
-  
-  const response = await axios.post(AUTH_API_URL, {
-    token: token,
-    returnSecureToken: true,
-  }, {
-    params: {
-      key: apiKey
-    }
-  });
-  
-  return response.data.idToken;
-}
-
-async function callAPI(url, idToken, data) {
-
-  // Call API URL with headers:
-  //
-  //  Content-Type: application/json
-  //  Authorization: Bearer <idtoken>
-  
-  const response = await axios.post(url, data, {
-    headers: {
-      Authorization: `Bearer ${idToken}`
-    }
+async function callAPI(url, token, data) {
+  const response = await axios.post(url, {
+    ...data,
+    token
   });
 
   return response.data;
@@ -107,24 +67,12 @@ async function main(url, apiKey, tokenFile, dataFile) {
     return;
   }
 
-  
-  console.log("Attempting to log in")
-  let idToken = null;
-  try {
-    idToken = await logIn(apiKey, token);
-  } catch (e) {
-    console.error(`Login failed with status ${e.response.status} ${e.response.statusText}`)
-    console.error(e.response.data);
-    return;
-  }
-
   console.log("Calling API")
   let response = null;
   try {
-    response = await callAPI(url, idToken, data);
+    response = await callAPI(url, token, data);
   } catch (e) {
     console.error(`API call failed with status ${e.response.status}: ${e.response.statusText}`)
-    console.error(e.request);
     console.error(e.response.data);
     return;
   }

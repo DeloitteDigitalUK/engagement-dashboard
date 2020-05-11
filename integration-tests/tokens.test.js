@@ -60,8 +60,8 @@ test('findRemovedTokens', async () => {
     }]
   };
 
-  expect(findRemovedTokens(before, before)).toEqual(new Set([]));
-  expect(findRemovedTokens(before, after)).toEqual(new Set(['234']));
+  expect(findRemovedTokens(before, before)).toEqual([]);
+  expect(findRemovedTokens(before, after)).toEqual(['234']);
 
 });
 

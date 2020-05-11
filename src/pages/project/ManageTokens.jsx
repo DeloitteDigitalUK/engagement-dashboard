@@ -195,7 +195,7 @@ export default function ManageTokensPage({ user, project }) {
                   label="Token"
                   variant="outlined"
                   multiline
-                  rows={18}
+                  rows={4}
                   value={newToken}
                 />
               :

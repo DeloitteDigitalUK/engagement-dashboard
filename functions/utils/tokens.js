@@ -1,21 +1,66 @@
-const admin = require('firebase-admin');
-
-const { v4: uuid4 } = require('uuid');
+const { nanoid } = require('nanoid');
 const { Project, Roles } = require('models');
 
-exports.issueToken = async (auth, role, projectId) => {
-  const uid = uuid4();
-  return {
-    uid: uid,
-    token: await auth.createCustomToken(uid, { projectId, role })
-  };
+const TOKENS_COLLECTION = '_api_tokens';
+
+exports.issueToken = async (db, role, projectId, name) => {
+  const uid = nanoid(32);
+  const token = nanoid(64);
+  await db.collection(TOKENS_COLLECTION).doc(token).set({ projectId, role, uid, name });
+  return { uid, token };
 };
 
-exports.findRemovedTokens = (before, after) => {
-  const beforeTokens = new Set((before.tokens || []).map(t => t.uid));
-  const afterTakens = new Set((after.tokens || []).map(t => t.uid));
+exports.revokeTokens = async (db, uids) => {
+  const querySnapshot = await db
+    .collection(TOKENS_COLLECTION)
+    .where('uid', 'in', uids)
+    .get();
+  
+  const batch = db.batch();
+  
+  querySnapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+  
+  return batch.commit();
+};
 
-  return new Set([...beforeTokens].filter(v => !afterTakens.has(v)));
+exports.validateToken = async (db, token, roles) => {
+  const tokenSnapshot = await db.collection(TOKENS_COLLECTION).doc(token).get();
+  if(!tokenSnapshot.exists) {
+    return null;
+  }
+
+  const tokenData = tokenSnapshot.data();
+  if(!roles.includes(tokenData.role)) {
+    return null;
+  }
+  
+  const projectSnapshot = await db
+    .collection(Project.getCollectionPath())
+    // XXX: in the server cloud function, we get an error calling
+    // `snapshot.data()` in the converter, so we do it manually below instead.
+    // .withConverter(Project)
+    .doc(tokenData.projectId)
+    .get();
+
+  if(!projectSnapshot.exists) {
+    return null;
+  }
+
+  const project = Project.fromFirestore(projectSnapshot, {});
+
+  if(!project.tokens.some(t => t.uid === tokenData.uid)) {
+    return null;
+  }
+
+  return tokenData;
+}
+
+exports.findRemovedTokens = (before, after) => {
+  const beforeTokens = (before.tokens || []).map(t => t.uid);
+  const afterTakens = new Set((after.tokens || []).map(t => t.uid));
+  return [...new Set([...beforeTokens].filter(v => !afterTakens.has(v)))];
 };
 
 exports.verifyAndGetProject = async (db, projectId, email, roles=[Roles.owner]) => {

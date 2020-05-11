@@ -3,9 +3,14 @@ const functions = require('firebase-functions');
 const { Roles } = require('models');
 
 const { admin } = require('./app');
-const { findRemovedTokens, issueToken, verifyAndGetProject, addTokenToProject } = require('./utils/tokens');
+const {
+  issueToken,
+  revokeTokens,
+  findRemovedTokens,
+  verifyAndGetProject,
+  addTokenToProject
+} = require('./utils/tokens');
 
-const auth = admin.auth();
 const db = admin.firestore();
 
 /**
@@ -33,7 +38,7 @@ exports.createNew = functions.https.onCall(async (data, context) => {
   const role = Roles.author;
 
   const project = await verifyAndGetProject(db, data.projectId, email);
-  const { uid, token } = await issueToken(auth, role, data.projectId);
+  const { uid, token } = await issueToken(db, role, data.projectId, data.name);
   await addTokenToProject(db, project, uid, role, data.name);
   return token;
 });
@@ -45,6 +50,5 @@ exports.removeUnusedTokens = functions.firestore
   .document('projects/{projectId}')
   .onUpdate(async (change, context) => {
     const removed = findRemovedTokens(change.before.data(), change.after.data());
-    // Note: `deleteUser()` may throw if user (token) never logged in
-    return Promise.all(Array.from(removed).map(uid => auth.deleteUser(uid)));
+    return removed.length > 0? revokeTokens(db, removed) : null;
   });

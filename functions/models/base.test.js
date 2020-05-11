@@ -110,8 +110,7 @@ describe("calculating paths", () => {
   });
 
   test('can calculate collection path with and without parent', () => {
-    const t1 = new TestModel("123"),
-          t2 = new TestModel("321", null, t1, null);
+    const t1 = new TestModel("123");
     
     expect(TestModel.getCollectionPath()).toEqual("testModels");
     expect(TestModel.getCollectionPath(t1)).toEqual("testModels/123/testModels");

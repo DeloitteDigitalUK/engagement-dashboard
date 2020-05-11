@@ -1,45 +1,17 @@
 const functions = require('firebase-functions');
 const express = require('express');
-const cookieParser = require('cookie-parser')();
-const cors = require('cors')({origin: true});
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const bodyParser = require('body-parser')
+
 const app = express();
 
+const { Roles } = require('models');
+
 const { admin } = require('./app');
-const auth = admin.auth();
+const { validateToken } = require('./utils/tokens');
 
-/**
- * Express middleware to validate ID Tokens in the Authorization HTTP header:
- * 
- *   `Authorization: Bearer <Firebase ID Token>`
- * 
- * You can also use a `__session` cookie.
- */
-async function validateFirebaseIdToken(req, res, next) {
-  if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
-      !(req.cookies && req.cookies.__session)) {
-    res.status(403).send('Unauthorized');
-    return;
-  }
-
-  let idToken;
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-    idToken = req.headers.authorization.split('Bearer ')[1];
-  } else if(req.cookies) {
-    idToken = req.cookies.__session;
-  } else {
-    res.status(403).send('Unauthorized');
-    return;
-  }
-
-  try {
-    req.user = await auth.verifyIdToken(idToken);
-    next();
-    return;
-  } catch (error) {
-    res.status(403).send('Unauthorized');
-    return;
-  }
-}
+const db = admin.firestore();
 
 function stripPrefix(prefix) {
   return (req, res, next) => {
@@ -50,13 +22,30 @@ function stripPrefix(prefix) {
   }
 }
 
-app.use(cors);
-app.use(cookieParser);
-app.use(validateFirebaseIdToken);
+app.use(cors({origin: true}));
 app.use(stripPrefix('api'));
+app.use(cookieParser());
+app.use(bodyParser.json());
 
-app.post('/post-update', (req, res) => {
-  res.send(`Posting update to ${req.user.projectId} with role ${req.user.role}`);
+app.post('/post-update', async (req, res) => {
+
+  const token = req.body.token;
+  if(!token) {
+    res.status(400);
+    res.send("No `token` parameter in request.");
+    return;
+  }
+
+  const tokenData = await validateToken(db, token, [Roles.owner, Roles.administrator, Roles.author]);
+  if(tokenData === null) {
+    res.status(403);
+    res.send("Invalid token.")
+    return;
+  }
+
+  const { projectId, role } = tokenData;
+
+  res.send(`Posting update to ${projectId} with role ${role}`);
 });
 
 exports.app = functions.https.onRequest(app);
