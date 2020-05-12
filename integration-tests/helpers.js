@@ -49,7 +49,7 @@ exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
   return db;
 };
 
-exports.setupAdmin = async (data=null, rulesFile='firestore.rules') => {
+exports.setupAdmin = async (data=null) => {
   const projectId = `rules-spec-${Date.now()}`;
   
   const adminApp = firebase.initializeAdminApp({
@@ -65,12 +65,6 @@ exports.setupAdmin = async (data=null, rulesFile='firestore.rules') => {
       await ref.set(data[key]);
     }
   }
-
-  // Load rules
-  await firebase.loadFirestoreRules({
-    projectId,
-    rules: fs.readFileSync(rulesFile, 'utf8')
-  });
 
   return adminDb;
 };
