@@ -8,15 +8,14 @@ exports.verifyAndGetProject = async (db, projectId, email, roles=[Roles.owner]) 
   const snapshot = await db
     .collection(Project.getCollectionPath())
     .doc(projectId)
-    // XXX: in the server cloud function, we get an error calling
-    // `snapshot.data()` in the converter, so we do it manually below instead.
-    // .withConverter(Project)
     .get();
   
   if(!snapshot.exists) {
     throw new Error(`Project with id ${projectId} does not exist.`)
   }
 
+  // Note: We can't use `withSnapshot(Project)` above because the admin-SDK
+  // version of this takes a different signature
   const project = Project.fromFirestore(snapshot, {});
   
   if(!project.hasRole(email, roles)) {
@@ -90,9 +89,6 @@ exports.validateToken = async (db, token, roles) => {
   
   const projectSnapshot = await db
     .collection(Project.getCollectionPath())
-    // XXX: in the server cloud function, we get an error calling
-    // `snapshot.data()` in the converter, so we do it manually below instead.
-    // .withConverter(Project)
     .doc(tokenData.projectId)
     .get();
 
@@ -100,6 +96,8 @@ exports.validateToken = async (db, token, roles) => {
     return null;
   }
 
+  // Note: We can't use `withSnapshot(Project)` above because the admin-SDK
+  // version of this takes a different signature
   const project = Project.fromFirestore(projectSnapshot, {});
 
   if(!project.tokens.some(t => t.uid === tokenData.uid)) {
