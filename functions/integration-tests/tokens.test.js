@@ -10,7 +10,7 @@ const {
   findRemovedTokens,
   revokeTokens,
   validateToken,
-} = require('../functions/utils/tokens');
+} = require('../utils/tokens');
 
 const project = new Project('1', {
   name: "My project",

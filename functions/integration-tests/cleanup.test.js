@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const { setupAdmin, tearDown } = require('./helpers');
 const {
   Project,
@@ -7,7 +8,7 @@ const {
   InsightsUpdate
 } = require('models');
 
-const { cleanUp } = require('../functions/utils/cleanup');
+const { cleanUp } = require('../utils/cleanup');
 
 const project = new Project('1', {
   name: "My project",

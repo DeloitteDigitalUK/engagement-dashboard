@@ -1,3 +1,5 @@
+/* eslint-disable no-empty */
+/* eslint-disable no-await-in-loop */
 const firebase = require('@firebase/testing');
 const fs = require('fs');
 
@@ -16,7 +18,7 @@ const fs = require('fs');
  * }
  * ```
  */
-exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
+exports.setup = async (auth=null, data=null, rulesFile='../firestore.rules') => {
 
   const projectId = `rules-spec-${Date.now()}`;
   
@@ -36,6 +38,7 @@ exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
   if (data) {
     for (const key in data) {
       const ref = adminDb.doc(key);
+      // eslint-disable-next-line no-await-in-loop
       await ref.set(data[key]);
     }
   }
@@ -73,7 +76,7 @@ exports.setupAdmin = async (data=null) => {
  * Delete all apps and their data in the test database.
  */
 exports.tearDown = async () => {
-  Promise.all(firebase.apps().map(app => app.delete()));
+  return Promise.all(firebase.apps().map(app => app.delete()));
 };
 
 /**

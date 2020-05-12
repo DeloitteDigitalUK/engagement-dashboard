@@ -7,7 +7,9 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test": "jest -c integration-tests/jest.json --watch --runInBand",
+    "test:ci": "jest -c integration-tests/jest.json --runInBand"
   },
   "engines": {
     "node": "10"
@@ -24,8 +26,11 @@
   },
   "devDependencies": {
     "eslint": "^5.12.0",
+    "jest": "^25.3.0",
     "eslint-plugin-promise": "^4.0.1",
-    "firebase-functions-test": "^0.1.7"
+    "firebase-functions-test": "^0.1.7",
+    "@firebase/testing": "^0.19.1",
+    "lodash.omit": "^4.5.0"
   },
   "private": true
 }
