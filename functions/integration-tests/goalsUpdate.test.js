@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const { setup, tearDown } = require('./helpers');
 const {
   Project,

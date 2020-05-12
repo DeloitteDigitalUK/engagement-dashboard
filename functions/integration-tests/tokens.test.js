@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const omit = require('lodash.omit');
 const { nanoid } = require('nanoid');
 
