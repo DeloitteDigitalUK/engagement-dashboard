@@ -37,8 +37,7 @@ describe("constructor", () => {
   
   test('strips unknown values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org", foo: "bar"});
-    expect(t.id).toEqual("123");
-    expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
+    expect({...t}).toEqual({id: "123", name: "John", email: "test@example.org", parent: null, error: null});
   });
 
 });
@@ -47,28 +46,24 @@ describe("updating the object", () => {
   test('can update values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
 
-    t.id = "321";
     t.update({
       name: "James",
       email: "james@example.org"
     });
 
-    expect(t.id).toEqual("321");
-    expect(t.toObject()).toEqual({name: "James", email: "james@example.org"});
+    expect({...t}).toEqual({id: "123", name: "James", email: "james@example.org", parent: null, error: null});
   });
 
   test('can partially update the object', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     
-    expect(t.id).toEqual("123");
-    expect(t.toObject()).toEqual({name: "John", email: "test@example.org"});
+    expect({...t}).toEqual({id: "123", name: "John", email: "test@example.org", parent: null, error: null});
 
     t.update({
       name: "James"
     });
     
-    expect(t.id).toEqual("123");
-    expect(t.toObject()).toEqual({name: "James", email: "test@example.org"});
+    expect({...t}).toEqual({id: "123", name: "James", email: "test@example.org", parent: null, error: null});
   });
   
   test('validates on update', () => {
@@ -80,14 +75,24 @@ describe("updating the object", () => {
   test('ignores unknown values', () => {
     const t = new TestModel("123", {name: "John", email: "test@example.org"});
     
-    t.id = "321";
     t.update({
       name: "James",
       foo: "bar"
     });
 
-    expect(t.id).toEqual("321");
-    expect(t.toObject()).toEqual({name: "James", email: "test@example.org"});
+    expect({...t}).toEqual({id: "123", name: "James", email: "test@example.org", parent: null, error: null});
+  });
+
+  test('does not override id', () => {
+    const t = new TestModel("123", {name: "John", email: "test@example.org"});
+    
+    t.update({
+      name: "James",
+      id: "bar"
+    });
+
+    expect(t.id).toEqual("123");
+    expect({...t}).toEqual({id: "123", name: "James", email: "test@example.org", parent: null, error: null});
   });
 });
 
