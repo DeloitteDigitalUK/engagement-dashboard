@@ -43,13 +43,20 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "emulators": "firebase emulators:start",
-    "test": "react-scripts test",
-    "test:integration": "npm --prefix functions test",
-    "test:models": "npm --prefix functions/models test",
-    "test:ci": "firebase emulators:exec \"npm --prefix functions run test:ci\"",
     "deploy": "firebase deploy",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    
+    "emulators": "firebase emulators:start",
+    
+    "test": "react-scripts test",
+    "test:models": "npm --prefix functions/models test",
+    "test:integration": "npm --prefix functions test",
+    
+    "test:ci": "react-scripts test --watchAll=false --runInBand",
+    "test:ci:models": "npm --prefix functions/models run test:ci",
+    "test:ci:integration": "firebase emulators:exec --only firestore \"npm --prefix functions run test:ci\"",
+
+    "test:ci:all": "npm run test:ci && npm run test:ci:models && npm run test:ci:integration"
   },
   "eslintConfig": {
     "extends": "react-app"

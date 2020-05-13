@@ -72,21 +72,40 @@ The emulators must be started before the webapp with:
 
   $ firebase emulators:start
 
-(or if you prefer: `npm run test:run-emulators`)
+(or if you prefer: `npm run emulators`)
 
 ## Run app, tests
 
-Once set up you can run various `npm` scripts:
+Various `npm` scripts can be used to start the app for local development and
+testing, as well as to deploy it to Firebase.
+
+To run the app locally (connecting to a *remote* Firebase project as per the
+configured environment):
 
 * `npm start` will run the webapp locally at `http://localhost:3000`
+
+To run tests in interactive "watch" mode:
+
 * `npm test` will run unit tests in watch mode, automatically re-running tests
   when files are changed.
+* `npm run test:models` will run unit test the shared models package in
+  watch mode.
 * `npm run emulators` will start the Firebase emulators, after
   which you can run:
 * `npm run test:integration` to run integration tests in watch mode.
-* `npm run test:models` to test the shared models package
+
+To run the tests once:
+
+* `npm run test:ci:all` will run all of the below in sequence:
+* `npm run test:ci` for the front-end tests.
+* `npm run test:ci:models` for the models unit tests.
+* `npm run test:ci:integration` for the integration tests *including starting
+   the emulators* (this will fail if the emulators are already running!)
+
+To build and deploy to production:
+
 * `npm run build` will bundle the webapp into `build` for deployment.
-* `npm run deploy` will build the app (as per `npm run build`) and then deploy
+* `npm run deploy` will build the app (calling `npm run build`) and then deploy
   it to Firebase hosting, alongside Cloud Functions (in the `functions`
   directory) and Firestore rules. To deploy functions only, run
   `npm run deploy` from the `functions` directory.
