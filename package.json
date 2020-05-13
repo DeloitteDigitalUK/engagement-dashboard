@@ -44,7 +44,7 @@
     "deploy": "firebase deploy",
     "eject": "react-scripts eject",
     "emulators": "firebase emulators:start",
-    "test": "react-scripts test",
+    "test": "react-scripts test --runInBand",
     "test:models": "npm --prefix functions/models test",
     "test:integration": "npm --prefix functions test",
     "test:ci": "react-scripts test --watchAll=false --runInBand",
