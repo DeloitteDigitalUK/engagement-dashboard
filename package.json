@@ -12,10 +12,8 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "apexcharts": "^3.19.0",
-    "clsx": "^1.1.0",
     "d3-array": "^2.4.0",
     "d3-time": "^1.1.0",
-    "d3-time-format": "^2.2.3",
     "draft-js": "^0.11.5",
     "eslint": "^6.8.0",
     "firebase": "^7.14.0",
@@ -45,17 +43,13 @@
     "build": "react-scripts build",
     "deploy": "firebase deploy",
     "eject": "react-scripts eject",
-    
     "emulators": "firebase emulators:start",
-    
     "test": "react-scripts test",
     "test:models": "npm --prefix functions/models test",
     "test:integration": "npm --prefix functions test",
-    
     "test:ci": "react-scripts test --watchAll=false --runInBand",
     "test:ci:models": "npm --prefix functions/models run test:ci",
     "test:ci:integration": "firebase emulators:exec --only firestore \"npm --prefix functions run test:ci\"",
-
     "test:ci:all": "npm run test:ci && npm run test:ci:models && npm run test:ci:integration"
   },
   "eslintConfig": {
