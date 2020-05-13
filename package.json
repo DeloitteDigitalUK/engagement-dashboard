@@ -47,6 +47,7 @@
     "test": "react-scripts test",
     "test:integration": "npm --prefix functions test",
     "test:models": "npm --prefix functions/models test",
+    "test:ci": "firebase emulators:exec \"npm --prefix functions run test:ci\"",
     "deploy": "firebase deploy",
     "eject": "react-scripts eject"
   },
