@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+var currentDisplayIndex = 0;
+
 function FilterToolbar({
   project, canAdd,
   updateType, setUpdateType,
@@ -117,6 +119,8 @@ function FilterToolbar({
             {project.updateTypes.includes(UpdateTypes.flow) && <MenuItem onClick={redirectToAddForm(UpdateTypes.flow)}>Team flow</MenuItem>}
           </Menu>
         </>}
+
+
       </Box>
     </Box>
   );
@@ -134,7 +138,7 @@ function UpdateCard({ project, update }) {
       <Link to={`/project/${project.id}/update/${update.id}`} component={RouterLink} underline="none">
         <CardContent>
           {UpdateView?
-            <UpdateView update={update} /> : 
+            <UpdateView update={update} /> :
             <Alert severity="error">Update type {update.type} not found for update {update.id}!</Alert>
           }
         </CardContent>
@@ -143,11 +147,22 @@ function UpdateCard({ project, update }) {
   );
 }
 
+function initializeCard(aCard, anUpdates) {
+  if (aCard == null && anUpdates != null && anUpdates.length > 0) {
+    console.log("Initializing the first card out of updates", anUpdates);
+    aCard = anUpdates[0];
+    currentDisplayIndex = 1;
+    console.log("Card value set to", aCard)
+  }
+  return aCard;
+}
+
 export default function ViewProjectPage({ user, project }) {
 
   const api = useAPI();
   const [updateType, setUpdateType] = useState("-");
   const [team, setTeam] = useState("-");
+  var [card, setCard] = useState(null);
 
   const [ updates, loading, error ] = api.useUpdates(
     project,
@@ -155,17 +170,18 @@ export default function ViewProjectPage({ user, project }) {
     updateType !== "-"? updateType : null
   );
 
-  if(error) {
+  card = initializeCard(card, updates);
+
+  if (error) {
     console.error(error);
   }
   
   const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
   const canAdd = project.hasRole(user.email, [Roles.owner, Roles.administrator, Roles.author]);
-
-  const editLink = `/project/${project.id}/edit`;
+  var currentValue;
 
   return (
-    <AuthenticatedLayout user={user} project={project} editLink={canEdit? editLink : null}>
+    <AuthenticatedLayout user={user} project={project}>
       <Typography component="h2" variant="h3" gutterBottom>{project.name}</Typography>
       <Typography paragraph>{project.description}</Typography>
 
@@ -175,10 +191,29 @@ export default function ViewProjectPage({ user, project }) {
 
         {loading && <Loading />}
         {error && <Alert severity="error">{error.message}</Alert>}
-        {updates && updates.map(update => <UpdateCard key={update.id} project={project} update={update} />)}
+
+        {console.log("Displaying card", card)}
+
+        {card && <UpdateCard key={card} project={project} update={card} />}
+
+        <Button onClick={() =>
+                {
+                    console.log(updates);
+                    if (updates != null) {
+                        if (typeof updates[currentDisplayIndex+1]) {
+                            currentValue = updates[currentDisplayIndex++];
+                            setCard(currentValue);
+                            console.log("Current card set to ", currentValue);
+                        }
+                    }
+                }
+            }>
+            Next
+        </Button>
+
 
         {updates && updates.length === 0 && <>
-          <Alert severity="warning">No updates found!!!</Alert>
+          <Alert severity="warning">No updates found</Alert>
         </>}
 
       </Box>

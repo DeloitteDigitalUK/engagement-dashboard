@@ -9,6 +9,7 @@ import Loading from '../../components/Loading';
 import NotFoundPage from '../NotFoundPage';
 
 import ViewProjectPage from './ViewProject';
+import StackedUpdateViewPage from './StackedUpdateView';
 import EditProjectPage from './EditProject';
 
 import NewUpdatePage from './update/NewUpdate';
@@ -43,6 +44,7 @@ export default function ProjectPage({ user }) {
   return (
     <Switch>
       <Route exact path={path}><ViewProjectPage user={user} project={project} /></Route>
+      <Route exact path={`${path}/stacked-view`}><StackedUpdateViewPage user={user} project={project} /></Route>
       <Route exact path={`${path}/edit`}><EditProjectPage user={user} project={project} /></Route>
       <Route exact path={`${path}/new-update`}><NewUpdatePage user={user} project={project} /></Route>
       <Route path={`${path}/update/:updateId`}><UpdatePage user={user} project={project}/></Route>
