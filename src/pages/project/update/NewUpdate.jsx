@@ -56,8 +56,9 @@ export default function NewUpdatePage({ user, project }) {
       <Paper className={classes.paper}>
         <StatusMessages messages={messages} />
 
-        <FormDescription title={`Add ${updateType}`}>
-          Add a new update to this project.
+        <FormDescription title={`Add ${views.title} update`}>
+          Add a new update, which will be displayed to all users on the
+          project dashboard.
         </FormDescription>
 
         <UpdateForm

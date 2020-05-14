@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, FormControl, FormHelperText, Box, makeStyles } from '@material-ui/core';
+import { Grid, FormControl, FormHelperText, Box } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Markdown from 'react-markdown';
 
@@ -9,13 +9,15 @@ import { UpdateTypes, GoalsUpdate } from 'models';
 import WysiwygEditor from '../../components/WysiwygEditor';
 
 import { submitHandler } from '../../utils/formHelpers';
-import { UpdateSummary, UpdateHeader, UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
-
-const useStyles = makeStyles((theme) => ({
-  content: {
-    ...theme.typography.body1
-  }
-}));
+import {
+  UpdateSummary,
+  UpdateHeader,
+  UpdateFields,
+  UpdateButtons,
+  toInitialValues,
+  toUpdateValues,
+  useStyles
+} from './updateHelpers';
 
 function GoalsSummary({ update }) {
   return <UpdateSummary update={update} />;
@@ -24,14 +26,12 @@ function GoalsSummary({ update }) {
 function GoalsView({ update }) {
   const classes = useStyles();
 
-  return (
-    <>
-      <UpdateHeader update={update} />
-      <Box className={classes.content}>
-        <Markdown source={update.text} />
-      </Box>
-    </>
-  );
+  return (<>
+    <UpdateHeader update={update} />
+    <Box className={classes.content}>
+      <Markdown source={update.text} />
+    </Box>
+  </>);
 }
 
 function GoalsForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
@@ -40,7 +40,7 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
 
   if(!editing) {
     update = new GoalsUpdate(null, {
-      type: UpdateTypes.goals,
+      date: new Date(),
       authorId: user.uid,
       authorName: user.displayName
     }, project);
@@ -51,9 +51,9 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
           validationSchema={GoalsUpdate.getSchema()}
           initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
-            action: (data) => {
+            action: async (data) => {
               update.update(toUpdateValues(data));
-              save(update);
+              await save(update);
             },
             knownErrors,
             setMessages,
@@ -86,6 +86,7 @@ function GoalsForm({ user, project, update, save, cancel, setMessages, knownErro
 
 export default {
   updateType: UpdateTypes.goals,
+  title: "goals",
   SummaryView: GoalsSummary,
   FullView: GoalsView,
   AddForm: GoalsForm,

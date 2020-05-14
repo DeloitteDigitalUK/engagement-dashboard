@@ -1,3 +1,5 @@
+/* eslint-disable no-empty */
+/* eslint-disable no-await-in-loop */
 const firebase = require('@firebase/testing');
 const fs = require('fs');
 
@@ -16,7 +18,7 @@ const fs = require('fs');
  * }
  * ```
  */
-module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules') => {
+exports.setup = async (auth=null, data=null, rulesFile='../firestore.rules') => {
 
   const projectId = `rules-spec-${Date.now()}`;
   
@@ -36,6 +38,7 @@ module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules')
   if (data) {
     for (const key in data) {
       const ref = adminDb.doc(key);
+      // eslint-disable-next-line no-await-in-loop
       await ref.set(data[key]);
     }
   }
@@ -49,11 +52,31 @@ module.exports.setup = async (auth=null, data=null, rulesFile='firestore.rules')
   return db;
 };
 
+exports.setupAdmin = async (data=null) => {
+  const projectId = `rules-spec-${Date.now()}`;
+  
+  const adminApp = firebase.initializeAdminApp({
+    projectId
+  });
+
+  const adminDb = adminApp.firestore();
+
+  // Write mock documents before rules
+  if (data) {
+    for (const key in data) {
+      const ref = adminDb.doc(key);
+      await ref.set(data[key]);
+    }
+  }
+
+  return adminDb;
+};
+
 /**
  * Delete all apps and their data in the test database.
  */
-module.exports.tearDown = async () => {
-  Promise.all(firebase.apps().map(app => app.delete()));
+exports.tearDown = async () => {
+  return Promise.all(firebase.apps().map(app => app.delete()));
 };
 
 /**

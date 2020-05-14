@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, FormControl, FormHelperText, Box, makeStyles } from '@material-ui/core';
+import { Grid, FormControl, FormHelperText, Box } from '@material-ui/core';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Markdown from 'react-markdown';
 
@@ -9,13 +9,15 @@ import { UpdateTypes, InsightsUpdate } from 'models';
 import WysiwygEditor from '../../components/WysiwygEditor';
 
 import { submitHandler } from '../../utils/formHelpers';
-import { UpdateSummary, UpdateHeader, UpdateFields, UpdateButtons, toInitialValues, toUpdateValues } from './updateHelpers';
-
-const useStyles = makeStyles((theme) => ({
-  content: {
-    ...theme.typography.body1
-  }
-}));
+import {
+  UpdateSummary,
+  UpdateHeader,
+  UpdateFields,
+  UpdateButtons,
+  toInitialValues,
+  toUpdateValues,
+  useStyles
+} from './updateHelpers';
 
 function InsightsSummary({ update }) {
   return <UpdateSummary update={update} />;
@@ -24,14 +26,12 @@ function InsightsSummary({ update }) {
 function InsightsView({ update }) {
   const classes = useStyles();
 
-  return (
-    <>
-      <UpdateHeader update={update} />
-      <Box className={classes.content}>
-        <Markdown source={update.text} />
-      </Box>
-    </>
-  );
+  return (<>
+    <UpdateHeader update={update} />
+    <Box className={classes.content}>
+      <Markdown source={update.text} />
+    </Box>
+  </>);
 }
 
 function InsightsForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
@@ -40,7 +40,7 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
   if(!editing) {
     update = new InsightsUpdate(null, {
-      type: UpdateTypes.insights,
+      date: new Date(),
       authorId: user.uid,
       authorName: user.displayName
     }, project);
@@ -51,9 +51,9 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
           validationSchema={InsightsUpdate.getSchema()}
           initialValues={toInitialValues(update)}
           onSubmit={submitHandler({
-            action: (data) => {
+            action: async (data) => {
               update.update(toUpdateValues(data));
-              save(update);
+              await save(update);
             },
             knownErrors,
             setMessages,
@@ -86,6 +86,7 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
 export default {
   updateType: UpdateTypes.insights,
+  title: "insights",
   SummaryView: InsightsSummary,
   FullView: InsightsView,
   AddForm: InsightsForm,

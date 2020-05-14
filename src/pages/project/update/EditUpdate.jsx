@@ -52,7 +52,7 @@ export default function EditUpdatePage({ user, project, update }) {
   }
 
   const deleteUpdate = async () => {
-    await api.deleteUpdate(update);
+    api.deleteUpdate(update);
     history.push(`/project/${project.id}`);
   };
 
@@ -63,7 +63,7 @@ export default function EditUpdatePage({ user, project, update }) {
       <Paper className={classes.paper}>
         <StatusMessages messages={messages} />
 
-        <FormDescription title={`Edit ${update.type}`}>
+        <FormDescription title={`Edit ${views.title} update`}>
           Modify an existing update.
         </FormDescription>
 

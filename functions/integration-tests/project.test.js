@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const { setup, tearDown } = require('./helpers');
 const { Project, UpdateTypes, Roles } = require('models');
 
@@ -19,10 +20,16 @@ describe('conversion', () => {
       name: "My project",
       description: "A description",
       updateTypes: [UpdateTypes.insights],
-      teams: [],
+      teams: ['Alpha', 'Beta'],
       roles: {
         'test@example.org': Roles.owner
-      }
+      },
+      tokens: [{
+        uid: '123',
+        role: Roles.author,
+        creationDate: new Date(2020, 0, 1),
+        name: "Test token"
+      }]
     });
   
     const ref = await db.collection(coll).withConverter(Project).add(p1);
@@ -46,7 +53,8 @@ describe('conversion', () => {
       teams: [],
       roles: {
         'test@example.org': Roles.owner
-      }
+      },
+      tokens: []
     });
   
     const ref = await db.collection(coll).withConverter(Project).add(p1);
@@ -61,6 +69,7 @@ describe('conversion', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     });
   });
 
@@ -95,6 +104,7 @@ describe('conversion', () => {
       roles: {
         "test@example.org": Roles.owner,
       },
+      tokens: []
     });
 
   });
@@ -115,6 +125,7 @@ describe('role checks', () => {
       roles: {
         "rouge@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -133,7 +144,8 @@ describe('role checks', () => {
       teams: [],
       roles: {
         "test@example@@org": Roles.owner,
-      }
+      },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -145,6 +157,7 @@ describe('role checks', () => {
       roles: {
         "rouge@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
   });
@@ -163,7 +176,8 @@ describe('role checks', () => {
       teams: [],
       roles: {
         "rogue@example@@org": Roles.owner,
-      }
+      },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -174,7 +188,8 @@ describe('role checks', () => {
       teams: [],
       roles: {
         "test@example@@org": Roles.owner,
-      }
+      },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -185,7 +200,8 @@ describe('role checks', () => {
       teams: [],
       roles: {
         'rouge@example@@org': Roles.owner,
-      }
+      },
+      tokens: []
     })).toBeAllowed();
   });
 
@@ -200,6 +216,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
     
@@ -220,6 +237,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       },
       [`${coll}/2`]: {
         name: "My project",
@@ -231,6 +249,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
         },
+        tokens: []
       },
       [`${coll}/3`]: {
         name: "My project",
@@ -242,6 +261,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
         },
+        tokens: []
       },
       [`${coll}/4`]: {
         name: "My project",
@@ -263,6 +283,7 @@ describe('role checks', () => {
         roles: {
           "test2@example@@org": Roles.owner,
         },
+        tokens: []
       },
     });
     
@@ -287,6 +308,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       },
       [`${coll}/2`]: {
         name: "My project",
@@ -298,6 +320,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
         },
+        tokens: []
       },
       [`${coll}/3`]: {
         name: "My project",
@@ -309,6 +332,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
         },
+        tokens: []
       },
       [`${coll}/4`]: {
         name: "My project",
@@ -320,6 +344,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
         },
+        tokens: []
       },
       [`${coll}/5`]: {
         name: "My project",
@@ -330,6 +355,7 @@ describe('role checks', () => {
         roles: {
           "test2@example@@org": Roles.owner,
         },
+        tokens: []
       },
     });
     
@@ -354,6 +380,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       },
       [`${coll}/2`]: {
         name: "My project",
@@ -365,6 +392,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
         },
+        tokens: []
       },
       [`${coll}/3`]: {
         name: "My project",
@@ -376,6 +404,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
         },
+        tokens: []
       },
       [`${coll}/4`]: {
         name: "My project",
@@ -387,6 +416,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
         },
+        tokens: []
       },
       [`${coll}/5`]: {
         name: "My project",
@@ -397,6 +427,7 @@ describe('role checks', () => {
         roles: {
           "test2@example@@org": Roles.owner,
         },
+        tokens: []
       },
     });
     
@@ -421,6 +452,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       },
       [`${coll}/2`]: {
         name: "My project",
@@ -432,6 +464,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
         },
+        tokens: []
       },
       [`${coll}/3`]: {
         name: "My project",
@@ -443,6 +476,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
         },
+        tokens: []
       },
       [`${coll}/4`]: {
         name: "My project",
@@ -454,6 +488,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
         },
+        tokens: []
       },
       [`${coll}/5`]: {
         name: "My project",
@@ -464,6 +499,7 @@ describe('role checks', () => {
         roles: {
           "test2@example@@org": Roles.owner,
         },
+        tokens: []
       },
     });
     
@@ -488,6 +524,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       },
       [`${coll}/2`]: {
         name: "My project",
@@ -499,6 +536,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.administrator,
         },
+        tokens: []
       },
       [`${coll}/3`]: {
         name: "My project",
@@ -510,6 +548,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.author,
         },
+        tokens: []
       },
       [`${coll}/4`]: {
         name: "My project",
@@ -521,6 +560,7 @@ describe('role checks', () => {
           "test2@example@@org": Roles.owner,
           "test@example@@org": Roles.member,
         },
+        tokens: []
       },
     });
     
@@ -545,6 +585,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
     await expect(db.collection(coll).add({
@@ -556,6 +597,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -567,6 +609,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -578,6 +621,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -589,6 +633,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -600,6 +645,7 @@ describe('role checks', () => {
       // roles: {
       //   "test@example@@org": Roles.owner,
       // },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -618,6 +664,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -630,6 +677,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
     await expect(db.collection(coll).doc('1').set({
@@ -641,6 +689,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -652,6 +701,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -663,6 +713,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -674,6 +725,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -685,6 +737,7 @@ describe('role checks', () => {
       // roles: {
       //   "test@example@@org": Roles.owner,
       // },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -703,6 +756,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -715,6 +769,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: [],
       ringer: "bogus"
     })).toBeDenied();
 
@@ -727,6 +782,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: [],
       ringer: "bogus"
     })).toBeDenied();
 
@@ -746,6 +802,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -758,6 +815,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -769,6 +827,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -787,6 +846,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -799,6 +859,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -810,6 +871,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -828,6 +890,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -842,6 +905,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -853,6 +917,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     // empty list
@@ -866,6 +931,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
     await expect(db.collection(coll).doc('1').set({
@@ -877,6 +943,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
 
@@ -891,6 +958,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
     await expect(db.collection(coll).doc('1').set({
@@ -902,6 +970,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
     
     // list with an unknown value
@@ -915,6 +984,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -926,6 +996,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
   });
@@ -944,6 +1015,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -956,6 +1028,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -967,6 +1040,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).add({
@@ -978,6 +1052,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
     await expect(db.collection(coll).doc('1').set({
@@ -989,6 +1064,7 @@ describe('role checks', () => {
       roles: {
         "test@example@@org": Roles.owner,
       },
+      tokens: []
     })).toBeAllowed();
 
   });
@@ -1007,6 +1083,7 @@ describe('role checks', () => {
         roles: {
           "test@example@@org": Roles.owner,
         },
+        tokens: []
       }
     });
 
@@ -1018,6 +1095,7 @@ describe('role checks', () => {
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
       roles: "owner",
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -1026,6 +1104,7 @@ describe('role checks', () => {
       owner: "test@example@@org",
       updateTypes: [UpdateTypes.insights,],
       roles: 123,
+      tokens: []
     })).toBeDenied();
 
     // empty map (must contain owner role)
@@ -1037,6 +1116,7 @@ describe('role checks', () => {
       updateTypes: [UpdateTypes.insights,],
       teams: [],
       roles: {},
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -1046,6 +1126,7 @@ describe('role checks', () => {
       updateTypes: [UpdateTypes.insights,],
       teams: [],
       roles: {},
+      tokens: []
     })).toBeDenied();
     
     // map with an unknown value
@@ -1059,6 +1140,7 @@ describe('role checks', () => {
         "test@example@@org": Roles.owner,
         "test2@example@@org": 'root',
       },
+      tokens: []
     })).toBeDenied();
 
     await expect(db.collection(coll).doc('1').set({
@@ -1070,8 +1152,131 @@ describe('role checks', () => {
         "test@example@@org": Roles.owner,
         "test2@example@@org": 123,
       },
+      tokens: []
     })).toBeDenied();
 
+  });
+
+  test('tokens must be a list', async () => {
+    const db = await setup({
+      uid: '123',
+      email: 'test@example.org',
+    }, {
+      [`${coll}/1`]: {
+        name: "My project",
+        description: "A description",
+        owner: "test@example@@org",
+        updateTypes: [UpdateTypes.insights,],
+        teams: [],
+        roles: {
+          "test@example@@org": Roles.owner,
+        },
+        tokens: [{
+          uid: '123',
+          role: Roles.author,
+          creationDate: new Date(2020, 0, 1),
+          name: "Foo"
+        }]
+      }
+    });
+
+    await expect(db.collection(coll).add({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: [],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+      tokens: "Bar"
+    })).toBeDenied();
+
+    await expect(db.collection(coll).doc('1').set({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: [],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+      tokens: null
+    })).toBeDenied();
+
+    await expect(db.collection(coll).add({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: [],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+      tokens: [{
+        uid: '321',
+        role: Roles.author,
+        creationDate: new Date(2020, 0, 1),
+        name: "Bar"
+      }]
+    })).toBeAllowed();
+
+    await expect(db.collection(coll).doc('1').set({
+      name: "My project",
+      description: "A description",
+      owner: "test@example@@org",
+      updateTypes: [UpdateTypes.insights,],
+      teams: [],
+      roles: {
+        "test@example@@org": Roles.owner,
+      },
+      tokens: [{
+        uid: '321',
+        role: Roles.author,
+        creationDate: new Date(2020, 0, 1),
+        name: "Bar"
+      }]
+    })).toBeAllowed();
+
+  });
+
+  test('anonymous cannot view non-existent project', async () => {
+    const db = await setup();
+
+    const p1 = new Project('p1', {
+      name: "My project",
+      description: "A description",
+      updateTypes: [UpdateTypes.insights],
+      teams: [],
+      roles: {
+        'test@example.org': Roles.owner
+      },
+      tokens: []
+    });
+    
+    await expect(db.doc(p1.getPath()).get()).toBeDenied();
+    
+  });
+
+  test('authenticated can view non-existent project', async () => {
+    const db = await setup({
+      uid: '123',
+      email: 'test@example.org',
+    });
+
+    const p1 = new Project('p1', {
+      name: "My project",
+      description: "A description",
+      updateTypes: [UpdateTypes.insights],
+      teams: [],
+      roles: {
+        'test@example.org': Roles.owner
+      },
+      tokens: []
+    });
+    
+    await expect(db.doc(p1.getPath()).get()).toBeAllowed();
+    expect((await db.doc(p1.getPath()).get()).exists).toEqual(false);
   });
   
     

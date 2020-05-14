@@ -5,16 +5,9 @@
 
 ## Immediate
 
-- [ ] Create views for Flow updates
-- [ ] Create views for Goals updates
-- [ ] Create views for RAID updates
-- [ ] Create views for Release updates
-
 - [ ] Improve how updates are displayed on the project summary, e.g. group
       by type, limit number of updates for each type, etc.
-
-- [ ] Add Cloud Function to automatically delete update sub-collection items
-      when deleting project.
+- [ ] Add pagination to project updates list
 
 - [ ] Add Cloud Function to allow creating a new update. For some update types
       (e.g. team flow) this should instead find and update an existing update

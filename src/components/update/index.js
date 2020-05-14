@@ -1,10 +1,14 @@
 import Insights from './insights';
 import Goals from './goals';
+import Release from './release';
+import Raid from './raid';
+import Flow from './flow';
 
 // Check that each update UI follows the right conventions at least
 function assertConformance(mod) {
   if(
     !('updateType' in mod) ||
+    !('title' in mod) ||
     !('SummaryView' in mod) ||
     !('FullView' in mod) ||
     !('AddForm' in mod) ||
@@ -17,8 +21,9 @@ function assertConformance(mod) {
 }
 
 /**
- * Each module exports a common set of attributes:
+ * Each module exports an object with keys:
  *  - `updateType`: the type string
+ *  - `title`: a string used to label the update type
  *  - `summaryCriteria`: used to decide what to display on the summary view
  *  - `summaryView`: component used to render a single item in the summary
  *  - `fullView`: component used to render the update as a full page
@@ -28,4 +33,7 @@ function assertConformance(mod) {
 export default {
   [Insights.updateType]: assertConformance(Insights),
   [Goals.updateType]: assertConformance(Goals),
+  [Release.updateType]: assertConformance(Release),
+  [Raid.updateType]: assertConformance(Raid),
+  [Flow.updateType]: assertConformance(Flow),
 };

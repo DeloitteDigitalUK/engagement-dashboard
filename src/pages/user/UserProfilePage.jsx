@@ -56,7 +56,7 @@ export default function UserProfilePage({ user }) {
         validationSchema={profileSchema}
         initialValues={{ ...profileSchema.default(), name: user.displayName }}
         onSubmit={submitHandler({
-          action: ({ name }) => api.updateProfile({ name }),
+          action: async ({ name }) => await api.updateProfile({ name }),
           success: "Changes saved",
           knownErrors,
           setMessages,
@@ -102,7 +102,7 @@ export default function UserProfilePage({ user }) {
         validationSchema={passwordSchema}
         initialValues={passwordSchema.default()}
         onSubmit={submitHandler({
-          action: ({ currentPassword, newPassword }) => api.changePassword(currentPassword, newPassword),
+          action: async ({ currentPassword, newPassword }) => await api.changePassword(currentPassword, newPassword),
           success: "Your password has been changed",
           knownErrors,
           setMessages

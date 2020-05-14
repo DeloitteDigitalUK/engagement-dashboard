@@ -1,13 +1,14 @@
+/* eslint-disable no-await-in-loop */
 const { setup, tearDown } = require('./helpers');
 const {
   Project,
   UpdateTypes,
   Roles,
   Update,
-  RaidUpdate
+  GoalsUpdate
 } = require('models');
 
-const UpdateClass = RaidUpdate;
+const UpdateClass = GoalsUpdate;
 
 const project = new Project('1', {
   name: "My project",
@@ -33,13 +34,9 @@ const u1 = new UpdateClass('1', {
     date: new Date(2020, 1, 1),
     team: "Alpha",
     
-    raidItems: [{
-      type: 'risk',
-      summary: "A risk",
-      url: null,
-      priority: 'medium',
-      date: new Date(2020, 2, 1)
-    }]
+    authorId: '1',
+    authorName: 'John',
+    text: 'Some text'
   }, project);
 
 // everything below should in theory be the same for all update types
@@ -141,9 +138,8 @@ describe('conversion', () => {
       [project.getPath()]: Project.toFirestore(project),
       [u1.getPath()]: {
         ...Update.toFirestore(u1),
-        title: null,
-        date: "Foo",
-        raidItems: null
+        date: "foo",
+        title: null
       }
     });
 
@@ -156,9 +152,8 @@ describe('conversion', () => {
     expect(u2.error).toBeTruthy();
     expect(u2.toObject()).toEqual({
       ...Update.toFirestore(u1),
-      title: null,
-      date: "Foo",
-      raidItems: null
+      date: "foo",
+      title: null
     });
     
   });

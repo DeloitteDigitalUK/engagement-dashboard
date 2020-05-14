@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 // These imports have side-effects!
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/functions';
 
 import * as Yup from 'yup';
 import * as rfhAuth from 'react-firebase-hooks/auth';
@@ -27,6 +28,15 @@ var firebaseConfig = {
 // Initialise Firebase global singleton
 
 firebase.initializeApp(firebaseConfig);
+
+// Use emulators if set in environment
+if(process.env.REACT_APP_EMULATE_FIRESTORE) {
+  firebase.firestore().settings({ host: process.env.REACT_APP_EMULATE_FIRESTORE, ssl: false });
+}
+
+if(process.env.REACT_APP_EMULATE_FUNCTIONS) {
+  firebase.functions().useFunctionsEmulator(process.env.REACT_APP_EMULATE_FUNCTIONS)
+}
 
 // to get trace debugging for Firestore operations, uncomment this line
 // firebase.setLogLevel('debug');
@@ -306,6 +316,31 @@ export default class API {
 
     const updates = querySnapshot.docs.map(u => { let n = u.data(); n.parent = project; return n; });
     return [updates, loading, error];
+  }
+
+  // Tokens
+
+  /**
+   * Create a new API token for the given projec with the given name.
+   * Return the token.
+   */
+  async createToken(project, name) {
+    const remote = firebase.functions().httpsCallable('tokens-createNew');
+    const response = await remote({ projectId: project.id, name });
+    return response.data;
+  }
+
+  /**
+   * Remove the API token with the given uid from the project.
+   */
+  async removeToken(project, uid) {
+    project.tokens = (project.tokens || []).filter(t => t.uid !== uid);
+    return this.firebase.firestore()
+      .doc(project.getPath())
+      .withConverter(Project)
+      .update({
+        tokens: project.tokens
+      });
   }
   
 }
