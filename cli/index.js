@@ -28,25 +28,32 @@ const args = yargs
     requiresArg: true,
     normalize: true,
   })
+  .option('always-create', {
+    alias: 'c',
+    describe: 'If set, never update an existing update',
+    boolean: true,
+    normalize: true,
+  })
   .option('data-file', {
     alias: 'd',
-    describe: 'File containing data to send in JSON format',
+    describe: 'File containing update data to send in JSON format',
     demandOption: true,
     requiresArg: true,
     normalize: true,
   })
   .argv;
 
-async function callAPI(url, token, data) {
+async function callAPI(url, token, alwaysCreate, data) {
   const response = await axios.post(url, {
-    ...data,
-    token
+    token: token,
+    alwaysCreate: !!alwaysCreate,
+    updateData: data,
   });
 
   return response.data;
 }
 
-async function main(url, apiKey, tokenFile, dataFile) {
+async function main(url, tokenFile, alwaysCreate, dataFile) {
   if(!fs.existsSync(tokenFile)) {
     console.error(`Token file '${tokenFile}' does not exist.`);
     return;
@@ -67,10 +74,15 @@ async function main(url, apiKey, tokenFile, dataFile) {
     return;
   }
 
+  if(!data.type) {
+    console.error("The update data should contain a `type` key.");
+    return;
+  }
+
   console.log("Calling API")
   let response = null;
   try {
-    response = await callAPI(url, token, data);
+    response = await callAPI(url, token, alwaysCreate, data);
   } catch (e) {
     console.error(`API call failed with status ${e.response.status}: ${e.response.statusText}`)
     console.error(e.response.data);
@@ -85,4 +97,4 @@ async function main(url, apiKey, tokenFile, dataFile) {
   console.log("Done")
 }
 
-main(args['url'], args['api-key'], args['token-file'], args['data-file']);
+main(args['url'], args['token-file'], args['always-create'], args['data-file']);

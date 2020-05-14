@@ -16,7 +16,7 @@ const flowUpdateSchema = Update.getSchema().concat(Yup.object({
 
 class FlowUpdate extends Update {
   static getSchema() { return flowUpdateSchema; }
-  static getUpdateKey(data) { return 'team' in data? 'team': null; }
+  static getUpdateKey(data) { return 'id' in data? 'id' : 'team' in data? 'team': null; }
 }
 
 Update.registerUpdateType(UpdateTypes.flow, FlowUpdate);
