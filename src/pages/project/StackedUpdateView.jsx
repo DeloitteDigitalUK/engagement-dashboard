@@ -176,7 +176,7 @@ export default function ViewProjectPage({ user, project }) {
     console.error(error);
   }
   
-  const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
+  // const canEdit = project.hasRole(user.email, [Roles.owner, Roles.administrator]);
   const canAdd = project.hasRole(user.email, [Roles.owner, Roles.administrator, Roles.author]);
   var currentValue;
 
