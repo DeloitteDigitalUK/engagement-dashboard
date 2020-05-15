@@ -10,6 +10,12 @@ import { useAPI } from '../api';
 export const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  actions: {
+    display: 'flex'
   },
   projectTitle: {
     margin: theme.spacing(0, 1),
@@ -72,37 +78,39 @@ export default function AuthenticatedToolbar({ user, project, update, editLink=n
         }
       </Box>
 
-      {editLink && <Button type="button" variant="contained" className={classes.editButton} component={RouterLink} to={editLink}>Edit</Button>}
+      <Box className={classes.actions}>
+        {editLink && <Button type="button" variant="contained" className={classes.editButton} component={RouterLink} to={editLink}>Edit</Button>}
 
-      <IconButton
-        aria-label="Current user account"
-        aria-controls="menu-user-profile"
-        aria-haspopup="true"
-        onClick={(e) => { setAnchorElement(e.target); setMenuOpen(true); }}
-        color="inherit"
-      >
-        <AccountCircle />
-        <Hidden smDown><Typography component="small" className={classes.userName}>{user.displayName}</Typography></Hidden>
-      </IconButton>
-      <Menu
-        id="menu-user-profile"
-        anchorEl={anchorElement}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-      >
-        <MenuItem onClick={handleProfile}>Profile</MenuItem>
-        <MenuItem onClick={handleLogOut}>Log out</MenuItem>
-      </Menu>
+        <IconButton
+          aria-label="Current user account"
+          aria-controls="menu-user-profile"
+          aria-haspopup="true"
+          onClick={(e) => { setAnchorElement(e.target); setMenuOpen(true); }}
+          color="inherit"
+        >
+          <AccountCircle />
+          <Hidden smDown><Typography component="small" className={classes.userName}>{user.displayName}</Typography></Hidden>
+        </IconButton>
+        <Menu
+          id="menu-user-profile"
+          anchorEl={anchorElement}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+        >
+          <MenuItem onClick={handleProfile}>Profile</MenuItem>
+          <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+        </Menu>
+      </Box>
+
     </Toolbar>
-
   );
 }

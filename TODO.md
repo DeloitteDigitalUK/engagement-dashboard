@@ -2,9 +2,6 @@
 
 ## Bugs
 
-- [ ] If the project and/or update title is very long, the title bar breaks
-      on narrow screens
-
 ## Immediate
 
 - [ ] Only permit users to create/view projects once their email address is
