@@ -2,6 +2,8 @@
 
 ## Bugs
 
+- [ ] If the project and/or update title is very long, the title bar breaks
+      on narrow screens
 
 ## Immediate
 
@@ -11,9 +13,6 @@
 - [ ] Improve how updates are displayed on the project summary, e.g. group
       by type, limit number of updates for each type, etc.
 - [ ] Add pagination to project updates list
-
-- [ ] Create error boundaries around update and project renders
-- [ ] Test and fix responsive UI
 
 ## Longer term
 
