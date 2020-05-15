@@ -47,5 +47,36 @@
       ]
     }
   ],
-  "fieldOverrides": []
+  "fieldOverrides": [
+    {
+      "collectionGroup": "projects",
+      "fieldPath": "description",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "projects",
+      "fieldPath": "tokens",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "updates",
+      "fieldPath": "cycleTimeData",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "updates",
+      "fieldPath": "raidItems",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "updates",
+      "fieldPath": "summary",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "updates",
+      "fieldPath": "text",
+      "indexes": []
+    }
+  ]
 }

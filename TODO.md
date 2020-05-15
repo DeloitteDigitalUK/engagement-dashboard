@@ -5,8 +5,6 @@
 
 ## Immediate
 
-- [ ] Exclude text and list fields from indexes if not needed?
-
 - [ ] Only permit users to create/view projects once their email address is
       verified?
 
