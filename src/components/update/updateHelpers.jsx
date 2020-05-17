@@ -62,10 +62,6 @@ export function UpdateSummary({ update }) {
 
   return (
     <>
-      <Typography color="textPrimary" component="h2" variant="h5">
-        {update.title}
-        {update.team && <Chip color="primary" variant="outlined" label={update.team} className={classes.teamLabel} size="small" />}
-      </Typography>
       <Typography color="textSecondary" variant="subtitle2" gutterBottom>{update.authorName? `By ${update.authorName} on ` : ""}{moment(update.date).format("DD MMM YYYY")}</Typography>
       <Typography color="textSecondary" paragraph>{update.summary}</Typography>
     </>
@@ -76,7 +72,18 @@ export function UpdateSummary({ update }) {
  * Common full view elements for updates
  */
 export function UpdateHeader({ update }) {
-  return <UpdateSummary update={update} />
+  const classes = useStyles();
+
+  return (
+  <>
+      <Typography color="textPrimary" component="h2" variant="h5">
+          {update.title}
+          {update.team && <Chip color="primary" variant="outlined" label={update.team} className={classes.teamLabel} size="small" />}
+      </Typography>
+      <UpdateSummary update={update} />
+   </>
+
+  );
 }
 
 /**
