@@ -131,7 +131,7 @@ function UpdateCard({ project, update }) {
   const classes = useStyles();
 
   const views = updateViews[update.type];
-  const UpdateView = views? views.SummaryView : null;
+  const UpdateView = views? views.FullView : null;
 
   return (
     <Card variant="outlined" className={classes.updateCard}>
@@ -196,27 +196,29 @@ export default function ViewProjectPage({ user, project }) {
 
         {card && <UpdateCard key={card} project={project} update={card} />}
 
-        <Button onClick={() =>
-                {
-                    console.log(updates);
-                    if (updates != null) {
-                        if (typeof updates[currentDisplayIndex+1]) {
-                            currentValue = updates[currentDisplayIndex++];
-                            setCard(currentValue);
-                            console.log("Current card set to ", currentValue);
-                        }
-                    }
-                }
-            }>
-            Next
-        </Button>
-
-
         {updates && updates.length === 0 && <>
           <Alert severity="warning">No updates found</Alert>
         </>}
 
       </Box>
+
+      <Box my={2}>
+         <Button variant="outlined" color="secondary" onClick={() =>
+                      {
+                          console.log(updates);
+                          if (updates != null) {
+                              if (typeof updates[currentDisplayIndex+1]) {
+                                  currentValue = updates[currentDisplayIndex++];
+                                  setCard(currentValue);
+                                  console.log("Current card set to ", currentValue);
+                              }
+                          }
+                      }
+                  }>
+                  Next
+              </Button>
+      </Box>
+
     </AuthenticatedLayout>
   );
 }
