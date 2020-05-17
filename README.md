@@ -2,7 +2,180 @@
 
 Manage and display interesting information about engagements.
 
-## Architecture
+Users can sign up and then log in, after which they can create *projects*.
+Projects can be shared with other users via their email addresses, with a
+simple role-based permission system.
+
+Projects are containers for *updates* of various types. Updates can be added
+via the web UI or through an integration with a third party system. Update
+types include:
+
+- Information about a *release*.
+- New *insights*.
+- *Goals* for teams.
+- Important *RAID items*: risks, issues, dependencies, decisions, etc.
+- *Flow data* that can be used to render pretty graphs.
+
+Updates contain some common data - a title, a description, a date - and some
+information specific to the update type.
+
+## REST API
+
+Updates can be added via a simple RESTful API, secured with unique tokens. A
+project owner can generate one or more *tokens*, which should be kept as secret
+as possible. A `POST` request can then be sent to the endpoint URL, which will
+(depending on the hosting) be:
+
+  `https://{domain}/api/post-update`
+
+The request must have a `Content-Type` of `application/json` and contain a JSON
+object in its payload. This object should have the following keys:
+
+- `token` – The unique project token. This serves both to authenticate the
+  request, and to identify the project to update.
+- `updateData` – An object containing the data needed to create or modify an
+  update – more on this below.
+- `alwaysCreate` (optional) – Always create a new update, rather than modifying
+  an existing one, even if the data in `updateData` would normally imply
+  updating one.
+
+The update data is specific to the update type, but all include certain fields:
+
+```
+  "token": <token string, required>,
+  "updateData": {
+    "type": <string, required>,
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>
+    ...
+  }
+```
+
+(Note: To encode a string, use a JavaScript-style ISO date string, e.g.
+`"date": "2020-01-02T00:00:00.000Z"`).
+
+Depending on the `type`, other fields are required:
+
+Insights:
+```
+  "updateData": {
+    "type": "insights",
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>,
+    "authorId": <string, required>,
+    "authorName": <string, required>,
+    "text": <string of markdown-formatted text, required>
+  }
+```
+
+Goals:
+```
+  "updateData": {
+    "type": "goals",
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>,
+    "authorId": <string, required>,
+    "authorName": <string, required>,
+    "text": <string of markdown-formatted text, required>
+  }
+```
+
+Release:
+```
+  "updateData": {
+    "type": "release",
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>,
+    "releaseDate": <date, optional>,
+    "status": <string, one of: 'in-progress', 'complete', 'overdue'>
+    "text": <string of markdown-formatted text, required>
+  }
+```
+
+RAID update:
+```
+  "updateData": {
+    "type": "raid",
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>,
+    "raidItems": [{
+      "type": <string, one of: 'risk', 'issue', 'assumption', 'dependency', 'decision'>,
+      "summary": <string, required>,
+      "url": <string, optional, must be a valid URL>,
+      "priority": <string, one of: 'low', 'medium', 'high'>,
+      "date": <date, optional>
+    }]
+  }
+```
+
+Flow:
+```
+  "updateData": {
+    "type": "flow",
+    "title": <string, required>,
+    "summary": <string, optional>,
+    "date": <date, required>,
+    "team": <string, optional>,
+    "cycleTimeData": [{
+      "item": <string, required>,
+      "commitmentDate": <date, required>,
+      "completionDate": <date, optional>,
+      "itemType": <string, optional>,
+      "url": <string, optional, must be a valid URL>
+    }]
+  }
+```
+
+In all cases, you can also add an `"id"` parameter to refer to a specific
+update (the ID is visible in the URL in the web app), in which case this will
+be modified.
+
+Specifically for the *flow* update type, the default behaviour is to modify
+another flow update for the same *team*, i.e. matching on the `"team"` field.
+
+To avoid this behaviour, send `"alwaysCreate": true` in the API payload.
+
+## Command-line client
+
+You can also use the API via a simple command-line tool. This also serves as
+a simple example of how to call the API. It can be found in the `cli/` folder,
+which is its own NPM package. To install the tool:
+
+```
+$ cd cli
+$ npm install -g
+```
+
+This should install a utility called `engagement-dashbaord`:
+
+```
+$ engagement-dashboard --help
+```
+
+The basic usage pattern is:
+
+```
+$ engagement-pattern --url <API endpoint URL> --token-file token.txt --data-file data.json
+```
+
+The `--token-file` parameter specifies a text file that contains the token (we
+do it this way because it is easier to secure a file than a command line
+parameter, which might be replicated in shell history etc.).
+
+The `--data-file` parameter specifies a JSON-formatted text file that contains
+the update payload (i.e. the contents of the `"updateData"` parameter).
+
+## Architecture and development
 
 The client side uses ReactJS and is managed with
 [create-react-app](https://create-react-app.dev).
@@ -10,14 +183,14 @@ The client side uses ReactJS and is managed with
 The server side uses Google Firebase (Firstore, Cloud Functions,
 Authentication).
 
-## Development pre-requisites
+### Development pre-requisites
 
 - NodeJS (v13.12 tested)
 - Firebase CLI (`npm install -g firebase-tools`)
 - Install all dependencies with `npm install` in the root directory
 - A Java JDK for running the firebase emulators locally
 
-## Creating a firebase environment
+### Creating a firebase environment
 
 The remote Firebase project and associates access keys are deliberately not
 checked into source control.
@@ -74,7 +247,7 @@ The emulators must be started before the webapp with:
 
 (or if you prefer: `npm run emulators`)
 
-## Run app, tests
+### Run app, tests
 
 Various `npm` scripts can be used to start the app for local development and
 testing, as well as to deploy it to Firebase.
@@ -110,7 +283,7 @@ To build and deploy to production:
   directory) and Firestore rules. To deploy functions only, run
   `npm run deploy` from the `functions` directory.
 
-## Understanding the codebase
+### Understanding the codebase
 
 The code is organised as follows:
 

@@ -103,7 +103,7 @@ class Model {
    * Set and validate fields according to the schema
    */
   update(data) {
-    const schema = Yup.object(pick(this.constructor.getSchema().fields, Object.keys(data)));
+    const schema = Yup.object(pick(this.constructor.getSchema().fields, Object.keys(data))).noUnknown();
     Object.assign(this, schema.validateSync(data));
   }
 

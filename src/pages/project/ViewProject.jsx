@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
   updateCard: {
     marginTop: theme.spacing(2)
+  },
+  addUpdateButton: {
+    whiteSpace: 'nowrap'
   }
 }));
 
