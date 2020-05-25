@@ -7,6 +7,7 @@ import {
   MenuItem,
   Button,
   Card,
+  CardMedia,
   Link,
   CardContent,
   Box,
@@ -31,7 +32,23 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2)
   },
   updateCard: {
-    marginTop: theme.spacing(2)
+    transition: "0.3s",
+    maxWidth: 500,
+    margin: "auto",
+    boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)"
+  },
+  cardMedia: {
+    paddingTop: "30%",
+    position: "relative"
+  },
+  ribbon: {
+     color: "white",
+     position: "absolute",
+     top: theme.spacing(2),
+     left: theme.spacing(2),
+     backgroundColor: 'red',
+     padding: "2px 8px",
+     borderRadius: 2
   }
 }));
 
@@ -60,22 +77,6 @@ function FilterToolbar({
 
       <Box flexGrow="1">
 
-        {project.updateTypes && project.updateTypes.length > 0 && <>
-          <FormControl className={classes.toolbarControl} color="primary">
-            <Select
-              displayEmpty
-              value={updateType}
-              onChange={e => setUpdateType(e.target.value)}
-            >
-              <MenuItem value="-">All update types</MenuItem>
-              {project.updateTypes.includes(UpdateTypes.goals) && <MenuItem value={UpdateTypes.goals}>Goals</MenuItem>}
-              {project.updateTypes.includes(UpdateTypes.insights) && <MenuItem value={UpdateTypes.insights}>Insights</MenuItem>}
-              {project.updateTypes.includes(UpdateTypes.release) && <MenuItem value={UpdateTypes.release}>Releases</MenuItem>}
-              {project.updateTypes.includes(UpdateTypes.raid) && <MenuItem value={UpdateTypes.raid}>RAID items</MenuItem>}
-              {project.updateTypes.includes(UpdateTypes.flow) && <MenuItem value={UpdateTypes.flow}>Flow</MenuItem>}
-            </Select>
-          </FormControl>
-        </>}
         
         {project.teams && project.teams.length > 0 && <>
           <FormControl className={classes.toolbarControl} color="primary">
@@ -134,8 +135,16 @@ function UpdateCard({ project, update }) {
   const UpdateView = views? views.FullView : null;
 
   return (
-    <Card variant="outlined" className={classes.updateCard}>
+    <Card className={classes.updateCard} >
       <Link to={`/project/${project.id}/update/${update.id}`} component={RouterLink} underline="none">
+
+        <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header.jpg'}>
+
+          <div className={classes.ribbon}>
+            <Typography color={"inherit"}>{update.type}</Typography>
+          </div>
+        </CardMedia>
+
         <CardContent>
           {UpdateView?
             <UpdateView update={update} /> :
@@ -186,7 +195,7 @@ export default function ViewProjectPage({ user, project }) {
       <Typography paragraph>{project.description}</Typography>
 
       <FilterToolbar {...{project, canAdd, updateType, setUpdateType, team, setTeam}} />
-      
+
       <Box my={2}>
 
         {loading && <Loading />}

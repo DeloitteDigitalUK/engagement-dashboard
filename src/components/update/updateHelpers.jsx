@@ -58,7 +58,6 @@ export function toUpdateValues(data) {
  * Common summary view elements for updates
  */
 export function UpdateSummary({ update }) {
-  const classes = useStyles();
 
   return (
     <>
@@ -76,7 +75,7 @@ export function UpdateHeader({ update }) {
 
   return (
   <>
-      <Typography color="textPrimary" component="h2" variant="h5">
+      <Typography color="textPrimary" component="h2" variant="h5" className={classes.ribbon}>
           {update.title}
           {update.team && <Chip color="primary" variant="outlined" label={update.team} className={classes.teamLabel} size="small" />}
       </Typography>
@@ -185,3 +184,4 @@ export function UpdateButtons({editing, isSubmitting, cancel}) {
     </Grid>
   );
 }
+
