@@ -4,8 +4,10 @@ import {
   Typography,
   Button,
   Card,
+  CardHeader,
   CardMedia,
   CardContent,
+  Avatar,
   Box,
   makeStyles,
 } from '@material-ui/core';
@@ -16,6 +18,8 @@ import { useAPI } from '../../api';
 import AuthenticatedLayout from "../../layouts/AuthenticatedLayout";
 import Loading from '../../components/Loading';
 import updateViews from '../../components/update';
+import { UpdateHeader } from '../../components/update/updateHelpers';
+
 
 const useStyles = makeStyles((theme) => ({
   toolbarControl: {
@@ -55,22 +59,31 @@ function UpdateCard({ project, update }) {
   const classes = useStyles();
 
   const views = updateViews[update.type];
-  const UpdateView = views? views.FullView : null;
+  const UpdateView = views? views.ContentView : null;
 
   return (
     <Card className={classes.updateCard} >
-        <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header.jpg'}>
+          <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header.jpg'}>
             <div className={classes.ribbon}>
                 <Typography color={"inherit"}>{update.type}</Typography>
             </div>
-        </CardMedia>
+          </CardMedia>
 
-        <CardContent>
-          {UpdateView?
-            <UpdateView update={update} /> :
-            <Alert severity="error">Update type {update.type} not found for update {update.id}!</Alert>
-          }
-        </CardContent>
+          <CardHeader
+            avatar={
+              <Avatar className={classes.avatar}>
+                R
+              </Avatar>
+            }
+            title={<UpdateHeader update={update} />}
+          />
+
+          <CardContent>
+            {UpdateView?
+              <UpdateView update={update} /> :
+              <Alert severity="error">Update type {update.type} not found for update {update.id}!</Alert>
+            }
+          </CardContent>
     </Card>
   );
 }
