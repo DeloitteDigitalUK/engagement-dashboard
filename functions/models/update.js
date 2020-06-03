@@ -68,6 +68,26 @@ class Update extends Model {
     return super.update(data);
   }
 
+  /**
+   * Return a prettyfied displayable type
+   */
+  getDisplayType() {
+    var display = "";
+    if (this.type) {
+        display = this.type.toUpperCase();
+        display = this.stringToSingular(display);
+    }
+    return display;
+  }
+
+  stringToSingular(anInputString) {
+    var returnString = anInputString;
+    if (anInputString.charAt(anInputString.length-1) == 'S') {
+        anInputString = anInputString.substring(0, anInputString.length-1);
+    }
+    return anInputString;
+  }
+
 }
 
 Update.typeRegister = {};

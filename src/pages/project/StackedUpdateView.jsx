@@ -65,7 +65,7 @@ function UpdateCard({ project, update }) {
     <Card className={classes.updateCard} >
           <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header.jpg'}>
             <div className={classes.ribbon}>
-                <Typography color={"inherit"}>{update.type}</Typography>
+                <Typography color={"inherit"}>{update.getDisplayType()}</Typography>
             </div>
           </CardMedia>
 
