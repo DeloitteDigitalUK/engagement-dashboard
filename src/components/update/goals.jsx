@@ -24,8 +24,6 @@ function GoalsSummary({ update }) {
 }
 
 function GoalsView({ update }) {
-  const classes = useStyles();
-
   return (<>
     <UpdateHeader update={update} />
     <GoalsContent update={update} />

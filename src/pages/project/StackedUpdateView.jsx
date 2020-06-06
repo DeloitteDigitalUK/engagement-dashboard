@@ -11,11 +11,14 @@ import {
   Box,
   makeStyles,
 } from '@material-ui/core';
+
+import { blueGrey, deepOrange, deepPurple, green, red, teal } from '@material-ui/core/colors';
+
 import { Alert } from '@material-ui/lab';
 
 import { useAPI } from '../../api';
 
-import AuthenticatedLayout from "../../layouts/AuthenticatedLayout";
+import AuthenticatedViewOnlyLayout from "../../layouts/AuthenticatedViewOnlyLayout";
 import Loading from '../../components/Loading';
 import updateViews from '../../components/update';
 import { UpdateHeader } from '../../components/update/updateHelpers';
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   updateCard: {
     transition: "0.3s",
-    maxWidth: 500,
+    maxWidth: "90%",
     margin: "auto",
     boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)"
   },
@@ -45,11 +48,36 @@ const useStyles = makeStyles((theme) => ({
     padding: "2px 8px",
     borderRadius: 2
   },
+  projectRibbon: {
+    backgroundColor: blueGrey[500],
+    color: "white",
+    padding: "2px 8px"
+  },
   sharedHeaderAndNavButton: {
     margin: "auto",
     position: "relative",
-    maxWidth: 500
-  }
+    maxWidth: "90%"
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  purple: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+  green: {
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+  },
+  red: {
+    color: theme.palette.getContrastText(red[500]),
+    backgroundColor: red[500],
+  },
+  teal: {
+    color: theme.palette.getContrastText(teal[500]),
+    backgroundColor: teal[500],
+  },
 }));
 
 var currentDisplayIndex = 0;
@@ -67,12 +95,20 @@ function UpdateCard({ project, update }) {
             <div className={classes.ribbon}>
                 <Typography color={"inherit"}>{update.getDisplayType()}</Typography>
             </div>
+
           </CardMedia>
+
+         <CardHeader className={classes.projectRibbon}
+            title={project.name}
+            subheader={project.description}
+            titleTypographyProps={{variant:'h5' }}
+            subheaderTypographyProps={{variant:'subtitle2', color: 'textSecondary' }}
+          />
 
           <CardHeader
             avatar={
-              <Avatar className={classes.avatar}>
-                R
+              <Avatar className={getAvatarClass(classes, update.getInitial())}>
+                {update.getInitial()}
               </Avatar>
             }
             title={<UpdateHeader update={update} />}
@@ -86,6 +122,30 @@ function UpdateCard({ project, update }) {
           </CardContent>
     </Card>
   );
+}
+
+function getAvatarClass(classes, initial) {
+    var classColor = classes.orange;
+    switch (initial) {
+        case "I" :
+            classColor = classes.orange
+            break;
+        case "G" :
+            classColor = classes.purple
+            break;
+        case "Rel" :
+            classColor = classes.green
+            break;
+        case "R" :
+            classColor = classes.red
+            break;
+        case "F" :
+            classColor = classes.teal
+            break;
+        default :
+            classColor = classes.orange;
+    }
+    return classColor;
 }
 
 function initializeCard(aCard, anUpdates) {
@@ -118,11 +178,7 @@ export default function ViewProjectPage({ user, project }) {
   var currentValue;
 
   return (
-    <AuthenticatedLayout user={user} project={project}>
-      <Box className={classes.sharedHeaderAndNavButton} >
-        <Typography component="h2" variant="h3" gutterBottom>{project.name}</Typography>
-        <Typography paragraph>{project.description}</Typography>
-      </Box>
+    <AuthenticatedViewOnlyLayout user={user} project={project}>
 
       <Box my={2}>
 
@@ -156,6 +212,6 @@ export default function ViewProjectPage({ user, project }) {
               </Button>
       </Box>
 
-    </AuthenticatedLayout>
+    </AuthenticatedViewOnlyLayout>
   );
 }

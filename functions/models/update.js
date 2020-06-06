@@ -88,6 +88,30 @@ class Update extends Model {
     return anInputString;
   }
 
+  getInitial() {
+    var initialChar = "";
+    if (this.type) {
+        switch (this.type) {
+             case UpdateTypes.release:
+                initialChar = "Rel";
+                break;
+             case UpdateTypes.flow:
+                initialChar = "F";
+                break;
+             case UpdateTypes.insights:
+                initialChar = "I";
+                break;
+             case UpdateTypes.raid:
+                initialChar = "R";
+                break;
+             case UpdateTypes.goals:
+                initialChar = "G";
+                break;
+        }
+    }
+    return initialChar;
+  }
+
 }
 
 Update.typeRegister = {};

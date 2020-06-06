@@ -35,8 +35,6 @@ function ReleaseSummary({ update }) {
 }
 
 function ReleaseView({ update }) {
-  const classes = useStyles();
-
   return (<>
     <UpdateHeader update={update} />
     <ReleaseContent update={update} />

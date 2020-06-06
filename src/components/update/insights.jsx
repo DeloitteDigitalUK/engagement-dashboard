@@ -24,8 +24,6 @@ function InsightsSummary({ update }) {
 }
 
 function InsightsView({ update }) {
-  const classes = useStyles();
-
   return (<>
     <UpdateHeader update={update} />
     <InsightsContent update={update} />
