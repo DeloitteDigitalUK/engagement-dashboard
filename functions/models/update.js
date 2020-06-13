@@ -82,7 +82,7 @@ class Update extends Model {
 
   stringToSingular(anInputString) {
     var returnString = anInputString;
-    if (anInputString.charAt(anInputString.length-1) == 'S') {
+    if (anInputString.charAt(anInputString.length-1) === 'S') {
         anInputString = anInputString.substring(0, anInputString.length-1);
     }
     return anInputString;
