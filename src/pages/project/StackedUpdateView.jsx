@@ -44,12 +44,12 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: theme.spacing(2),
     left: theme.spacing(2),
-    backgroundColor: 'red',
+    backgroundColor: '#ecb144',
     padding: "2px 8px",
     borderRadius: 2
   },
   projectRibbon: {
-    backgroundColor: blueGrey[500],
+    backgroundColor: "#353635",
     color: "white",
     padding: "2px 8px"
   },
@@ -91,7 +91,7 @@ function UpdateCard({ project, update }) {
 
   return (
     <Card className={classes.updateCard} >
-          <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header.jpg'}>
+          <CardMedia className={classes.cardMedia} image={process.env.PUBLIC_URL+'/stacked-view-header-7.jpg'}>
             <div className={classes.ribbon}>
                 <Typography color={"inherit"}>{update.getDisplayType()}</Typography>
             </div>
@@ -102,15 +102,15 @@ function UpdateCard({ project, update }) {
             title={project.name}
             subheader={project.description}
             titleTypographyProps={{variant:'h5' }}
-            subheaderTypographyProps={{variant:'subtitle2', color: 'textSecondary' }}
+            subheaderTypographyProps={{variant:'subtitle2', color: 'white' }}
           />
 
           <CardHeader
             avatar={
               <Avatar className={getAvatarClass(classes, update.getInitial())}>
                 {update.getInitial()}
-              </Avatar>
-            }
+
+              </Avatar>            }
             title={<UpdateHeader update={update} />}
           />
 
