@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
   },
   appBar: {
-    backgroundColor: '#424244',
+    backgroundColor: '#ecb144',
+    color: 'black'
   }
 }));
 
