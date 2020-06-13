@@ -24,10 +24,16 @@ function GoalsSummary({ update }) {
 }
 
 function GoalsView({ update }) {
+  return (<>
+    <UpdateHeader update={update} />
+    <GoalsContent update={update} />
+  </>);
+}
+
+function GoalsContent({ update }) {
   const classes = useStyles();
 
   return (<>
-    <UpdateHeader update={update} />
     <Box className={classes.content}>
       <Markdown source={update.text} />
     </Box>
@@ -89,6 +95,7 @@ export default {
   title: "goals",
   SummaryView: GoalsSummary,
   FullView: GoalsView,
+  ContentView: GoalsContent,
   AddForm: GoalsForm,
   EditForm: GoalsForm,
 };

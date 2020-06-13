@@ -24,10 +24,16 @@ function InsightsSummary({ update }) {
 }
 
 function InsightsView({ update }) {
+  return (<>
+    <UpdateHeader update={update} />
+    <InsightsContent update={update} />
+  </>);
+}
+
+function InsightsContent({ update }) {
   const classes = useStyles();
 
   return (<>
-    <UpdateHeader update={update} />
     <Box className={classes.content}>
       <Markdown source={update.text} />
     </Box>
@@ -86,9 +92,10 @@ function InsightsForm({ user, project, update, save, cancel, setMessages, knownE
 
 export default {
   updateType: UpdateTypes.insights,
-  title: "insights",
+  title: "insight",
   SummaryView: InsightsSummary,
   FullView: InsightsView,
+  ContentView: InsightsContent,
   AddForm: InsightsForm,
   EditForm: InsightsForm,
 };

@@ -68,6 +68,50 @@ class Update extends Model {
     return super.update(data);
   }
 
+  /**
+   * Return a prettyfied displayable type
+   */
+  getDisplayType() {
+    var display = "";
+    if (this.type) {
+        display = this.type.toUpperCase();
+        display = this.stringToSingular(display);
+    }
+    return display;
+  }
+
+  stringToSingular(anInputString) {
+    var returnString = anInputString;
+    if (anInputString.charAt(anInputString.length-1) == 'S') {
+        anInputString = anInputString.substring(0, anInputString.length-1);
+    }
+    return anInputString;
+  }
+
+  getInitial() {
+    var initialChar = "";
+    if (this.type) {
+        switch (this.type) {
+             case UpdateTypes.release:
+                initialChar = "Rel";
+                break;
+             case UpdateTypes.flow:
+                initialChar = "F";
+                break;
+             case UpdateTypes.insights:
+                initialChar = "I";
+                break;
+             case UpdateTypes.raid:
+                initialChar = "R";
+                break;
+             case UpdateTypes.goals:
+                initialChar = "G";
+                break;
+        }
+    }
+    return initialChar;
+  }
+
 }
 
 Update.typeRegister = {};

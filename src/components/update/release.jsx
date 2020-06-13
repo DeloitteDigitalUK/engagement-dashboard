@@ -35,15 +35,22 @@ function ReleaseSummary({ update }) {
 }
 
 function ReleaseView({ update }) {
+  return (<>
+    <UpdateHeader update={update} />
+    <ReleaseContent update={update} />
+  </>);
+}
+
+function ReleaseContent({ update }) {
   const classes = useStyles();
 
   return (<>
-    <UpdateHeader update={update} />
     <Box className={classes.content}>
       <Markdown source={update.text} />
     </Box>
   </>);
 }
+
 
 function ReleaseForm({ user, project, update, save, cancel, setMessages, knownErrors }) {
   const classes = useStyles();
@@ -134,6 +141,7 @@ export default {
   title: "release",
   SummaryView: ReleaseSummary,
   FullView: ReleaseView,
+  ContentView: ReleaseContent,
   AddForm: ReleaseForm,
   EditForm: ReleaseForm,
 };

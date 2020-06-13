@@ -50,6 +50,12 @@ function RaidSummary({ update }) {
 function RaidView({ update }) {
   return (<>
     <UpdateHeader update={update} />
+    <RaidContent update={update} />
+  </>);
+}
+
+function RaidContent({ update }) {
+  return (<>
     <Table>
       <TableHead>
         <TableRow>
@@ -261,6 +267,7 @@ export default {
   title: "RAID",
   SummaryView: RaidSummary,
   FullView: RaidView,
+  ContentView: RaidContent,
   AddForm: RaidForm,
   EditForm: RaidForm,
 };
